@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Resources\PostCollection;
+use App\Http\Resources\UserCollection;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -18,9 +19,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get( '/users', function () {
-//    $test = DB::table('Users')->get()->all();
-    dd(dd(DB::select('select 1')));
-    return User::all();
+    return new UserCollection(User::all());
 } );
 
 
