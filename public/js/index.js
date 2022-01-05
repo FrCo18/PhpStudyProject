@@ -8781,15 +8781,37 @@ var react_1 = __importStar(__webpack_require__(/*! react */ "./node_modules/reac
 var axios_1 = __importDefault(__webpack_require__(/*! axios */ "./node_modules/axios/index.js"));
 
 var Courses = function Courses() {
-  var _ref = (0, react_1.useState)([]),
+  // const [news, setNews] = useState<any[]>([])
+  //
+  //   useEffect(() => {
+  //     axios.get('http://localhost:3001/news').then((response) => {
+  //       console.log(response.data)
+  //       setNews(response.data)
+  //     }).catch((e) => {
+  //       console.error(e)
+  //     })
+  //   }, [])
+  //
+  //   return (
+  //     <div style={{color: "white"}}>
+  //       <div>Курсы</div>
+  //       {news.length > 0 ?
+  //         news.map(el =>
+  //           <div><img src={el.image} alt='image' style={{width: '100px'}}/></div>
+  //         )
+  //         : 'Не удалось загрузить посты!'
+  //       }
+  //     </div>
+  //   );
+  // };
+  var _ref = (0, react_1.useState)(false),
       _ref2 = _slicedToArray(_ref, 2),
-      news = _ref2[0],
-      setNews = _ref2[1];
+      auth = _ref2[0],
+      setAuth = _ref2[1];
 
   (0, react_1.useEffect)(function () {
     axios_1["default"].get('http://localhost:3001/news').then(function (response) {
       console.log(response.data);
-      setNews(response.data);
     })["catch"](function (e) {
       console.error(e);
     });
@@ -8798,15 +8820,7 @@ var Courses = function Courses() {
     style: {
       color: "white"
     }
-  }, react_1["default"].createElement("div", null, "\u041A\u0443\u0440\u0441\u044B"), news.length > 0 ? news.map(function (el) {
-    return react_1["default"].createElement("div", null, react_1["default"].createElement("img", {
-      src: el.image,
-      alt: 'image',
-      style: {
-        width: '100px'
-      }
-    }));
-  }) : '');
+  }, react_1["default"].createElement("div", null, "\u041A\u0443\u0440\u0441\u044B"));
 };
 
 exports["default"] = Courses;
