@@ -1,5 +1,7 @@
 import React from 'react';
 import {Card, Button, Container} from "react-bootstrap";
+import {Link} from "react-router-dom";
+import Courses from "./Courses";
 
 const Home: React.FC = () => {
   return (
@@ -13,7 +15,8 @@ const Home: React.FC = () => {
         <Card.Text>
           У нас есть курсы даже для тех кто уже знаком с языком
         </Card.Text>
-        <Button variant="primary">Начать свой первый курс сейчас</Button>
+        <Button variant="primary"><Link style={{color: 'white', textDecoration: 'none'}} to='/courses'>Начать свой
+          первый курс сейчас</Link></Button>
       </Card.Body>
       <Card.Footer className="text-muted">PHP Courses</Card.Footer>
     </Card>

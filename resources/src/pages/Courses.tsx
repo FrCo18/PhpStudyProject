@@ -1,47 +1,29 @@
 import React, {useEffect, useState} from 'react';
 import axios from "axios";
 import {map} from "react-bootstrap/ElementChildren";
+import Auth from "../components/Auth/Auth";
+import {TypeCourse} from "../components/Courses/types/TypeCourse";
+import CourseList from "../components/Courses/CourseList";
 
 const Courses: React.FC = () => {
-
-  // const [news, setNews] = useState<any[]>([])
-//
-//   useEffect(() => {
-//     axios.get('http://localhost:3001/news').then((response) => {
-//       console.log(response.data)
-//       setNews(response.data)
-//     }).catch((e) => {
-//       console.error(e)
-//     })
-//   }, [])
-//
-//   return (
-//     <div style={{color: "white"}}>
-//       <div>Курсы</div>
-//       {news.length > 0 ?
-//         news.map(el =>
-//           <div><img src={el.image} alt='image' style={{width: '100px'}}/></div>
-//         )
-//         : 'Не удалось загрузить посты!'
-//       }
-//     </div>
-//   );
-// };
-
-  const [auth, setAuth] = useState(false)
-
+  const [courses, setCourses] = useState<TypeCourse[]>([])
   useEffect(() => {
-    axios.get('http://localhost:3001/news').then((response) => {
-      console.log(response.data)
+    axios.get('/api/courses').then((response) => {
+      setCourses(response.data)
     }).catch((e) => {
-      console.error(e)
+      console.log(e)
     })
   }, [])
 
+  useEffect(() => {
+
+  }, [courses])
   return (
     <div style={{color: "white"}}>
-      <div>Курсы</div>
-
+      <p>Курсы</p>
+      <Auth>
+        <CourseList/>
+      </Auth>
     </div>
   );
 };

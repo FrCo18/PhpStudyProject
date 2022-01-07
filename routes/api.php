@@ -1,6 +1,7 @@
 <?php
 
-use App\Http\Resources\PostCollection;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CourseController;
 use App\Http\Resources\UserCollection;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -18,10 +19,14 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get( '/users', function () {
-    return new UserCollection(User::all());
-} );
+//Auth routes
+Route::get( '/checkauth', [ AuthController::class, 'checkAuth' ] );
+Route::post( '/login', [ AuthController::class, 'login' ] );
+Route::post( '/register', [ AuthController::class, 'register' ] );
+Route::post( '/logout', [ AuthController::class, 'logout' ] );
 
+//Courses routes
+Route::get('/courses', [ CourseController::class, 'getCourses']);
 
 Route::middleware( 'auth:sanctum' )->get( '/user', function ( Request $request ) {
     return $request->user();
