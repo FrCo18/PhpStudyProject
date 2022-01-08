@@ -16,7 +16,7 @@ class AuthController extends Controller
 {
     public function login( Request $request )
     {
-        $attributes = User::where( 'email', $request->get( 'email' ) )->first();
+        $attributes = User::query()->where( 'email', $request->get( 'email' ) )->first();
 
         if ( isset( $attributes->token ) ) {
             return response()->redirectTo( '/' )->cookie( 'token', $attributes->token, 60 );
