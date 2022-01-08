@@ -3,8 +3,6 @@ import {Container, Nav} from "react-bootstrap";
 import axios from "axios";
 import Login from "./Login";
 import Register from "./Register";
-import {AuthProps} from "./types/AuthProps";
-import CourseList from "../Courses/AllCourses";
 
 const Auth: React.FC = ({children}) => {
   const [auth, setAuth] = useState<boolean>(false)
