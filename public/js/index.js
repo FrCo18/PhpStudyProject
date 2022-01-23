@@ -8661,8 +8661,6 @@ var react_1 = __importStar(__webpack_require__(/*! react */ "./node_modules/reac
 
 var react_bootstrap_1 = __webpack_require__(/*! react-bootstrap */ "./node_modules/react-bootstrap/esm/index.js");
 
-var axios_1 = __importDefault(__webpack_require__(/*! axios */ "./node_modules/axios/index.js"));
-
 var Login_1 = __importDefault(__webpack_require__(/*! ./Login */ "./resources/src/components/Auth/Login.tsx"));
 
 var Register_1 = __importDefault(__webpack_require__(/*! ./Register */ "./resources/src/components/Auth/Register.tsx"));
@@ -8678,15 +8676,15 @@ var Auth = function Auth(_ref) {
   var _ref4 = (0, react_1.useState)(Login_1["default"]),
       _ref5 = _slicedToArray(_ref4, 2),
       loginOrRegisterForm = _ref5[0],
-      setShowForm = _ref5[1];
+      setShowForm = _ref5[1]; // useEffect(() => {
+  //   axios.get('/api/checkauth').then((response) => {
+  //     setAuth(response.data['is_auth'])
+  //   }).catch((e) => {
+  //     console.error(e)
+  //   })
+  // }, [])
+  //
 
-  (0, react_1.useEffect)(function () {
-    axios_1["default"].get('/api/checkauth').then(function (response) {
-      setAuth(response.data['is_auth']);
-    })["catch"](function (e) {
-      console.error(e);
-    });
-  }, []);
 
   var showLoginForm = function showLoginForm() {
     setShowForm(Login_1["default"]);
@@ -9379,6 +9377,7 @@ window._ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
 
 window.axios = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+axios.defaults.withCredentials = true;
 /**
  * Echo exposes an expressive API for subscribing to channels and listening
  * for events that are broadcast by Laravel. Echo and event broadcasting
