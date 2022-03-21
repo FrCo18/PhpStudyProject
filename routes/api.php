@@ -26,7 +26,7 @@ Route::post( '/register', [ AuthController::class, 'register' ] );
 Route::post( '/logout', [ AuthController::class, 'logout' ] );
 
 //Courses routes
-Route::get( '/courses', [ CourseController::class, 'getCourses' ] )->middleware( 'auth:sanctum' );
+Route::get( '/courses', [ CourseController::class, 'getCourses' ] );
 
 //Route::middleware( 'auth:sanctum' )->get( '/user', function ( Request $request ) {
 //    return $request->user();

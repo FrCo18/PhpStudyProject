@@ -8661,6 +8661,8 @@ var react_1 = __importStar(__webpack_require__(/*! react */ "./node_modules/reac
 
 var react_bootstrap_1 = __webpack_require__(/*! react-bootstrap */ "./node_modules/react-bootstrap/esm/index.js");
 
+var axios_1 = __importDefault(__webpack_require__(/*! axios */ "./node_modules/axios/index.js"));
+
 var Login_1 = __importDefault(__webpack_require__(/*! ./Login */ "./resources/src/components/Auth/Login.tsx"));
 
 var Register_1 = __importDefault(__webpack_require__(/*! ./Register */ "./resources/src/components/Auth/Register.tsx"));
@@ -8676,15 +8678,15 @@ var Auth = function Auth(_ref) {
   var _ref4 = (0, react_1.useState)(Login_1["default"]),
       _ref5 = _slicedToArray(_ref4, 2),
       loginOrRegisterForm = _ref5[0],
-      setShowForm = _ref5[1]; // useEffect(() => {
-  //   axios.get('/api/checkauth').then((response) => {
-  //     setAuth(response.data['is_auth'])
-  //   }).catch((e) => {
-  //     console.error(e)
-  //   })
-  // }, [])
-  //
+      setShowForm = _ref5[1];
 
+  (0, react_1.useEffect)(function () {
+    axios_1["default"].get('/api/checkauth').then(function (response) {
+      setAuth(response.data['is_auth']);
+    })["catch"](function (e) {
+      console.error(e);
+    });
+  }, []);
 
   var showLoginForm = function showLoginForm() {
     setShowForm(Login_1["default"]);
@@ -8739,19 +8741,42 @@ var react_1 = __importDefault(__webpack_require__(/*! react */ "./node_modules/r
 
 var react_bootstrap_1 = __webpack_require__(/*! react-bootstrap */ "./node_modules/react-bootstrap/esm/index.js");
 
-var Password_1 = __importDefault(__webpack_require__(/*! ./login-components/Password */ "./resources/src/components/Auth/login-components/Password.tsx"));
-
-var Email_1 = __importDefault(__webpack_require__(/*! ./login-components/Email */ "./resources/src/components/Auth/login-components/Email.tsx"));
-
 var Login = function Login() {
+  // const [formInput, setFormInput] = useState({email: '', password: ''})
+  // const updateFormInput = (e: any): void => {
+  //   e.persist()
+  //   setFormInput(prevState => ({...prevState, [e.target.name]: e.target.value}))
+  // }
+  // const signIn = (e: any) => {
+  //   e.preventDefault()
+  //   axios.get('/sanctum/csrf-cookie').then(() => {
+  //     axios.post('/api/login',formInput)
+  //   });
+  // }
   return react_1["default"].createElement(react_bootstrap_1.Container, {
     style: {
       width: '80vh'
     }
   }, react_1["default"].createElement("h1", null, "\u0410\u0432\u0442\u043E\u0440\u0438\u0437\u0430\u0446\u0438\u044F"), react_1["default"].createElement(react_bootstrap_1.Form, {
-    action: '/api/login',
+    action: '#',
     method: 'post'
-  }, react_1["default"].createElement(Email_1["default"], null), react_1["default"].createElement(Password_1["default"], null), react_1["default"].createElement(react_bootstrap_1.Button, {
+  }, react_1["default"].createElement(react_bootstrap_1.Form.Group, {
+    className: "mb-3",
+    controlId: "formBasicEmail"
+  }, react_1["default"].createElement(react_bootstrap_1.Form.Label, null, "Email address"), react_1["default"].createElement(react_bootstrap_1.Form.Control, {
+    required: true,
+    name: 'email',
+    type: "email",
+    placeholder: "Enter email"
+  })), react_1["default"].createElement(react_bootstrap_1.Form.Group, {
+    className: "mb-3",
+    controlId: "formBasicPassword"
+  }, react_1["default"].createElement(react_bootstrap_1.Form.Label, null, "Password"), react_1["default"].createElement(react_bootstrap_1.Form.Control, {
+    name: 'password',
+    required: true,
+    type: "password",
+    placeholder: "Password"
+  })), react_1["default"].createElement(react_bootstrap_1.Button, {
     variant: "primary",
     type: "submit"
   }, "\u0412\u043E\u0439\u0442\u0438")));
@@ -8789,6 +8814,7 @@ var Password_1 = __importDefault(__webpack_require__(/*! ./register-components/P
 var Email_1 = __importDefault(__webpack_require__(/*! ./register-components/Email */ "./resources/src/components/Auth/register-components/Email.tsx"));
 
 var Register = function Register() {
+  var csrf_token = '{{echo csrf_token()}}';
   return react_1["default"].createElement(react_bootstrap_1.Container, {
     style: {
       width: '80vh'
@@ -8796,91 +8822,17 @@ var Register = function Register() {
   }, react_1["default"].createElement("h1", null, "\u0420\u0435\u0433\u0438\u0441\u0442\u0440\u0430\u0446\u0438\u044F"), react_1["default"].createElement(react_bootstrap_1.Form, {
     action: '/api/register',
     method: 'post'
-  }, react_1["default"].createElement(Email_1["default"], null), react_1["default"].createElement(Password_1["default"], null), react_1["default"].createElement(react_bootstrap_1.Button, {
+  }, react_1["default"].createElement("input", {
+    type: 'hidden',
+    name: '_token',
+    value: csrf_token
+  }), react_1["default"].createElement(Email_1["default"], null), react_1["default"].createElement(Password_1["default"], null), react_1["default"].createElement(react_bootstrap_1.Button, {
     variant: "primary",
     type: "submit"
   }, "\u0417\u0430\u0440\u0435\u0433\u0438\u0441\u0442\u0440\u0438\u0440\u043E\u0432\u0430\u0442\u044C\u0441\u044F")));
 };
 
 exports["default"] = Register;
-
-/***/ }),
-
-/***/ "./resources/src/components/Auth/login-components/Email.tsx":
-/*!******************************************************************!*\
-  !*** ./resources/src/components/Auth/login-components/Email.tsx ***!
-  \******************************************************************/
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var __importDefault = this && this.__importDefault || function (mod) {
-  return mod && mod.__esModule ? mod : {
-    "default": mod
-  };
-};
-
-Object.defineProperty(exports, "__esModule", ({
-  value: true
-}));
-
-var react_1 = __importDefault(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
-
-var react_bootstrap_1 = __webpack_require__(/*! react-bootstrap */ "./node_modules/react-bootstrap/esm/index.js");
-
-var Email = function Email() {
-  return react_1["default"].createElement(react_bootstrap_1.Form.Group, {
-    className: "mb-3",
-    controlId: "formBasicEmail"
-  }, react_1["default"].createElement(react_bootstrap_1.Form.Label, null, "Email address"), react_1["default"].createElement(react_bootstrap_1.Form.Control, {
-    required: true,
-    name: 'email',
-    type: "email",
-    placeholder: "Enter email"
-  }));
-};
-
-exports["default"] = Email;
-
-/***/ }),
-
-/***/ "./resources/src/components/Auth/login-components/Password.tsx":
-/*!*********************************************************************!*\
-  !*** ./resources/src/components/Auth/login-components/Password.tsx ***!
-  \*********************************************************************/
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var __importDefault = this && this.__importDefault || function (mod) {
-  return mod && mod.__esModule ? mod : {
-    "default": mod
-  };
-};
-
-Object.defineProperty(exports, "__esModule", ({
-  value: true
-}));
-
-var react_1 = __importDefault(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
-
-var react_bootstrap_1 = __webpack_require__(/*! react-bootstrap */ "./node_modules/react-bootstrap/esm/index.js");
-
-var Password = function Password() {
-  return react_1["default"].createElement(react_bootstrap_1.Form.Group, {
-    className: "mb-3",
-    controlId: "formBasicPassword"
-  }, react_1["default"].createElement(react_bootstrap_1.Form.Label, null, "Password"), react_1["default"].createElement(react_bootstrap_1.Form.Control, {
-    name: 'password',
-    required: true,
-    type: "password",
-    placeholder: "Password"
-  }));
-};
-
-exports["default"] = Password;
 
 /***/ }),
 
@@ -8970,39 +8922,6 @@ var Password = function Password() {
 };
 
 exports["default"] = Password;
-
-/***/ }),
-
-/***/ "./resources/src/components/Courses/CourseList.tsx":
-/*!*********************************************************!*\
-  !*** ./resources/src/components/Courses/CourseList.tsx ***!
-  \*********************************************************/
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var __importDefault = this && this.__importDefault || function (mod) {
-  return mod && mod.__esModule ? mod : {
-    "default": mod
-  };
-};
-
-Object.defineProperty(exports, "__esModule", ({
-  value: true
-}));
-
-var react_1 = __importDefault(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
-
-var CourseList = function CourseList() {
-  return react_1["default"].createElement("h1", {
-    style: {
-      color: 'white'
-    }
-  }, "Hello");
-};
-
-exports["default"] = CourseList;
 
 /***/ }),
 
@@ -9228,52 +9147,6 @@ exports["default"] = About;
 "use strict";
 
 
-function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
-
-function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
-
-function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
-
-function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
-
-function _iterableToArrayLimit(arr, i) { var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]; if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
-
-function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
-
-var __createBinding = this && this.__createBinding || (Object.create ? function (o, m, k, k2) {
-  if (k2 === undefined) k2 = k;
-  Object.defineProperty(o, k2, {
-    enumerable: true,
-    get: function get() {
-      return m[k];
-    }
-  });
-} : function (o, m, k, k2) {
-  if (k2 === undefined) k2 = k;
-  o[k2] = m[k];
-});
-
-var __setModuleDefault = this && this.__setModuleDefault || (Object.create ? function (o, v) {
-  Object.defineProperty(o, "default", {
-    enumerable: true,
-    value: v
-  });
-} : function (o, v) {
-  o["default"] = v;
-});
-
-var __importStar = this && this.__importStar || function (mod) {
-  if (mod && mod.__esModule) return mod;
-  var result = {};
-  if (mod != null) for (var k in mod) {
-    if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-  }
-
-  __setModuleDefault(result, mod);
-
-  return result;
-};
-
 var __importDefault = this && this.__importDefault || function (mod) {
   return mod && mod.__esModule ? mod : {
     "default": mod
@@ -9284,33 +9157,27 @@ Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 
-var react_1 = __importStar(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
-
-var axios_1 = __importDefault(__webpack_require__(/*! axios */ "./node_modules/axios/index.js"));
+var react_1 = __importDefault(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
 
 var Auth_1 = __importDefault(__webpack_require__(/*! ../components/Auth/Auth */ "./resources/src/components/Auth/Auth.tsx"));
 
-var CourseList_1 = __importDefault(__webpack_require__(/*! ../components/Courses/CourseList */ "./resources/src/components/Courses/CourseList.tsx"));
-
 var Courses = function Courses() {
-  var _ref = (0, react_1.useState)([]),
-      _ref2 = _slicedToArray(_ref, 2),
-      courses = _ref2[0],
-      setCourses = _ref2[1];
-
-  (0, react_1.useEffect)(function () {
-    axios_1["default"].get('/api/courses').then(function (response) {
-      setCourses(response.data);
-    })["catch"](function (e) {
-      console.log(e);
-    });
-  }, []);
-  (0, react_1.useEffect)(function () {}, [courses]);
+  // const [courses, setCourses] = useState<TypeCourse[]>([])
+  // useEffect(() => {
+  //   axios.get('/api/courses').then((response) => {
+  //     setCourses(response.data)
+  //   }).catch((e) => {
+  //     console.log(e)
+  //   })
+  // }, [])
+  // useEffect(() => {
+  //
+  // }, [courses])
   return react_1["default"].createElement("div", {
     style: {
       color: "white"
     }
-  }, react_1["default"].createElement("p", null, "\u041A\u0443\u0440\u0441\u044B"), react_1["default"].createElement(Auth_1["default"], null, react_1["default"].createElement(CourseList_1["default"], null)));
+  }, react_1["default"].createElement("p", null, "\u041A\u0443\u0440\u0441\u044B"), react_1["default"].createElement(Auth_1["default"], null));
 };
 
 exports["default"] = Courses;
@@ -71178,7 +71045,7 @@ function dequal(foo, bar) {
 /***/ ((module) => {
 
 "use strict";
-module.exports = JSON.parse('{"_args":[["axios@0.21.4","C:\\\\OpenServer\\\\domains\\\\php-study-project"]],"_development":true,"_from":"axios@0.21.4","_id":"axios@0.21.4","_inBundle":false,"_integrity":"sha512-ut5vewkiu8jjGBdqpM44XxjuCjq9LAKeHVmoVfHVzy8eHgxxq8SbAVQNovDA8mVi05kP0Ea/n/UzcSHcTJQfNg==","_location":"/axios","_phantomChildren":{},"_requested":{"type":"version","registry":true,"raw":"axios@0.21.4","name":"axios","escapedName":"axios","rawSpec":"0.21.4","saveSpec":null,"fetchSpec":"0.21.4"},"_requiredBy":["#DEV:/"],"_resolved":"https://registry.npmjs.org/axios/-/axios-0.21.4.tgz","_spec":"0.21.4","_where":"C:\\\\OpenServer\\\\domains\\\\php-study-project","author":{"name":"Matt Zabriskie"},"browser":{"./lib/adapters/http.js":"./lib/adapters/xhr.js"},"bugs":{"url":"https://github.com/axios/axios/issues"},"bundlesize":[{"path":"./dist/axios.min.js","threshold":"5kB"}],"dependencies":{"follow-redirects":"^1.14.0"},"description":"Promise based HTTP client for the browser and node.js","devDependencies":{"coveralls":"^3.0.0","es6-promise":"^4.2.4","grunt":"^1.3.0","grunt-banner":"^0.6.0","grunt-cli":"^1.2.0","grunt-contrib-clean":"^1.1.0","grunt-contrib-watch":"^1.0.0","grunt-eslint":"^23.0.0","grunt-karma":"^4.0.0","grunt-mocha-test":"^0.13.3","grunt-ts":"^6.0.0-beta.19","grunt-webpack":"^4.0.2","istanbul-instrumenter-loader":"^1.0.0","jasmine-core":"^2.4.1","karma":"^6.3.2","karma-chrome-launcher":"^3.1.0","karma-firefox-launcher":"^2.1.0","karma-jasmine":"^1.1.1","karma-jasmine-ajax":"^0.1.13","karma-safari-launcher":"^1.0.0","karma-sauce-launcher":"^4.3.6","karma-sinon":"^1.0.5","karma-sourcemap-loader":"^0.3.8","karma-webpack":"^4.0.2","load-grunt-tasks":"^3.5.2","minimist":"^1.2.0","mocha":"^8.2.1","sinon":"^4.5.0","terser-webpack-plugin":"^4.2.3","typescript":"^4.0.5","url-search-params":"^0.10.0","webpack":"^4.44.2","webpack-dev-server":"^3.11.0"},"homepage":"https://axios-http.com","jsdelivr":"dist/axios.min.js","keywords":["xhr","http","ajax","promise","node"],"license":"MIT","main":"index.js","name":"axios","repository":{"type":"git","url":"git+https://github.com/axios/axios.git"},"scripts":{"build":"NODE_ENV=production grunt build","coveralls":"cat coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js","examples":"node ./examples/server.js","fix":"eslint --fix lib/**/*.js","postversion":"git push && git push --tags","preversion":"npm test","start":"node ./sandbox/server.js","test":"grunt test","version":"npm run build && grunt version && git add -A dist && git add CHANGELOG.md bower.json package.json"},"typings":"./index.d.ts","unpkg":"dist/axios.min.js","version":"0.21.4"}');
+module.exports = JSON.parse('{"name":"axios","version":"0.21.4","description":"Promise based HTTP client for the browser and node.js","main":"index.js","scripts":{"test":"grunt test","start":"node ./sandbox/server.js","build":"NODE_ENV=production grunt build","preversion":"npm test","version":"npm run build && grunt version && git add -A dist && git add CHANGELOG.md bower.json package.json","postversion":"git push && git push --tags","examples":"node ./examples/server.js","coveralls":"cat coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js","fix":"eslint --fix lib/**/*.js"},"repository":{"type":"git","url":"https://github.com/axios/axios.git"},"keywords":["xhr","http","ajax","promise","node"],"author":"Matt Zabriskie","license":"MIT","bugs":{"url":"https://github.com/axios/axios/issues"},"homepage":"https://axios-http.com","devDependencies":{"coveralls":"^3.0.0","es6-promise":"^4.2.4","grunt":"^1.3.0","grunt-banner":"^0.6.0","grunt-cli":"^1.2.0","grunt-contrib-clean":"^1.1.0","grunt-contrib-watch":"^1.0.0","grunt-eslint":"^23.0.0","grunt-karma":"^4.0.0","grunt-mocha-test":"^0.13.3","grunt-ts":"^6.0.0-beta.19","grunt-webpack":"^4.0.2","istanbul-instrumenter-loader":"^1.0.0","jasmine-core":"^2.4.1","karma":"^6.3.2","karma-chrome-launcher":"^3.1.0","karma-firefox-launcher":"^2.1.0","karma-jasmine":"^1.1.1","karma-jasmine-ajax":"^0.1.13","karma-safari-launcher":"^1.0.0","karma-sauce-launcher":"^4.3.6","karma-sinon":"^1.0.5","karma-sourcemap-loader":"^0.3.8","karma-webpack":"^4.0.2","load-grunt-tasks":"^3.5.2","minimist":"^1.2.0","mocha":"^8.2.1","sinon":"^4.5.0","terser-webpack-plugin":"^4.2.3","typescript":"^4.0.5","url-search-params":"^0.10.0","webpack":"^4.44.2","webpack-dev-server":"^3.11.0"},"browser":{"./lib/adapters/http.js":"./lib/adapters/xhr.js"},"jsdelivr":"dist/axios.min.js","unpkg":"dist/axios.min.js","typings":"./index.d.ts","dependencies":{"follow-redirects":"^1.14.0"},"bundlesize":[{"path":"./dist/axios.min.js","threshold":"5kB"}]}');
 
 /***/ })
 

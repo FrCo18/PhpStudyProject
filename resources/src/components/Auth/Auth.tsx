@@ -8,14 +8,14 @@ const Auth: React.FC = ({children}) => {
   const [auth, setAuth] = useState<boolean>(false)
   const [loginOrRegisterForm, setShowForm] = useState<React.FC>(Login)
 
-  // useEffect(() => {
-  //   axios.get('/api/checkauth').then((response) => {
-  //     setAuth(response.data['is_auth'])
-  //   }).catch((e) => {
-  //     console.error(e)
-  //   })
-  // }, [])
-  //
+  useEffect(() => {
+    axios.get('/api/checkauth').then((response) => {
+      setAuth(response.data['is_auth'])
+    }).catch((e) => {
+      console.error(e)
+    })
+  }, [])
+
 
   const showLoginForm = () => {
     setShowForm(Login)

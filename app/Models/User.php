@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Facades\Date;
+use Laravel\Sanctum\HasApiTokens;
 
 /**
  * @property int $idUser
@@ -19,7 +20,7 @@ use Illuminate\Support\Facades\Date;
  */
 class User extends Model
 {
-    use HasFactory;
+    use HasFactory, HasApiTokens;
 
     protected $table = 'Users';
     protected $primaryKey = 'idUser';

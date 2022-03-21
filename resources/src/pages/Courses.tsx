@@ -6,23 +6,23 @@ import {TypeCourse} from "../components/Courses/types/TypeCourse";
 import CourseList from "../components/Courses/CourseList";
 
 const Courses: React.FC = () => {
-  const [courses, setCourses] = useState<TypeCourse[]>([])
-  useEffect(() => {
-    axios.get('/api/courses').then((response) => {
-      setCourses(response.data)
-    }).catch((e) => {
-      console.log(e)
-    })
-  }, [])
+  // const [courses, setCourses] = useState<TypeCourse[]>([])
+  // useEffect(() => {
+  //   axios.get('/api/courses').then((response) => {
+  //     setCourses(response.data)
+  //   }).catch((e) => {
+  //     console.log(e)
+  //   })
+  // }, [])
 
-  useEffect(() => {
-
-  }, [courses])
+  // useEffect(() => {
+  //
+  // }, [courses])
   return (
     <div style={{color: "white"}}>
       <p>Курсы</p>
       <Auth>
-        <CourseList/>
+        {/*<CourseList/>*/}
       </Auth>
     </div>
   );
