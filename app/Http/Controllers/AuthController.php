@@ -4,78 +4,67 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Cookie;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use JetBrains\PhpStorm\ArrayShape;
-use Throwable;
 
 class AuthController extends Controller
 {
-    public function login(Request $request): RedirectResponse
+    public function logout(Request $request)
     {
-        $attributes = User::query()->where('email', $request->get('email'))->first();
+        $request->user()->tokens()->delete();
 
-        if (isset($attributes->token)) {
-            return response()->redirectTo('/')->cookie('token', $attributes->token, 60);
-        }
-
-        return redirect()->back();
-    }
-
-    public function logout(): RedirectResponse
-    {
-        return response()->redirectTo('/')->cookie('token', '', 0);
+        return [
+            'message' => 'Logged out'
+        ];
     }
 
     #[ArrayShape(['token' => "mixed"])]
-    public function register(Request $request): array
+    public function register(Request $request)
     {
-        $token = $request->user()->createToken($request->token_name);
+        $fields = $request->validate([
+            'email' => 'required|string|unique:Users,email',
+            'password' => 'required|string|confirmed'
+        ]);
 
-//        $user_info = [
-//            'token' => $this->generateRandomHash()
-//        ];
-//
-//        while ( isset( User::where( 'token', $user_info[ 'token' ] )->limit( 1 )->get( 'email' )[ 0 ] ) ) {
-//            $user_info[ 'token' ] = $this->generateRandomHash();
-//        }
-//
-//        $user = new User();
-//        $user->email = $request->get( 'email' );
-//        $user->password = $request->get( 'password' );
-//        $user->token = $user_info[ 'token' ];
-//        $user->save();
-//
-//        return response()->redirectTo( '/' )->cookie( 'token', $user_info[ 'token' ], 60 );
+        $user = User::create([
+            'email' => $fields['email'],
+            'password' => bcrypt($fields['password'])
+        ]);
 
-        return ['token' => $token->plainTextToken];
+        $token = $user->createToken('apptoken')->plainTextToken;
+
+        $response = [
+            'user' => $user,
+            'token' => $token
+        ];
+
+        return response($response, 201);
     }
 
-    private function generateRandomHash(): string
+    public function login(Request $request)
     {
-        return Str::random(100);
-    }
+        $fields = $request->validate([
+            'email' => 'required|string',
+            'password' => 'required|string'
+        ]);
 
-    public function checkAuth(Request $request): JsonResponse
-    {
-        $token = $request->cookies->get('token');
-        $attributes = User::where('token', $token)->limit(1)->get();
-        if (isset($attributes[0])) {
-            $attributes = $attributes[0];
-            $attributes['is_auth'] = true;
-            $output_info = [
-                'email' => $attributes['email'],
-                'is_auth' => true
-            ];
-        } else {
-            $output_info['is_auth'] = false;
+        //Проверка на email
+        $user = User::where('email', $fields['email'])->first();
+
+        //Проверка пароля
+        if(!$user || !Hash::check($fields['password'], $user->password)){
+            return response(['message' => 'Bad creds'], 401);
         }
 
+        $token = $user->createToken('apptoken')->plainTextToken;
 
-        return response()->json($output_info);
+        $response = [
+            'user' => $user,
+            'token' => $token
+        ];
+
+        return response($response, 201);
     }
 }

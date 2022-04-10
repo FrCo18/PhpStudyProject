@@ -5,6 +5,7 @@ use App\Http\Controllers\CourseController;
 use App\Http\Resources\UserCollection;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 
@@ -19,15 +20,13 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-//Auth routes
-Route::get( '/checkauth', [ AuthController::class, 'checkAuth' ] );
-Route::post( '/login', [ AuthController::class, 'login' ] );
-Route::post( '/register', [ AuthController::class, 'register' ] );
-Route::post( '/logout', [ AuthController::class, 'logout' ] );
+//Auth
+Route::post('/register', [AuthController::class, 'register'])->name('register');
+Route::post('/login', [AuthController::class, 'login']);
 
-//Courses routes
-Route::get( '/courses', [ CourseController::class, 'getCourses' ] );
+Route::group(['middleware' => ['auth:sanctum']], function (){
+    Route::post('/logout', [AuthController::class, 'logout']);
 
-//Route::middleware( 'auth:sanctum' )->get( '/user', function ( Request $request ) {
-//    return $request->user();
-//} );
+    //Courses routes
+    Route::get('/courses', [CourseController::class, 'getCourses']);
+});

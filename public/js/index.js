@@ -8532,11 +8532,19 @@ var react_router_dom_1 = __webpack_require__(/*! react-router-dom */ "./node_mod
 
 var AppRouter_1 = __importDefault(__webpack_require__(/*! ./components/AppRouter */ "./resources/src/components/AppRouter.tsx"));
 
+var AuthContext_1 = __webpack_require__(/*! ./contexts/AuthContext */ "./resources/src/contexts/AuthContext.tsx");
+
 var App = function App() {
-  return react_1["default"].createElement(react_router_dom_1.BrowserRouter, null, react_1["default"].createElement(react_bootstrap_1.Container, {
+  return react_1["default"].createElement(AuthContext_1.AuthContext.Provider, {
+    value: {
+      Auth: {
+        bearerStart: 'Bearer '
+      }
+    }
+  }, react_1["default"].createElement(react_router_dom_1.BrowserRouter, null, react_1["default"].createElement(react_bootstrap_1.Container, {
     fluid: true,
     className: 'bg-dark vh-100'
-  }, react_1["default"].createElement(Navbar_1["default"], null), react_1["default"].createElement(AppRouter_1["default"], null)));
+  }, react_1["default"].createElement(Navbar_1["default"], null), react_1["default"].createElement(AppRouter_1["default"], null))));
 };
 
 exports["default"] = App;
@@ -8572,6 +8580,8 @@ var About_1 = __importDefault(__webpack_require__(/*! ../pages/About */ "./resou
 
 var Courses_1 = __importDefault(__webpack_require__(/*! ../pages/Courses */ "./resources/src/pages/Courses.tsx"));
 
+var Register_1 = __importDefault(__webpack_require__(/*! ../pages/Auth/Register */ "./resources/src/pages/Auth/Register.tsx"));
+
 var AppRouter = function AppRouter() {
   return react_1["default"].createElement(react_router_dom_1.Routes, null, react_1["default"].createElement(react_router_dom_1.Route, {
     path: '/',
@@ -8585,343 +8595,13 @@ var AppRouter = function AppRouter() {
   }), react_1["default"].createElement(react_router_dom_1.Route, {
     path: '/about',
     element: react_1["default"].createElement(About_1["default"], null)
+  }), react_1["default"].createElement(react_router_dom_1.Route, {
+    path: '/register',
+    element: react_1["default"].createElement(Register_1["default"], null)
   }));
 };
 
 exports["default"] = AppRouter;
-
-/***/ }),
-
-/***/ "./resources/src/components/Auth/Auth.tsx":
-/*!************************************************!*\
-  !*** ./resources/src/components/Auth/Auth.tsx ***!
-  \************************************************/
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
-
-"use strict";
-
-
-function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
-
-function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
-
-function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
-
-function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
-
-function _iterableToArrayLimit(arr, i) { var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]; if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
-
-function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
-
-var __createBinding = this && this.__createBinding || (Object.create ? function (o, m, k, k2) {
-  if (k2 === undefined) k2 = k;
-  Object.defineProperty(o, k2, {
-    enumerable: true,
-    get: function get() {
-      return m[k];
-    }
-  });
-} : function (o, m, k, k2) {
-  if (k2 === undefined) k2 = k;
-  o[k2] = m[k];
-});
-
-var __setModuleDefault = this && this.__setModuleDefault || (Object.create ? function (o, v) {
-  Object.defineProperty(o, "default", {
-    enumerable: true,
-    value: v
-  });
-} : function (o, v) {
-  o["default"] = v;
-});
-
-var __importStar = this && this.__importStar || function (mod) {
-  if (mod && mod.__esModule) return mod;
-  var result = {};
-  if (mod != null) for (var k in mod) {
-    if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-  }
-
-  __setModuleDefault(result, mod);
-
-  return result;
-};
-
-var __importDefault = this && this.__importDefault || function (mod) {
-  return mod && mod.__esModule ? mod : {
-    "default": mod
-  };
-};
-
-Object.defineProperty(exports, "__esModule", ({
-  value: true
-}));
-
-var react_1 = __importStar(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
-
-var react_bootstrap_1 = __webpack_require__(/*! react-bootstrap */ "./node_modules/react-bootstrap/esm/index.js");
-
-var axios_1 = __importDefault(__webpack_require__(/*! axios */ "./node_modules/axios/index.js"));
-
-var Login_1 = __importDefault(__webpack_require__(/*! ./Login */ "./resources/src/components/Auth/Login.tsx"));
-
-var Register_1 = __importDefault(__webpack_require__(/*! ./Register */ "./resources/src/components/Auth/Register.tsx"));
-
-var Auth = function Auth(_ref) {
-  var children = _ref.children;
-
-  var _ref2 = (0, react_1.useState)(false),
-      _ref3 = _slicedToArray(_ref2, 2),
-      auth = _ref3[0],
-      setAuth = _ref3[1];
-
-  var _ref4 = (0, react_1.useState)(Login_1["default"]),
-      _ref5 = _slicedToArray(_ref4, 2),
-      loginOrRegisterForm = _ref5[0],
-      setShowForm = _ref5[1];
-
-  (0, react_1.useEffect)(function () {
-    axios_1["default"].get('/api/checkauth').then(function (response) {
-      setAuth(response.data['is_auth']);
-    })["catch"](function (e) {
-      console.error(e);
-    });
-  }, []);
-
-  var showLoginForm = function showLoginForm() {
-    setShowForm(Login_1["default"]);
-  };
-
-  var showRegisterForm = function showRegisterForm() {
-    setShowForm(Register_1["default"]);
-  };
-
-  return react_1["default"].createElement(react_bootstrap_1.Container, null, auth ? children : react_1["default"].createElement(react_bootstrap_1.Container, null, react_1["default"].createElement(react_bootstrap_1.Nav, {
-    className: "justify-content-center",
-    as: "ul"
-  }, react_1["default"].createElement(react_bootstrap_1.Nav.Item, {
-    className: 'mx-5',
-    as: "li",
-    onClick: function onClick() {
-      return showLoginForm();
-    }
-  }, "\u0410\u0432\u0442\u043E\u0440\u0438\u0437\u043E\u0432\u0430\u0442\u044C\u0441\u044F"), react_1["default"].createElement(react_bootstrap_1.Nav.Item, {
-    className: 'mx-5',
-    as: "li",
-    onClick: function onClick() {
-      return showRegisterForm();
-    }
-  }, "\u0417\u0430\u0440\u0435\u0433\u0438\u0441\u0442\u0440\u0438\u0440\u043E\u0432\u0430\u0442\u044C\u0441\u044F")), loginOrRegisterForm));
-};
-
-exports["default"] = Auth;
-
-/***/ }),
-
-/***/ "./resources/src/components/Auth/Login.tsx":
-/*!*************************************************!*\
-  !*** ./resources/src/components/Auth/Login.tsx ***!
-  \*************************************************/
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var __importDefault = this && this.__importDefault || function (mod) {
-  return mod && mod.__esModule ? mod : {
-    "default": mod
-  };
-};
-
-Object.defineProperty(exports, "__esModule", ({
-  value: true
-}));
-
-var react_1 = __importDefault(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
-
-var react_bootstrap_1 = __webpack_require__(/*! react-bootstrap */ "./node_modules/react-bootstrap/esm/index.js");
-
-var Login = function Login() {
-  // const [formInput, setFormInput] = useState({email: '', password: ''})
-  // const updateFormInput = (e: any): void => {
-  //   e.persist()
-  //   setFormInput(prevState => ({...prevState, [e.target.name]: e.target.value}))
-  // }
-  // const signIn = (e: any) => {
-  //   e.preventDefault()
-  //   axios.get('/sanctum/csrf-cookie').then(() => {
-  //     axios.post('/api/login',formInput)
-  //   });
-  // }
-  return react_1["default"].createElement(react_bootstrap_1.Container, {
-    style: {
-      width: '80vh'
-    }
-  }, react_1["default"].createElement("h1", null, "\u0410\u0432\u0442\u043E\u0440\u0438\u0437\u0430\u0446\u0438\u044F"), react_1["default"].createElement(react_bootstrap_1.Form, {
-    action: '#',
-    method: 'post'
-  }, react_1["default"].createElement(react_bootstrap_1.Form.Group, {
-    className: "mb-3",
-    controlId: "formBasicEmail"
-  }, react_1["default"].createElement(react_bootstrap_1.Form.Label, null, "Email address"), react_1["default"].createElement(react_bootstrap_1.Form.Control, {
-    required: true,
-    name: 'email',
-    type: "email",
-    placeholder: "Enter email"
-  })), react_1["default"].createElement(react_bootstrap_1.Form.Group, {
-    className: "mb-3",
-    controlId: "formBasicPassword"
-  }, react_1["default"].createElement(react_bootstrap_1.Form.Label, null, "Password"), react_1["default"].createElement(react_bootstrap_1.Form.Control, {
-    name: 'password',
-    required: true,
-    type: "password",
-    placeholder: "Password"
-  })), react_1["default"].createElement(react_bootstrap_1.Button, {
-    variant: "primary",
-    type: "submit"
-  }, "\u0412\u043E\u0439\u0442\u0438")));
-};
-
-exports["default"] = Login;
-
-/***/ }),
-
-/***/ "./resources/src/components/Auth/Register.tsx":
-/*!****************************************************!*\
-  !*** ./resources/src/components/Auth/Register.tsx ***!
-  \****************************************************/
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var __importDefault = this && this.__importDefault || function (mod) {
-  return mod && mod.__esModule ? mod : {
-    "default": mod
-  };
-};
-
-Object.defineProperty(exports, "__esModule", ({
-  value: true
-}));
-
-var react_1 = __importDefault(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
-
-var react_bootstrap_1 = __webpack_require__(/*! react-bootstrap */ "./node_modules/react-bootstrap/esm/index.js");
-
-var Password_1 = __importDefault(__webpack_require__(/*! ./register-components/Password */ "./resources/src/components/Auth/register-components/Password.tsx"));
-
-var Email_1 = __importDefault(__webpack_require__(/*! ./register-components/Email */ "./resources/src/components/Auth/register-components/Email.tsx"));
-
-var Register = function Register() {
-  var csrf_token = '{{echo csrf_token()}}';
-  return react_1["default"].createElement(react_bootstrap_1.Container, {
-    style: {
-      width: '80vh'
-    }
-  }, react_1["default"].createElement("h1", null, "\u0420\u0435\u0433\u0438\u0441\u0442\u0440\u0430\u0446\u0438\u044F"), react_1["default"].createElement(react_bootstrap_1.Form, {
-    action: '/api/register',
-    method: 'post'
-  }, react_1["default"].createElement("input", {
-    type: 'hidden',
-    name: '_token',
-    value: csrf_token
-  }), react_1["default"].createElement(Email_1["default"], null), react_1["default"].createElement(Password_1["default"], null), react_1["default"].createElement(react_bootstrap_1.Button, {
-    variant: "primary",
-    type: "submit"
-  }, "\u0417\u0430\u0440\u0435\u0433\u0438\u0441\u0442\u0440\u0438\u0440\u043E\u0432\u0430\u0442\u044C\u0441\u044F")));
-};
-
-exports["default"] = Register;
-
-/***/ }),
-
-/***/ "./resources/src/components/Auth/register-components/Email.tsx":
-/*!*********************************************************************!*\
-  !*** ./resources/src/components/Auth/register-components/Email.tsx ***!
-  \*********************************************************************/
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var __importDefault = this && this.__importDefault || function (mod) {
-  return mod && mod.__esModule ? mod : {
-    "default": mod
-  };
-};
-
-Object.defineProperty(exports, "__esModule", ({
-  value: true
-}));
-
-var react_1 = __importDefault(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
-
-var react_bootstrap_1 = __webpack_require__(/*! react-bootstrap */ "./node_modules/react-bootstrap/esm/index.js");
-
-var Email = function Email() {
-  return react_1["default"].createElement(react_bootstrap_1.Form.Group, {
-    className: "mb-3",
-    controlId: "formBasicEmail"
-  }, react_1["default"].createElement(react_bootstrap_1.Form.Label, null, "Email address"), react_1["default"].createElement(react_bootstrap_1.Form.Control, {
-    name: 'email',
-    type: "email",
-    placeholder: "Enter email",
-    required: true
-  }), react_1["default"].createElement(react_bootstrap_1.Form.Text, {
-    className: "text-muted"
-  }, "We'll never share your email with anyone else."));
-};
-
-exports["default"] = Email;
-
-/***/ }),
-
-/***/ "./resources/src/components/Auth/register-components/Password.tsx":
-/*!************************************************************************!*\
-  !*** ./resources/src/components/Auth/register-components/Password.tsx ***!
-  \************************************************************************/
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var __importDefault = this && this.__importDefault || function (mod) {
-  return mod && mod.__esModule ? mod : {
-    "default": mod
-  };
-};
-
-Object.defineProperty(exports, "__esModule", ({
-  value: true
-}));
-
-var react_1 = __importDefault(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
-
-var react_bootstrap_1 = __webpack_require__(/*! react-bootstrap */ "./node_modules/react-bootstrap/esm/index.js");
-
-var Password = function Password() {
-  return react_1["default"].createElement(react_bootstrap_1.Form.Group, {
-    className: "mb-3",
-    controlId: "formBasicPassword"
-  }, react_1["default"].createElement(react_bootstrap_1.Form.Label, {
-    htmlFor: "inputPassword5"
-  }, "Password"), react_1["default"].createElement(react_bootstrap_1.Form.Control, {
-    required: true,
-    name: 'password',
-    placeholder: "Enter password",
-    type: "password",
-    id: "inputPassword5",
-    "aria-describedby": "passwordHelpBlock",
-    minLength: 8,
-    maxLength: 10
-  }), react_1["default"].createElement(react_bootstrap_1.Form.Text, {
-    id: "passwordHelpBlock",
-    muted: true
-  }, "Your password must be 8-20 characters long, contain letters and numbers, and must not contain spaces, special characters, or emoji."));
-};
-
-exports["default"] = Password;
 
 /***/ }),
 
@@ -8980,12 +8660,6 @@ var __importStar = this && this.__importStar || function (mod) {
   return result;
 };
 
-var __importDefault = this && this.__importDefault || function (mod) {
-  return mod && mod.__esModule ? mod : {
-    "default": mod
-  };
-};
-
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
@@ -8996,8 +8670,6 @@ var react_bootstrap_1 = __webpack_require__(/*! react-bootstrap */ "./node_modul
 
 var react_router_dom_1 = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/index.js");
 
-var axios_1 = __importDefault(__webpack_require__(/*! axios */ "./node_modules/axios/index.js"));
-
 var Navbar = function Navbar() {
   var _ref = (0, react_1.useState)(false),
       _ref2 = _slicedToArray(_ref, 2),
@@ -9007,28 +8679,30 @@ var Navbar = function Navbar() {
   var _ref3 = (0, react_1.useState)(false),
       _ref4 = _slicedToArray(_ref3, 2),
       doLogout = _ref4[0],
-      setDoLogout = _ref4[1];
+      setDoLogout = _ref4[1]; // useEffect(() => {
+  //   axios.get('/api/checkauth').then((response) => {
+  //     setAuth(response.data['is_auth'])
+  //
+  //   }).catch((e) => {
+  //     console.error(e)
+  //   })
+  //   console.log('Use Effect for check auth')
+  // }, [doLogout])
+  //
+  // useEffect(() => {
+  //   if (doLogout) {
+  //     // setDoLogout(false)
+  //     axios.post('/api/logout').then((response) => {
+  //     }).catch((e) => {
+  //       console.error(e)
+  //     }).finally(()=>{
+  //       window.location.reload();
+  //     })
+  //   }
+  //   console.log('Use Effect for logout')
+  // }, [doLogout])
+  //
 
-  (0, react_1.useEffect)(function () {
-    axios_1["default"].get('/api/checkauth').then(function (response) {
-      setAuth(response.data['is_auth']);
-    })["catch"](function (e) {
-      console.error(e);
-    });
-    console.log('Use Effect for check auth');
-  }, [doLogout]);
-  (0, react_1.useEffect)(function () {
-    if (doLogout) {
-      // setDoLogout(false)
-      axios_1["default"].post('/api/logout').then(function (response) {})["catch"](function (e) {
-        console.error(e);
-      })["finally"](function () {
-        window.location.reload();
-      });
-    }
-
-    console.log('Use Effect for logout');
-  }, [doLogout]);
 
   var changeDoLogoutStatus = function changeDoLogoutStatus() {
     setDoLogout(true);
@@ -9069,6 +8743,26 @@ var Navbar = function Navbar() {
 };
 
 exports["default"] = Navbar;
+
+/***/ }),
+
+/***/ "./resources/src/contexts/AuthContext.tsx":
+/*!************************************************!*\
+  !*** ./resources/src/contexts/AuthContext.tsx ***!
+  \************************************************/
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports.AuthContext = void 0;
+
+var react_1 = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+
+exports.AuthContext = (0, react_1.createContext)(null);
 
 /***/ }),
 
@@ -9138,14 +8832,60 @@ exports["default"] = About;
 
 /***/ }),
 
-/***/ "./resources/src/pages/Courses.tsx":
-/*!*****************************************!*\
-  !*** ./resources/src/pages/Courses.tsx ***!
-  \*****************************************/
+/***/ "./resources/src/pages/Auth/Register.tsx":
+/*!***********************************************!*\
+  !*** ./resources/src/pages/Auth/Register.tsx ***!
+  \***********************************************/
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
 
+
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+function _iterableToArrayLimit(arr, i) { var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]; if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+var __createBinding = this && this.__createBinding || (Object.create ? function (o, m, k, k2) {
+  if (k2 === undefined) k2 = k;
+  Object.defineProperty(o, k2, {
+    enumerable: true,
+    get: function get() {
+      return m[k];
+    }
+  });
+} : function (o, m, k, k2) {
+  if (k2 === undefined) k2 = k;
+  o[k2] = m[k];
+});
+
+var __setModuleDefault = this && this.__setModuleDefault || (Object.create ? function (o, v) {
+  Object.defineProperty(o, "default", {
+    enumerable: true,
+    value: v
+  });
+} : function (o, v) {
+  o["default"] = v;
+});
+
+var __importStar = this && this.__importStar || function (mod) {
+  if (mod && mod.__esModule) return mod;
+  var result = {};
+  if (mod != null) for (var k in mod) {
+    if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+  }
+
+  __setModuleDefault(result, mod);
+
+  return result;
+};
 
 var __importDefault = this && this.__importDefault || function (mod) {
   return mod && mod.__esModule ? mod : {
@@ -9157,27 +8897,213 @@ Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 
-var react_1 = __importDefault(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
+var react_1 = __importStar(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
 
-var Auth_1 = __importDefault(__webpack_require__(/*! ../components/Auth/Auth */ "./resources/src/components/Auth/Auth.tsx"));
+var react_bootstrap_1 = __webpack_require__(/*! react-bootstrap */ "./node_modules/react-bootstrap/esm/index.js");
+
+var axios_1 = __importDefault(__webpack_require__(/*! axios */ "./node_modules/axios/index.js"));
+
+var Register = function Register() {
+  var _ref = (0, react_1.useState)(''),
+      _ref2 = _slicedToArray(_ref, 2),
+      email = _ref2[0],
+      setEmail = _ref2[1];
+
+  var _ref3 = (0, react_1.useState)(''),
+      _ref4 = _slicedToArray(_ref3, 2),
+      password = _ref4[0],
+      setPassword = _ref4[1];
+
+  var _ref5 = (0, react_1.useState)(''),
+      _ref6 = _slicedToArray(_ref5, 2),
+      confirmPassword = _ref6[0],
+      setConfirmPassword = _ref6[1];
+
+  var register = function register() {
+    var headers = {
+      'Accept': 'application/json'
+    };
+    var params = {
+      'email': email,
+      'password': password,
+      'password_confirmation': confirmPassword
+    };
+    axios_1["default"].post('api/register', params, {
+      headers: headers
+    }).then(function (response) {
+      console.log(response.data);
+    })["catch"](function (error) {
+      console.error('There was an error!', error);
+    });
+  };
+
+  return react_1["default"].createElement(react_bootstrap_1.Container, {
+    style: {
+      width: '80vh'
+    }
+  }, react_1["default"].createElement("h1", {
+    style: {
+      color: "white"
+    }
+  }, "\u0420\u0435\u0433\u0438\u0441\u0442\u0440\u0430\u0446\u0438\u044F"), react_1["default"].createElement(react_bootstrap_1.Form, {
+    action: '#'
+  }, react_1["default"].createElement(react_bootstrap_1.Form.Group, {
+    className: "mb-3",
+    controlId: "formBasicEmail"
+  }, react_1["default"].createElement(react_bootstrap_1.Form.Label, null, "Email address"), react_1["default"].createElement(react_bootstrap_1.Form.Control, {
+    id: 'inputEmail',
+    onChange: function onChange(event) {
+      return setEmail(event.target.value);
+    },
+    name: 'email',
+    type: "email",
+    placeholder: "Enter email",
+    required: true
+  }), react_1["default"].createElement(react_bootstrap_1.Form.Text, {
+    className: "text-muted"
+  }, "We'll never share your email with anyone else.")), react_1["default"].createElement(react_bootstrap_1.Form.Group, {
+    className: "mb-3",
+    controlId: "formBasicPassword"
+  }, react_1["default"].createElement(react_bootstrap_1.Form.Label, {
+    htmlFor: "inputPassword"
+  }, "Password"), react_1["default"].createElement(react_bootstrap_1.Form.Control, {
+    required: true,
+    name: 'password',
+    placeholder: "Enter password",
+    type: "password",
+    id: "inputPassword",
+    "aria-describedby": "passwordHelpBlock",
+    minLength: 8,
+    maxLength: 20,
+    onChange: function onChange(event) {
+      return setPassword(event.target.value);
+    }
+  }), react_1["default"].createElement(react_bootstrap_1.Form.Text, {
+    id: "passwordHelpBlock",
+    muted: true
+  }, "Your password must be 8-20 characters long, contain letters and numbers, and must not contain spaces, special characters, or emoji.")), react_1["default"].createElement(react_bootstrap_1.Form.Group, {
+    className: "mb-3",
+    controlId: "formBasicPassword"
+  }, react_1["default"].createElement(react_bootstrap_1.Form.Label, {
+    htmlFor: "inputPasswordConfirm"
+  }, "Password"), react_1["default"].createElement(react_bootstrap_1.Form.Control, {
+    required: true,
+    name: 'password_confirmation',
+    placeholder: "Enter password",
+    type: "password",
+    id: "inputPasswordConfirm",
+    "aria-describedby": "passwordHelpBlock",
+    minLength: 8,
+    maxLength: 20,
+    onChange: function onChange(event) {
+      return setConfirmPassword(event.target.value);
+    }
+  }), react_1["default"].createElement(react_bootstrap_1.Form.Text, {
+    id: "passwordHelpBlock",
+    muted: true
+  }, "Your password must be 8-20 characters long, contain letters and numbers, and must not contain spaces, special characters, or emoji.")), react_1["default"].createElement(react_bootstrap_1.Button, {
+    onClick: function onClick() {
+      return register();
+    },
+    variant: "primary",
+    type: "button"
+  }, "\u0417\u0430\u0440\u0435\u0433\u0438\u0441\u0442\u0440\u0438\u0440\u043E\u0432\u0430\u0442\u044C\u0441\u044F")));
+};
+
+exports["default"] = Register;
+
+/***/ }),
+
+/***/ "./resources/src/pages/Courses.tsx":
+/*!*****************************************!*\
+  !*** ./resources/src/pages/Courses.tsx ***!
+  \*****************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+"use strict";
+
+
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+function _iterableToArrayLimit(arr, i) { var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]; if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+var __createBinding = this && this.__createBinding || (Object.create ? function (o, m, k, k2) {
+  if (k2 === undefined) k2 = k;
+  Object.defineProperty(o, k2, {
+    enumerable: true,
+    get: function get() {
+      return m[k];
+    }
+  });
+} : function (o, m, k, k2) {
+  if (k2 === undefined) k2 = k;
+  o[k2] = m[k];
+});
+
+var __setModuleDefault = this && this.__setModuleDefault || (Object.create ? function (o, v) {
+  Object.defineProperty(o, "default", {
+    enumerable: true,
+    value: v
+  });
+} : function (o, v) {
+  o["default"] = v;
+});
+
+var __importStar = this && this.__importStar || function (mod) {
+  if (mod && mod.__esModule) return mod;
+  var result = {};
+  if (mod != null) for (var k in mod) {
+    if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+  }
+
+  __setModuleDefault(result, mod);
+
+  return result;
+};
+
+var __importDefault = this && this.__importDefault || function (mod) {
+  return mod && mod.__esModule ? mod : {
+    "default": mod
+  };
+};
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+
+var react_1 = __importStar(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
+
+var axios_1 = __importDefault(__webpack_require__(/*! axios */ "./node_modules/axios/index.js"));
+
+var react_router_dom_1 = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/index.js");
 
 var Courses = function Courses() {
-  // const [courses, setCourses] = useState<TypeCourse[]>([])
-  // useEffect(() => {
-  //   axios.get('/api/courses').then((response) => {
-  //     setCourses(response.data)
-  //   }).catch((e) => {
-  //     console.log(e)
-  //   })
-  // }, [])
-  // useEffect(() => {
-  //
-  // }, [courses])
+  var _ref = (0, react_1.useState)(false),
+      _ref2 = _slicedToArray(_ref, 2),
+      auth = _ref2[0],
+      setAuth = _ref2[1];
+
+  var navigate = (0, react_router_dom_1.useNavigate)();
+  (0, react_1.useEffect)(function () {
+    axios_1["default"].get('api/courses').then(function (response) {
+      console.log(response.data);
+    })["catch"](function (error) {
+      console.error('There was an error!', error.response.status);
+    });
+  }, []);
   return react_1["default"].createElement("div", {
     style: {
       color: "white"
     }
-  }, react_1["default"].createElement("p", null, "\u041A\u0443\u0440\u0441\u044B"), react_1["default"].createElement(Auth_1["default"], null));
+  }, react_1["default"].createElement("p", null, "\u041A\u0443\u0440\u0441\u044B"));
 };
 
 exports["default"] = Courses;
@@ -9244,6 +9170,8 @@ window._ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
 
 window.axios = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+window.axios.defaults.headers.common['Access-Control-Allow-Credentials'] = true;
+window.axios.defaults.headers.common['Authorization'] = '';
 axios.defaults.withCredentials = true;
 /**
  * Echo exposes an expressive API for subscribing to channels and listening

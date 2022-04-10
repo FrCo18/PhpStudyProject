@@ -4,13 +4,13 @@ import {Form} from "react-bootstrap";
 const Password: React.FC = () => {
   return (
     <Form.Group className="mb-3" controlId="formBasicPassword">
-      <Form.Label htmlFor="inputPassword">Password</Form.Label>
+      <Form.Label htmlFor="inputPassword5">Password Confirm</Form.Label>
       <Form.Control
         required
-        name='password'
+        name='password_confirmation'
         placeholder="Enter password"
         type="password"
-        id="inputPassword"
+        id="inputPassword5"
         aria-describedby="passwordHelpBlock"
         minLength={8}
         maxLength={10}

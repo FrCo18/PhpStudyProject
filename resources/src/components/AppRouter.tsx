@@ -3,6 +3,7 @@ import {Route, Routes} from "react-router-dom";
 import Home from "../pages/Home";
 import About from "../pages/About";
 import Courses from "../pages/Courses";
+import Register from "../pages/Auth/Register";
 
 const AppRouter: React.FC = () => {
   return (
@@ -11,6 +12,7 @@ const AppRouter: React.FC = () => {
       <Route path='*' element={<Home/>}/>
       <Route path='/courses' element={<Courses/>}/>
       <Route path='/about' element={<About/>}/>
+      <Route path='/register' element={<Register/>}/>
     </Routes>
   );
 };

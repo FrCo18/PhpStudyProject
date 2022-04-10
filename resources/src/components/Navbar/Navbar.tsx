@@ -7,29 +7,29 @@ import axios from "axios";
 const Navbar: React.FC = () => {
   const [auth, setAuth] = useState<boolean>(false)
   const [doLogout, setDoLogout] = useState<boolean>(false)
-  useEffect(() => {
-    axios.get('/api/checkauth').then((response) => {
-      setAuth(response.data['is_auth'])
-
-    }).catch((e) => {
-      console.error(e)
-    })
-    console.log('Use Effect for check auth')
-  }, [doLogout])
-
-  useEffect(() => {
-    if (doLogout) {
-      // setDoLogout(false)
-      axios.post('/api/logout').then((response) => {
-      }).catch((e) => {
-        console.error(e)
-      }).finally(()=>{
-        window.location.reload();
-      })
-    }
-    console.log('Use Effect for logout')
-  }, [doLogout])
-
+  // useEffect(() => {
+  //   axios.get('/api/checkauth').then((response) => {
+  //     setAuth(response.data['is_auth'])
+  //
+  //   }).catch((e) => {
+  //     console.error(e)
+  //   })
+  //   console.log('Use Effect for check auth')
+  // }, [doLogout])
+  //
+  // useEffect(() => {
+  //   if (doLogout) {
+  //     // setDoLogout(false)
+  //     axios.post('/api/logout').then((response) => {
+  //     }).catch((e) => {
+  //       console.error(e)
+  //     }).finally(()=>{
+  //       window.location.reload();
+  //     })
+  //   }
+  //   console.log('Use Effect for logout')
+  // }, [doLogout])
+  //
   const changeDoLogoutStatus = () => {
     setDoLogout(true)
   }
