@@ -8582,7 +8582,13 @@ var Courses_1 = __importDefault(__webpack_require__(/*! ../pages/Courses */ "./r
 
 var Register_1 = __importDefault(__webpack_require__(/*! ../pages/Auth/Register */ "./resources/src/pages/Auth/Register.tsx"));
 
+var Login_1 = __importDefault(__webpack_require__(/*! ../pages/Auth/Login */ "./resources/src/pages/Auth/Login.tsx"));
+
+var universal_cookie_1 = __importDefault(__webpack_require__(/*! universal-cookie */ "./node_modules/universal-cookie/es6/index.js"));
+
 var AppRouter = function AppRouter() {
+  var cookies = new universal_cookie_1["default"]();
+  var authToken = cookies.get('auth');
   return react_1["default"].createElement(react_router_dom_1.Routes, null, react_1["default"].createElement(react_router_dom_1.Route, {
     path: '/',
     element: react_1["default"].createElement(Home_1["default"], null)
@@ -8598,6 +8604,9 @@ var AppRouter = function AppRouter() {
   }), react_1["default"].createElement(react_router_dom_1.Route, {
     path: '/register',
     element: react_1["default"].createElement(Register_1["default"], null)
+  }), react_1["default"].createElement(react_router_dom_1.Route, {
+    path: '/login',
+    element: react_1["default"].createElement(Login_1["default"], null)
   }));
 };
 
@@ -8660,6 +8669,12 @@ var __importStar = this && this.__importStar || function (mod) {
   return result;
 };
 
+var __importDefault = this && this.__importDefault || function (mod) {
+  return mod && mod.__esModule ? mod : {
+    "default": mod
+  };
+};
+
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
@@ -8670,44 +8685,57 @@ var react_bootstrap_1 = __webpack_require__(/*! react-bootstrap */ "./node_modul
 
 var react_router_dom_1 = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/index.js");
 
+var axios_1 = __importDefault(__webpack_require__(/*! axios */ "./node_modules/axios/index.js"));
+
+var universal_cookie_1 = __importDefault(__webpack_require__(/*! universal-cookie */ "./node_modules/universal-cookie/es6/index.js"));
+
 var Navbar = function Navbar() {
   var _ref = (0, react_1.useState)(false),
       _ref2 = _slicedToArray(_ref, 2),
       auth = _ref2[0],
       setAuth = _ref2[1];
 
-  var _ref3 = (0, react_1.useState)(false),
-      _ref4 = _slicedToArray(_ref3, 2),
-      doLogout = _ref4[0],
-      setDoLogout = _ref4[1]; // useEffect(() => {
-  //   axios.get('/api/checkauth').then((response) => {
-  //     setAuth(response.data['is_auth'])
-  //
-  //   }).catch((e) => {
-  //     console.error(e)
-  //   })
-  //   console.log('Use Effect for check auth')
-  // }, [doLogout])
-  //
-  // useEffect(() => {
-  //   if (doLogout) {
-  //     // setDoLogout(false)
-  //     axios.post('/api/logout').then((response) => {
-  //     }).catch((e) => {
-  //       console.error(e)
-  //     }).finally(()=>{
-  //       window.location.reload();
-  //     })
-  //   }
-  //   console.log('Use Effect for logout')
-  // }, [doLogout])
-  //
+  var navigate = (0, react_router_dom_1.useNavigate)();
 
+  var logout = function logout() {
+    var cookies = new universal_cookie_1["default"]();
+    var authToken = cookies.get('auth_token');
+    var headers = {
+      'Accept': 'application/json',
+      'Authorization': 'Bearer ' + authToken
+    };
+    axios_1["default"].post('api/logout', null, {
+      headers: headers
+    }).then(function (response) {
+      var cookies = new universal_cookie_1["default"]();
+      cookies.remove('auth_token');
+    })["catch"](function (error) {
+      console.error('There was an error!', error);
+    })["finally"](function () {
+      var cookies = new universal_cookie_1["default"]();
 
-  var changeDoLogoutStatus = function changeDoLogoutStatus() {
-    setDoLogout(true);
+      if (!cookies.get('auth_token')) {
+        setAuth(false);
+        alert('Вы вышли из системы');
+        navigate('/');
+        window.location.reload();
+      }
+    });
   };
 
+  var checkAuth = function checkAuth() {
+    var cookies = new universal_cookie_1["default"]();
+
+    if (cookies.get('auth_token')) {
+      setAuth(true);
+    } else {
+      setAuth(false);
+    }
+  };
+
+  (0, react_1.useEffect)(function () {
+    return checkAuth();
+  }, []);
   return react_1["default"].createElement(react_bootstrap_1.Container, null, react_1["default"].createElement(react_bootstrap_1.Nav, {
     className: "justify-content-center",
     defaultActiveKey: "/home",
@@ -8728,18 +8756,36 @@ var Navbar = function Navbar() {
     eventKey: "link-2"
   }, react_1["default"].createElement(react_router_dom_1.Link, {
     to: '/about'
-  }, "\u041E \u043F\u0440\u043E\u0435\u043A\u0442\u0435"))), auth && react_1["default"].createElement(react_bootstrap_1.Button, {
+  }, "\u041E \u043F\u0440\u043E\u0435\u043A\u0442\u0435"))), auth ? react_1["default"].createElement(react_bootstrap_1.Button, {
     onClick: function onClick() {
-      return changeDoLogoutStatus();
+      return logout();
     },
     style: {
-      position: 'absolute',
       right: '5%'
     },
     className: 'mt-1',
     variant: "primary",
     size: "sm"
-  }, "Logout")));
+  }, "Logout") : react_1["default"].createElement("div", {
+    style: {
+      "float": 'right',
+      right: '5%'
+    }
+  }, react_1["default"].createElement(react_bootstrap_1.Button, {
+    onClick: function onClick() {
+      return navigate('/login');
+    },
+    className: 'mt-1',
+    variant: "primary",
+    size: "sm"
+  }, "\u0412\u043E\u0439\u0442\u0438"), react_1["default"].createElement(react_bootstrap_1.Button, {
+    onClick: function onClick() {
+      navigate('/register');
+    },
+    className: 'mt-1 ms-1',
+    variant: "primary",
+    size: "sm"
+  }, "\u0417\u0430\u0440\u0435\u0433\u0438\u0441\u0442\u0440\u0438\u0440\u043E\u0432\u0430\u0442\u044C\u0441\u044F"))));
 };
 
 exports["default"] = Navbar;
@@ -8832,6 +8878,189 @@ exports["default"] = About;
 
 /***/ }),
 
+/***/ "./resources/src/pages/Auth/Login.tsx":
+/*!********************************************!*\
+  !*** ./resources/src/pages/Auth/Login.tsx ***!
+  \********************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+"use strict";
+
+
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+function _iterableToArrayLimit(arr, i) { var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]; if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+var __createBinding = this && this.__createBinding || (Object.create ? function (o, m, k, k2) {
+  if (k2 === undefined) k2 = k;
+  Object.defineProperty(o, k2, {
+    enumerable: true,
+    get: function get() {
+      return m[k];
+    }
+  });
+} : function (o, m, k, k2) {
+  if (k2 === undefined) k2 = k;
+  o[k2] = m[k];
+});
+
+var __setModuleDefault = this && this.__setModuleDefault || (Object.create ? function (o, v) {
+  Object.defineProperty(o, "default", {
+    enumerable: true,
+    value: v
+  });
+} : function (o, v) {
+  o["default"] = v;
+});
+
+var __importStar = this && this.__importStar || function (mod) {
+  if (mod && mod.__esModule) return mod;
+  var result = {};
+  if (mod != null) for (var k in mod) {
+    if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+  }
+
+  __setModuleDefault(result, mod);
+
+  return result;
+};
+
+var __importDefault = this && this.__importDefault || function (mod) {
+  return mod && mod.__esModule ? mod : {
+    "default": mod
+  };
+};
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+
+var react_1 = __importStar(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
+
+var react_bootstrap_1 = __webpack_require__(/*! react-bootstrap */ "./node_modules/react-bootstrap/esm/index.js");
+
+var axios_1 = __importDefault(__webpack_require__(/*! axios */ "./node_modules/axios/index.js"));
+
+var universal_cookie_1 = __importDefault(__webpack_require__(/*! universal-cookie */ "./node_modules/universal-cookie/es6/index.js"));
+
+var react_router_dom_1 = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/index.js");
+
+var Login = function Login() {
+  var _ref = (0, react_1.useState)(''),
+      _ref2 = _slicedToArray(_ref, 2),
+      email = _ref2[0],
+      setEmail = _ref2[1];
+
+  var _ref3 = (0, react_1.useState)(''),
+      _ref4 = _slicedToArray(_ref3, 2),
+      password = _ref4[0],
+      setPassword = _ref4[1];
+
+  var navigate = (0, react_router_dom_1.useNavigate)();
+
+  var login = function login() {
+    var headers = {
+      'Accept': 'application/json'
+    };
+    var params = {
+      'email': email,
+      'password': password
+    };
+    axios_1["default"].post('api/login', params, {
+      headers: headers
+    }).then(function (response) {
+      if (response.data.auth) {
+        var cookies = new universal_cookie_1["default"]();
+        cookies.set('auth_token', response.data.token, {
+          path: '/'
+        });
+      }
+    })["catch"](function (error) {
+      alert('Не верны имя пользователя или пароль');
+      console.error('There was an error!', error);
+    })["finally"](function () {
+      var cookies = new universal_cookie_1["default"]();
+
+      if (cookies.get('auth_token')) {
+        window.location.reload();
+      }
+    });
+  }; //check auth
+
+
+  (0, react_1.useEffect)(function () {
+    var cookies = new universal_cookie_1["default"]();
+    var token = cookies.get('auth_token');
+
+    if (token) {
+      navigate('/');
+    }
+  }, []);
+  return react_1["default"].createElement(react_bootstrap_1.Container, {
+    style: {
+      width: '80vh'
+    }
+  }, react_1["default"].createElement("h1", {
+    style: {
+      color: "white"
+    }
+  }, "\u0410\u0432\u0442\u043E\u0440\u0438\u0437\u0430\u0446\u0438\u044F"), react_1["default"].createElement(react_bootstrap_1.Form, {
+    action: '#'
+  }, react_1["default"].createElement(react_bootstrap_1.Form.Group, {
+    className: "mb-3",
+    controlId: "formBasicEmail"
+  }, react_1["default"].createElement(react_bootstrap_1.Form.Label, null, "Email address"), react_1["default"].createElement(react_bootstrap_1.Form.Control, {
+    id: 'inputEmail',
+    onChange: function onChange(event) {
+      return setEmail(event.target.value);
+    },
+    name: 'email',
+    type: "email",
+    placeholder: "Enter email",
+    required: true
+  }), react_1["default"].createElement(react_bootstrap_1.Form.Text, {
+    className: "text-muted"
+  })), react_1["default"].createElement(react_bootstrap_1.Form.Group, {
+    className: "mb-3",
+    controlId: "formBasicPassword"
+  }, react_1["default"].createElement(react_bootstrap_1.Form.Label, {
+    htmlFor: "inputPassword"
+  }, "Password"), react_1["default"].createElement(react_bootstrap_1.Form.Control, {
+    required: true,
+    name: 'password',
+    placeholder: "Enter password",
+    type: "password",
+    id: "inputPassword",
+    "aria-describedby": "passwordHelpBlock",
+    minLength: 8,
+    maxLength: 20,
+    onChange: function onChange(event) {
+      return setPassword(event.target.value);
+    }
+  }), react_1["default"].createElement(react_bootstrap_1.Form.Text, {
+    id: "passwordHelpBlock",
+    muted: true
+  })), react_1["default"].createElement(react_bootstrap_1.Button, {
+    onClick: function onClick() {
+      return login();
+    },
+    variant: "primary",
+    type: "button"
+  }, "\u0412\u043E\u0439\u0442\u0438")));
+};
+
+exports["default"] = Login;
+
+/***/ }),
+
 /***/ "./resources/src/pages/Auth/Register.tsx":
 /*!***********************************************!*\
   !*** ./resources/src/pages/Auth/Register.tsx ***!
@@ -8903,6 +9132,10 @@ var react_bootstrap_1 = __webpack_require__(/*! react-bootstrap */ "./node_modul
 
 var axios_1 = __importDefault(__webpack_require__(/*! axios */ "./node_modules/axios/index.js"));
 
+var universal_cookie_1 = __importDefault(__webpack_require__(/*! universal-cookie */ "./node_modules/universal-cookie/es6/index.js"));
+
+var react_router_dom_1 = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/index.js");
+
 var Register = function Register() {
   var _ref = (0, react_1.useState)(''),
       _ref2 = _slicedToArray(_ref, 2),
@@ -8919,6 +9152,8 @@ var Register = function Register() {
       confirmPassword = _ref6[0],
       setConfirmPassword = _ref6[1];
 
+  var navigate = (0, react_router_dom_1.useNavigate)();
+
   var register = function register() {
     var headers = {
       'Accept': 'application/json'
@@ -8931,12 +9166,34 @@ var Register = function Register() {
     axios_1["default"].post('api/register', params, {
       headers: headers
     }).then(function (response) {
-      console.log(response.data);
+      if (response.data.auth) {
+        console.log('adadadadadadadadadadadadadada');
+        var cookies = new universal_cookie_1["default"]();
+        cookies.set('auth_token', response.data.token, {
+          path: '/'
+        });
+      }
     })["catch"](function (error) {
       console.error('There was an error!', error);
-    });
-  };
+    })["finally"](function () {
+      var cookies = new universal_cookie_1["default"]();
 
+      if (cookies.get('auth_token')) {
+        alert('Регистрация прошла успешно');
+        window.location.reload();
+      }
+    });
+  }; //check auth
+
+
+  (0, react_1.useEffect)(function () {
+    var cookies = new universal_cookie_1["default"]();
+    var token = cookies.get('auth_token');
+
+    if (token) {
+      navigate('/');
+    }
+  }, []);
   return react_1["default"].createElement(react_bootstrap_1.Container, {
     style: {
       width: '80vh'
@@ -9085,25 +9342,63 @@ var axios_1 = __importDefault(__webpack_require__(/*! axios */ "./node_modules/a
 
 var react_router_dom_1 = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/index.js");
 
-var Courses = function Courses() {
-  var _ref = (0, react_1.useState)(false),
-      _ref2 = _slicedToArray(_ref, 2),
-      auth = _ref2[0],
-      setAuth = _ref2[1];
+var universal_cookie_1 = __importDefault(__webpack_require__(/*! universal-cookie */ "./node_modules/universal-cookie/es6/index.js"));
 
+var react_bootstrap_1 = __webpack_require__(/*! react-bootstrap */ "./node_modules/react-bootstrap/esm/index.js");
+
+var Courses = function Courses() {
   var navigate = (0, react_router_dom_1.useNavigate)();
+  var cookies = new universal_cookie_1["default"]();
+  var token = cookies.get('auth_token');
+
+  var _ref = (0, react_1.useState)([]),
+      _ref2 = _slicedToArray(_ref, 2),
+      courses = _ref2[0],
+      setCourses = _ref2[1];
+
+  var _ref3 = (0, react_1.useState)(false),
+      _ref4 = _slicedToArray(_ref3, 2),
+      isLoad = _ref4[0],
+      setLoad = _ref4[1]; //check auth
+
+
   (0, react_1.useEffect)(function () {
-    axios_1["default"].get('api/courses').then(function (response) {
-      console.log(response.data);
-    })["catch"](function (error) {
-      console.error('There was an error!', error.response.status);
+    if (!token) {
+      console.log('Авторизуйтесь!');
+      navigate('/');
+    }
+  }, []); //получение списка курсов
+
+  (0, react_1.useEffect)(function () {
+    var headers = {
+      'Accept': 'application/json',
+      'Authorization': 'Bearer ' + token
+    };
+    axios_1["default"].get('api/courses', {
+      headers: headers
+    }).then(function (response) {
+      if (response.data.length) {
+        setCourses(response.data);
+      }
     });
   }, []);
   return react_1["default"].createElement("div", {
     style: {
       color: "white"
     }
-  }, react_1["default"].createElement("p", null, "\u041A\u0443\u0440\u0441\u044B"));
+  }, react_1["default"].createElement("p", null, "\u041A\u0443\u0440\u0441\u044B"), courses.map(function (course) {
+    return react_1["default"].createElement(react_bootstrap_1.Card, {
+      key: course.id_course,
+      style: {
+        color: 'black'
+      },
+      className: 'mb-3'
+    }, react_1["default"].createElement(react_bootstrap_1.Card.Header, {
+      as: "h5"
+    }, course.course), react_1["default"].createElement(react_bootstrap_1.Card.Body, null, react_1["default"].createElement(react_bootstrap_1.Card.Title, null, "\u0421\u043B\u043E\u0436\u043D\u043E\u0441\u0442\u044C: ", course.difficulty), react_1["default"].createElement(react_bootstrap_1.Card.Text, null, course.description), react_1["default"].createElement(react_bootstrap_1.Button, {
+      variant: "primary"
+    }, "\u041D\u0430\u0447\u0430\u0442\u044C")));
+  }));
 };
 
 exports["default"] = Courses;
@@ -9119,6 +9414,52 @@ exports["default"] = Courses;
 "use strict";
 
 
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+function _iterableToArrayLimit(arr, i) { var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]; if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+var __createBinding = this && this.__createBinding || (Object.create ? function (o, m, k, k2) {
+  if (k2 === undefined) k2 = k;
+  Object.defineProperty(o, k2, {
+    enumerable: true,
+    get: function get() {
+      return m[k];
+    }
+  });
+} : function (o, m, k, k2) {
+  if (k2 === undefined) k2 = k;
+  o[k2] = m[k];
+});
+
+var __setModuleDefault = this && this.__setModuleDefault || (Object.create ? function (o, v) {
+  Object.defineProperty(o, "default", {
+    enumerable: true,
+    value: v
+  });
+} : function (o, v) {
+  o["default"] = v;
+});
+
+var __importStar = this && this.__importStar || function (mod) {
+  if (mod && mod.__esModule) return mod;
+  var result = {};
+  if (mod != null) for (var k in mod) {
+    if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+  }
+
+  __setModuleDefault(result, mod);
+
+  return result;
+};
+
 var __importDefault = this && this.__importDefault || function (mod) {
   return mod && mod.__esModule ? mod : {
     "default": mod
@@ -9129,18 +9470,40 @@ Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 
-var react_1 = __importDefault(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
+var react_1 = __importStar(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
 
 var react_bootstrap_1 = __webpack_require__(/*! react-bootstrap */ "./node_modules/react-bootstrap/esm/index.js");
 
 var react_router_dom_1 = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/index.js");
 
+var universal_cookie_1 = __importDefault(__webpack_require__(/*! universal-cookie */ "./node_modules/universal-cookie/es6/index.js"));
+
 var Home = function Home() {
+  var _ref = (0, react_1.useState)(false),
+      _ref2 = _slicedToArray(_ref, 2),
+      auth = _ref2[0],
+      setAuth = _ref2[1]; //check auth
+
+
+  (0, react_1.useEffect)(function () {
+    var cookies = new universal_cookie_1["default"]();
+    var token = cookies.get('auth_token');
+
+    if (token) {
+      setAuth(true);
+    }
+  }, []);
   return react_1["default"].createElement(react_bootstrap_1.Card, {
     className: "text-center"
   }, react_1["default"].createElement(react_bootstrap_1.Card.Header, null, "\u041F\u043E\u0432\u0435\u0441\u0442\u0432\u043E\u0432\u0430\u043D\u0438\u0435"), react_1["default"].createElement(react_bootstrap_1.Card.Body, null, react_1["default"].createElement(react_bootstrap_1.Card.Title, null, "PHP Learning"), react_1["default"].createElement(react_bootstrap_1.Card.Text, null, "\u041F\u0440\u0438\u0432\u0435\u0442\u0441\u0442\u0432\u0443\u0435\u043C! \u0417\u0434\u0435\u0441\u044C \u0442\u044B \u0441\u043C\u043E\u0436\u0435\u0448\u044C \u043D\u0430\u0447\u0430\u0442\u044C \u0438\u0437\u0443\u0447\u0430\u0442\u044C \u0432\u043E\u0441\u0442\u0440\u0435\u0431\u043E\u0432\u0430\u043D\u043D\u044B\u0439 \u044F\u0437\u044B\u043A \u043F\u0440\u043E\u0433\u0440\u0430\u043C\u043C\u0438\u0440\u043E\u0432\u0430\u043D\u0438\u044F PHP"), react_1["default"].createElement(react_bootstrap_1.Card.Text, null, "\u0423 \u043D\u0430\u0441 \u0435\u0441\u0442\u044C \u043A\u0443\u0440\u0441\u044B \u0434\u0430\u0436\u0435 \u0434\u043B\u044F \u0442\u0435\u0445 \u043A\u0442\u043E \u0443\u0436\u0435 \u0437\u043D\u0430\u043A\u043E\u043C \u0441 \u044F\u0437\u044B\u043A\u043E\u043C"), react_1["default"].createElement(react_bootstrap_1.Button, {
     variant: "primary"
-  }, react_1["default"].createElement(react_router_dom_1.Link, {
+  }, auth ? react_1["default"].createElement(react_router_dom_1.Link, {
+    style: {
+      color: 'white',
+      textDecoration: 'none'
+    },
+    to: '/courses'
+  }, "\u041F\u0435\u0440\u0435\u0439\u0442\u0438 \u043A \u043A\u0443\u0440\u0441\u0430\u043C") : react_1["default"].createElement(react_router_dom_1.Link, {
     style: {
       color: 'white',
       textDecoration: 'none'
@@ -9171,7 +9534,6 @@ window._ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
 window.axios = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 window.axios.defaults.headers.common['Access-Control-Allow-Credentials'] = true;
-window.axios.defaults.headers.common['Authorization'] = '';
 axios.defaults.withCredentials = true;
 /**
  * Echo exposes an expressive API for subscribing to channels and listening
@@ -9252,6 +9614,219 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
 		__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 	} else {}
 }());
+
+
+/***/ }),
+
+/***/ "./node_modules/cookie/index.js":
+/*!**************************************!*\
+  !*** ./node_modules/cookie/index.js ***!
+  \**************************************/
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+/*!
+ * cookie
+ * Copyright(c) 2012-2014 Roman Shtylman
+ * Copyright(c) 2015 Douglas Christopher Wilson
+ * MIT Licensed
+ */
+
+
+
+/**
+ * Module exports.
+ * @public
+ */
+
+exports.parse = parse;
+exports.serialize = serialize;
+
+/**
+ * Module variables.
+ * @private
+ */
+
+var decode = decodeURIComponent;
+var encode = encodeURIComponent;
+
+/**
+ * RegExp to match field-content in RFC 7230 sec 3.2
+ *
+ * field-content = field-vchar [ 1*( SP / HTAB ) field-vchar ]
+ * field-vchar   = VCHAR / obs-text
+ * obs-text      = %x80-FF
+ */
+
+var fieldContentRegExp = /^[\u0009\u0020-\u007e\u0080-\u00ff]+$/;
+
+/**
+ * Parse a cookie header.
+ *
+ * Parse the given cookie header string into an object
+ * The object has the various cookies as keys(names) => values
+ *
+ * @param {string} str
+ * @param {object} [options]
+ * @return {object}
+ * @public
+ */
+
+function parse(str, options) {
+  if (typeof str !== 'string') {
+    throw new TypeError('argument str must be a string');
+  }
+
+  var obj = {}
+  var opt = options || {};
+  var pairs = str.split(';')
+  var dec = opt.decode || decode;
+
+  for (var i = 0; i < pairs.length; i++) {
+    var pair = pairs[i];
+    var index = pair.indexOf('=')
+
+    // skip things that don't look like key=value
+    if (index < 0) {
+      continue;
+    }
+
+    var key = pair.substring(0, index).trim()
+
+    // only assign once
+    if (undefined == obj[key]) {
+      var val = pair.substring(index + 1, pair.length).trim()
+
+      // quoted values
+      if (val[0] === '"') {
+        val = val.slice(1, -1)
+      }
+
+      obj[key] = tryDecode(val, dec);
+    }
+  }
+
+  return obj;
+}
+
+/**
+ * Serialize data into a cookie header.
+ *
+ * Serialize the a name value pair into a cookie string suitable for
+ * http headers. An optional options object specified cookie parameters.
+ *
+ * serialize('foo', 'bar', { httpOnly: true })
+ *   => "foo=bar; httpOnly"
+ *
+ * @param {string} name
+ * @param {string} val
+ * @param {object} [options]
+ * @return {string}
+ * @public
+ */
+
+function serialize(name, val, options) {
+  var opt = options || {};
+  var enc = opt.encode || encode;
+
+  if (typeof enc !== 'function') {
+    throw new TypeError('option encode is invalid');
+  }
+
+  if (!fieldContentRegExp.test(name)) {
+    throw new TypeError('argument name is invalid');
+  }
+
+  var value = enc(val);
+
+  if (value && !fieldContentRegExp.test(value)) {
+    throw new TypeError('argument val is invalid');
+  }
+
+  var str = name + '=' + value;
+
+  if (null != opt.maxAge) {
+    var maxAge = opt.maxAge - 0;
+
+    if (isNaN(maxAge) || !isFinite(maxAge)) {
+      throw new TypeError('option maxAge is invalid')
+    }
+
+    str += '; Max-Age=' + Math.floor(maxAge);
+  }
+
+  if (opt.domain) {
+    if (!fieldContentRegExp.test(opt.domain)) {
+      throw new TypeError('option domain is invalid');
+    }
+
+    str += '; Domain=' + opt.domain;
+  }
+
+  if (opt.path) {
+    if (!fieldContentRegExp.test(opt.path)) {
+      throw new TypeError('option path is invalid');
+    }
+
+    str += '; Path=' + opt.path;
+  }
+
+  if (opt.expires) {
+    if (typeof opt.expires.toUTCString !== 'function') {
+      throw new TypeError('option expires is invalid');
+    }
+
+    str += '; Expires=' + opt.expires.toUTCString();
+  }
+
+  if (opt.httpOnly) {
+    str += '; HttpOnly';
+  }
+
+  if (opt.secure) {
+    str += '; Secure';
+  }
+
+  if (opt.sameSite) {
+    var sameSite = typeof opt.sameSite === 'string'
+      ? opt.sameSite.toLowerCase() : opt.sameSite;
+
+    switch (sameSite) {
+      case true:
+        str += '; SameSite=Strict';
+        break;
+      case 'lax':
+        str += '; SameSite=Lax';
+        break;
+      case 'strict':
+        str += '; SameSite=Strict';
+        break;
+      case 'none':
+        str += '; SameSite=None';
+        break;
+      default:
+        throw new TypeError('option sameSite is invalid');
+    }
+  }
+
+  return str;
+}
+
+/**
+ * Try decoding a string using a decoding function.
+ *
+ * @param {string} str
+ * @param {function} decode
+ * @private
+ */
+
+function tryDecode(str, decode) {
+  try {
+    return decode(str);
+  } catch (e) {
+    return str;
+  }
+}
 
 
 /***/ }),
@@ -70689,6 +71264,194 @@ function defaultKey(key) {
 function canAcceptRef(component) {
   return !!component && (typeof component !== 'function' || component.prototype && component.prototype.isReactComponent);
 }
+
+/***/ }),
+
+/***/ "./node_modules/universal-cookie/es6/Cookies.js":
+/*!******************************************************!*\
+  !*** ./node_modules/universal-cookie/es6/Cookies.js ***!
+  \******************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var cookie__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! cookie */ "./node_modules/cookie/index.js");
+/* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./utils */ "./node_modules/universal-cookie/es6/utils.js");
+var __assign = (undefined && undefined.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
+
+
+var Cookies = /** @class */ (function () {
+    function Cookies(cookies, options) {
+        var _this = this;
+        this.changeListeners = [];
+        this.HAS_DOCUMENT_COOKIE = false;
+        this.cookies = (0,_utils__WEBPACK_IMPORTED_MODULE_1__.parseCookies)(cookies, options);
+        new Promise(function () {
+            _this.HAS_DOCUMENT_COOKIE = (0,_utils__WEBPACK_IMPORTED_MODULE_1__.hasDocumentCookie)();
+        }).catch(function () { });
+    }
+    Cookies.prototype._updateBrowserValues = function (parseOptions) {
+        if (!this.HAS_DOCUMENT_COOKIE) {
+            return;
+        }
+        this.cookies = cookie__WEBPACK_IMPORTED_MODULE_0__.parse(document.cookie, parseOptions);
+    };
+    Cookies.prototype._emitChange = function (params) {
+        for (var i = 0; i < this.changeListeners.length; ++i) {
+            this.changeListeners[i](params);
+        }
+    };
+    Cookies.prototype.get = function (name, options, parseOptions) {
+        if (options === void 0) { options = {}; }
+        this._updateBrowserValues(parseOptions);
+        return (0,_utils__WEBPACK_IMPORTED_MODULE_1__.readCookie)(this.cookies[name], options);
+    };
+    Cookies.prototype.getAll = function (options, parseOptions) {
+        if (options === void 0) { options = {}; }
+        this._updateBrowserValues(parseOptions);
+        var result = {};
+        for (var name_1 in this.cookies) {
+            result[name_1] = (0,_utils__WEBPACK_IMPORTED_MODULE_1__.readCookie)(this.cookies[name_1], options);
+        }
+        return result;
+    };
+    Cookies.prototype.set = function (name, value, options) {
+        var _a;
+        if (typeof value === 'object') {
+            value = JSON.stringify(value);
+        }
+        this.cookies = __assign(__assign({}, this.cookies), (_a = {}, _a[name] = value, _a));
+        if (this.HAS_DOCUMENT_COOKIE) {
+            document.cookie = cookie__WEBPACK_IMPORTED_MODULE_0__.serialize(name, value, options);
+        }
+        this._emitChange({ name: name, value: value, options: options });
+    };
+    Cookies.prototype.remove = function (name, options) {
+        var finalOptions = (options = __assign(__assign({}, options), { expires: new Date(1970, 1, 1, 0, 0, 1), maxAge: 0 }));
+        this.cookies = __assign({}, this.cookies);
+        delete this.cookies[name];
+        if (this.HAS_DOCUMENT_COOKIE) {
+            document.cookie = cookie__WEBPACK_IMPORTED_MODULE_0__.serialize(name, '', finalOptions);
+        }
+        this._emitChange({ name: name, value: undefined, options: options });
+    };
+    Cookies.prototype.addChangeListener = function (callback) {
+        this.changeListeners.push(callback);
+    };
+    Cookies.prototype.removeChangeListener = function (callback) {
+        var idx = this.changeListeners.indexOf(callback);
+        if (idx >= 0) {
+            this.changeListeners.splice(idx, 1);
+        }
+    };
+    return Cookies;
+}());
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Cookies);
+
+
+/***/ }),
+
+/***/ "./node_modules/universal-cookie/es6/index.js":
+/*!****************************************************!*\
+  !*** ./node_modules/universal-cookie/es6/index.js ***!
+  \****************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _Cookies__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Cookies */ "./node_modules/universal-cookie/es6/Cookies.js");
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_Cookies__WEBPACK_IMPORTED_MODULE_0__["default"]);
+
+
+/***/ }),
+
+/***/ "./node_modules/universal-cookie/es6/utils.js":
+/*!****************************************************!*\
+  !*** ./node_modules/universal-cookie/es6/utils.js ***!
+  \****************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "hasDocumentCookie": () => (/* binding */ hasDocumentCookie),
+/* harmony export */   "cleanCookies": () => (/* binding */ cleanCookies),
+/* harmony export */   "parseCookies": () => (/* binding */ parseCookies),
+/* harmony export */   "isParsingCookie": () => (/* binding */ isParsingCookie),
+/* harmony export */   "readCookie": () => (/* binding */ readCookie)
+/* harmony export */ });
+/* harmony import */ var cookie__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! cookie */ "./node_modules/cookie/index.js");
+
+function hasDocumentCookie() {
+    // Can we get/set cookies on document.cookie?
+    return typeof document === 'object' && typeof document.cookie === 'string';
+}
+function cleanCookies() {
+    document.cookie.split(';').forEach(function (c) {
+        document.cookie = c
+            .replace(/^ +/, '')
+            .replace(/=.*/, '=;expires=' + new Date().toUTCString() + ';path=/');
+    });
+}
+function parseCookies(cookies, options) {
+    if (typeof cookies === 'string') {
+        return cookie__WEBPACK_IMPORTED_MODULE_0__.parse(cookies, options);
+    }
+    else if (typeof cookies === 'object' && cookies !== null) {
+        return cookies;
+    }
+    else {
+        return {};
+    }
+}
+function isParsingCookie(value, doNotParse) {
+    if (typeof doNotParse === 'undefined') {
+        // We guess if the cookie start with { or [, it has been serialized
+        doNotParse =
+            !value || (value[0] !== '{' && value[0] !== '[' && value[0] !== '"');
+    }
+    return !doNotParse;
+}
+function readCookie(value, options) {
+    if (options === void 0) { options = {}; }
+    var cleanValue = cleanupCookieValue(value);
+    if (isParsingCookie(cleanValue, options.doNotParse)) {
+        try {
+            return JSON.parse(cleanValue);
+        }
+        catch (e) {
+            // At least we tried
+        }
+    }
+    // Ignore clean value if we failed the deserialization
+    // It is not relevant anymore to trim those values
+    return value;
+}
+function cleanupCookieValue(value) {
+    // express prepend j: before serializing a cookie
+    if (value && value[0] === 'j' && value[1] === ':') {
+        return value.substr(2);
+    }
+    return value;
+}
+
 
 /***/ }),
 

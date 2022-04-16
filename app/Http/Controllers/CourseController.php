@@ -12,8 +12,9 @@ class CourseController extends Controller
     public function getCourses(): JsonResponse
     {
         $courses = ( Course::query()
-            ->select( 'Courses.id_course', 'Courses.name as course', 'DifficultyCourse.name as difficulty' )
+            ->select( 'Courses.id_course', 'Courses.name as course', 'DifficultyCourse.name as difficulty', 'Courses.description' )
             ->join( 'DifficultyCourse', 'Courses.id_difficulty', '=', 'DifficultyCourse.id_difficulty' )
+            ->orderBy('Courses.id_course')
             ->get()
         );
         return response()->json( $courses );

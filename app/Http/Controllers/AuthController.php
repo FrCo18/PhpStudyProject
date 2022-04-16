@@ -16,7 +16,7 @@ class AuthController extends Controller
         $request->user()->tokens()->delete();
 
         return [
-            'message' => 'Logged out'
+            'auth' => false
         ];
     }
 
@@ -35,9 +35,18 @@ class AuthController extends Controller
 
         $token = $user->createToken('apptoken')->plainTextToken;
 
+        $user_response = [
+            'id' => $user->idUser,
+            'first_name' => $user->first_name,
+            'last_name' => $user->last_name,
+            'middle_name' => $user->middle_name,
+            'email' => $user->email,
+        ];
+
         $response = [
-            'user' => $user,
-            'token' => $token
+            'user' => $user_response,
+            'token' => $token,
+            'auth' => true
         ];
 
         return response($response, 201);
@@ -55,14 +64,23 @@ class AuthController extends Controller
 
         //Проверка пароля
         if(!$user || !Hash::check($fields['password'], $user->password)){
-            return response(['message' => 'Bad creds'], 401);
+            return response(['auth' => false], 401);
         }
 
         $token = $user->createToken('apptoken')->plainTextToken;
 
+        $user_response = [
+            'id' => $user->idUser,
+            'first_name' => $user->first_name,
+            'last_name' => $user->last_name,
+            'middle_name' => $user->middle_name,
+            'email' => $user->email,
+        ];
+
         $response = [
-            'user' => $user,
-            'token' => $token
+            'user' => $user_response,
+            'token' => $token,
+            'auth' => true
         ];
 
         return response($response, 201);

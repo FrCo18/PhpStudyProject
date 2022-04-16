@@ -4,9 +4,9 @@ import Navbar from "./components/Navbar/Navbar";
 import {BrowserRouter} from "react-router-dom";
 import AppRouter from "./components/AppRouter";
 import {AuthContext} from "./contexts/AuthContext";
-import axios from "axios";
 
 const App = () => {
+
   return (
     <AuthContext.Provider value={{
      Auth: {bearerStart: 'Bearer '}

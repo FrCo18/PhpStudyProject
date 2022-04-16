@@ -1,28 +1,64 @@
 import React, {useEffect, useState} from 'react';
 import axios from "axios";
-import {map} from "react-bootstrap/ElementChildren";
-import Auth from "../components/Auth/Auth";
-import {TypeCourse} from "../components/Courses/types/TypeCourse";
-import CourseList from "../components/Courses/CourseList";
 import {useNavigate} from "react-router-dom";
+import Cookies from "universal-cookie";
+import {Button, Card} from "react-bootstrap";
+
+interface CourseInterface{
+  id_course: number,
+  course: string,
+  difficulty: string,
+  description: string
+}
 
 const Courses: React.FC = () => {
-  const [auth, setAuth] = useState<boolean>(false)
   const navigate = useNavigate();
+  const cookies = new Cookies()
+  let token = cookies.get('auth_token')
+  const [courses, setCourses] = useState<CourseInterface[]>([])
+  const [isLoad, setLoad] = useState(false)
+
+  //check auth
   useEffect(() => {
-    axios.get('api/courses')
+    if(!token){
+      console.log('Авторизуйтесь!')
+      navigate('/')
+    }
+  }, [])
+
+  //получение списка курсов
+  useEffect(() => {
+    const headers = {
+      'Accept': 'application/json',
+      'Authorization': 'Bearer ' + token
+    }
+    axios.get('api/courses', {headers})
       .then((response) => {
-        console.log(response.data)
-      })
-      .catch(error => {
-        console.error('There was an error!', error.response.status);
-      });
+      if(response.data.length){
+        setCourses(response.data)
+      }
+    })
   },[])
 
   return (
     <div style={{color: "white"}}>
       <p>Курсы</p>
-
+      {
+        courses.map((course) => {
+          return (
+              <Card key={course.id_course} style={{color: 'black'}} className='mb-3'>
+                <Card.Header as="h5">{course.course}</Card.Header>
+                <Card.Body>
+                  <Card.Title>Сложность: {course.difficulty}</Card.Title>
+                  <Card.Text>
+                    {course.description}
+                  </Card.Text>
+                  <Button variant="primary">Начать</Button>
+                </Card.Body>
+              </Card>
+          );
+        })
+      }
     </div>
   );
 };

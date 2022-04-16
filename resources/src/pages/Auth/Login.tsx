@@ -1,37 +1,36 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useLayoutEffect, useMemo, useState} from 'react';
 import {Button, Container, Form} from "react-bootstrap";
 import axios from "axios";
 import Cookies from "universal-cookie";
 import {useNavigate} from "react-router-dom";
 
-const Register: React.FC = () => {
+const Login: React.FC = () => {
   const [email, setEmail] = useState<string>('')
   const [password, setPassword] = useState<string>('')
-  const [confirmPassword, setConfirmPassword] = useState<string>('')
   const navigate = useNavigate()
-  const register = () => {
+
+  const login = () => {
     const headers = {
       'Accept': 'application/json'
     }
     const params = {
       'email': email,
       'password': password,
-      'password_confirmation': confirmPassword
     }
-    axios.post('api/register', params, {headers})
+    axios.post('api/login', params, {headers})
       .then((response) => {
         if (response.data.auth) {
-          console.log('adadadadadadadadadadadadadada')
           const cookies = new Cookies()
           cookies.set('auth_token', response.data.token, {path: '/'})
         }
       })
       .catch(error => {
+        alert('Не верны имя пользователя или пароль')
         console.error('There was an error!', error);
       }).finally(() => {
       const cookies = new Cookies()
+
       if (cookies.get('auth_token')) {
-        alert('Регистрация прошла успешно')
         window.location.reload();
       }
     });
@@ -48,7 +47,7 @@ const Register: React.FC = () => {
 
   return (
     <Container style={{width: '80vh'}}>
-      <h1 style={{color: "white"}}>Регистрация</h1>
+      <h1 style={{color: "white"}}>Авторизация</h1>
       <Form action='#'>
         {/*Email*/}
         <Form.Group className="mb-3" controlId="formBasicEmail">
@@ -56,7 +55,6 @@ const Register: React.FC = () => {
           <Form.Control id='inputEmail' onChange={event => setEmail(event.target.value)}
                         name='email' type="email" placeholder="Enter email" required/>
           <Form.Text className="text-muted">
-            We'll never share your email with anyone else.
           </Form.Text>
         </Form.Group>
 
@@ -75,36 +73,15 @@ const Register: React.FC = () => {
             onChange={event => setPassword(event.target.value)}
           />
           <Form.Text id="passwordHelpBlock" muted>
-            Your password must be 8-20 characters long, contain letters and numbers, and
-            must not contain spaces, special characters, or emoji.
           </Form.Text>
         </Form.Group>
 
-        {/*Confirm Password*/}
-        <Form.Group className="mb-3" controlId="formBasicPassword">
-          <Form.Label htmlFor="inputPasswordConfirm">Password</Form.Label>
-          <Form.Control
-            required
-            name='password_confirmation'
-            placeholder="Enter password"
-            type="password"
-            id="inputPasswordConfirm"
-            aria-describedby="passwordHelpBlock"
-            minLength={8}
-            maxLength={20}
-            onChange={event => setConfirmPassword(event.target.value)}
-          />
-          <Form.Text id="passwordHelpBlock" muted>
-            Your password must be 8-20 characters long, contain letters and numbers, and
-            must not contain spaces, special characters, or emoji.
-          </Form.Text>
-        </Form.Group>
-        <Button onClick={() => register()} variant="primary" type="button">
-          Зарегистрироваться
+        <Button onClick={() => login()} variant="primary" type="button">
+          Войти
         </Button>
       </Form>
     </Container>
   );
 };
 
-export default Register;
+export default Login;
