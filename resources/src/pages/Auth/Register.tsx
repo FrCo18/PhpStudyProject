@@ -18,7 +18,7 @@ const Register: React.FC = () => {
       'password': password,
       'password_confirmation': confirmPassword
     }
-    axios.post('api/register', params, {headers})
+    axios.post('/api/register', params, {headers})
       .then((response) => {
         if (response.data.auth) {
           console.log('adadadadadadadadadadadadadada')

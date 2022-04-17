@@ -17,7 +17,7 @@ const Login: React.FC = () => {
       'email': email,
       'password': password,
     }
-    axios.post('api/login', params, {headers})
+    axios.post('/api/login', params, {headers})
       .then((response) => {
         if (response.data.auth) {
           const cookies = new Cookies()
