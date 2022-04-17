@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {Card, Button, Container} from "react-bootstrap";
 import {Link} from "react-router-dom";
-import Courses from "./Courses";
+import Courses from "./Courses/Courses";
 import Cookies from "universal-cookie";
 
 const Home: React.FC = () => {

@@ -8543,7 +8543,7 @@ var App = function App() {
     }
   }, react_1["default"].createElement(react_router_dom_1.BrowserRouter, null, react_1["default"].createElement(react_bootstrap_1.Container, {
     fluid: true,
-    className: 'bg-dark vh-100'
+    className: 'bg-dark min-vh-100'
   }, react_1["default"].createElement(Navbar_1["default"], null), react_1["default"].createElement(AppRouter_1["default"], null))));
 };
 
@@ -8578,17 +8578,17 @@ var Home_1 = __importDefault(__webpack_require__(/*! ../pages/Home */ "./resourc
 
 var About_1 = __importDefault(__webpack_require__(/*! ../pages/About */ "./resources/src/pages/About.tsx"));
 
-var Courses_1 = __importDefault(__webpack_require__(/*! ../pages/Courses */ "./resources/src/pages/Courses.tsx"));
+var Courses_1 = __importDefault(__webpack_require__(/*! ../pages/Courses/Courses */ "./resources/src/pages/Courses/Courses.tsx"));
 
 var Register_1 = __importDefault(__webpack_require__(/*! ../pages/Auth/Register */ "./resources/src/pages/Auth/Register.tsx"));
 
 var Login_1 = __importDefault(__webpack_require__(/*! ../pages/Auth/Login */ "./resources/src/pages/Auth/Login.tsx"));
 
-var universal_cookie_1 = __importDefault(__webpack_require__(/*! universal-cookie */ "./node_modules/universal-cookie/es6/index.js"));
+var Tasks_1 = __importDefault(__webpack_require__(/*! ../pages/Courses/Tasks */ "./resources/src/pages/Courses/Tasks.tsx"));
+
+var TaskPage_1 = __importDefault(__webpack_require__(/*! ../pages/Courses/TaskPage */ "./resources/src/pages/Courses/TaskPage.tsx"));
 
 var AppRouter = function AppRouter() {
-  var cookies = new universal_cookie_1["default"]();
-  var authToken = cookies.get('auth');
   return react_1["default"].createElement(react_router_dom_1.Routes, null, react_1["default"].createElement(react_router_dom_1.Route, {
     path: '/',
     element: react_1["default"].createElement(Home_1["default"], null)
@@ -8598,6 +8598,12 @@ var AppRouter = function AppRouter() {
   }), react_1["default"].createElement(react_router_dom_1.Route, {
     path: '/courses',
     element: react_1["default"].createElement(Courses_1["default"], null)
+  }), react_1["default"].createElement(react_router_dom_1.Route, {
+    path: '/courses/tasks/:id_course',
+    element: react_1["default"].createElement(Tasks_1["default"], null)
+  }), react_1["default"].createElement(react_router_dom_1.Route, {
+    path: '/courses/tasks/:id_course/:id_task',
+    element: react_1["default"].createElement(TaskPage_1["default"], null)
   }), react_1["default"].createElement(react_router_dom_1.Route, {
     path: '/about',
     element: react_1["default"].createElement(About_1["default"], null)
@@ -8611,6 +8617,45 @@ var AppRouter = function AppRouter() {
 };
 
 exports["default"] = AppRouter;
+
+/***/ }),
+
+/***/ "./resources/src/components/Loading.tsx":
+/*!**********************************************!*\
+  !*** ./resources/src/components/Loading.tsx ***!
+  \**********************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var __importDefault = this && this.__importDefault || function (mod) {
+  return mod && mod.__esModule ? mod : {
+    "default": mod
+  };
+};
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+
+var react_1 = __importDefault(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
+
+var react_bootstrap_1 = __webpack_require__(/*! react-bootstrap */ "./node_modules/react-bootstrap/esm/index.js");
+
+var Loading = function Loading() {
+  return react_1["default"].createElement(react_bootstrap_1.Spinner, {
+    style: {
+      position: 'absolute',
+      top: '50%',
+      right: '50%'
+    },
+    animation: "border",
+    variant: "light"
+  });
+};
+
+exports["default"] = Loading;
 
 /***/ }),
 
@@ -8704,12 +8749,10 @@ var Navbar = function Navbar() {
       'Accept': 'application/json',
       'Authorization': 'Bearer ' + authToken
     };
+    cookies.remove('auth_token');
     axios_1["default"].post('api/logout', null, {
       headers: headers
-    }).then(function (response) {
-      var cookies = new universal_cookie_1["default"]();
-      cookies.remove('auth_token');
-    })["catch"](function (error) {
+    }).then(function (response) {})["catch"](function (error) {
       console.error('There was an error!', error);
     })["finally"](function () {
       var cookies = new universal_cookie_1["default"]();
@@ -9271,10 +9314,10 @@ exports["default"] = Register;
 
 /***/ }),
 
-/***/ "./resources/src/pages/Courses.tsx":
-/*!*****************************************!*\
-  !*** ./resources/src/pages/Courses.tsx ***!
-  \*****************************************/
+/***/ "./resources/src/pages/Courses/Courses.tsx":
+/*!*************************************************!*\
+  !*** ./resources/src/pages/Courses/Courses.tsx ***!
+  \*************************************************/
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -9346,6 +9389,8 @@ var universal_cookie_1 = __importDefault(__webpack_require__(/*! universal-cooki
 
 var react_bootstrap_1 = __webpack_require__(/*! react-bootstrap */ "./node_modules/react-bootstrap/esm/index.js");
 
+var Loading_1 = __importDefault(__webpack_require__(/*! ../../components/Loading */ "./resources/src/components/Loading.tsx"));
+
 var Courses = function Courses() {
   var navigate = (0, react_router_dom_1.useNavigate)();
   var cookies = new universal_cookie_1["default"]();
@@ -9364,7 +9409,7 @@ var Courses = function Courses() {
 
   (0, react_1.useEffect)(function () {
     if (!token) {
-      console.log('Авторизуйтесь!');
+      alert('Авторизуйтесь!');
       navigate('/');
     }
   }, []); //получение списка курсов
@@ -9374,11 +9419,12 @@ var Courses = function Courses() {
       'Accept': 'application/json',
       'Authorization': 'Bearer ' + token
     };
-    axios_1["default"].get('api/courses', {
+    axios_1["default"].get('/api/courses', {
       headers: headers
     }).then(function (response) {
       if (response.data.length) {
         setCourses(response.data);
+        setLoad(true);
       }
     });
   }, []);
@@ -9386,7 +9432,7 @@ var Courses = function Courses() {
     style: {
       color: "white"
     }
-  }, react_1["default"].createElement("p", null, "\u041A\u0443\u0440\u0441\u044B"), courses.map(function (course) {
+  }, react_1["default"].createElement("p", null, "\u041A\u0443\u0440\u0441\u044B"), isLoad ? courses.map(function (course) {
     return react_1["default"].createElement(react_bootstrap_1.Card, {
       key: course.id_course,
       style: {
@@ -9396,12 +9442,364 @@ var Courses = function Courses() {
     }, react_1["default"].createElement(react_bootstrap_1.Card.Header, {
       as: "h5"
     }, course.course), react_1["default"].createElement(react_bootstrap_1.Card.Body, null, react_1["default"].createElement(react_bootstrap_1.Card.Title, null, "\u0421\u043B\u043E\u0436\u043D\u043E\u0441\u0442\u044C: ", course.difficulty), react_1["default"].createElement(react_bootstrap_1.Card.Text, null, course.description), react_1["default"].createElement(react_bootstrap_1.Button, {
-      variant: "primary"
+      variant: "primary",
+      onClick: function onClick() {
+        return navigate('/courses/tasks/' + course.id_course);
+      }
     }, "\u041D\u0430\u0447\u0430\u0442\u044C")));
-  }));
+  }) : react_1["default"].createElement(Loading_1["default"], null));
 };
 
 exports["default"] = Courses;
+
+/***/ }),
+
+/***/ "./resources/src/pages/Courses/TaskPage.tsx":
+/*!**************************************************!*\
+  !*** ./resources/src/pages/Courses/TaskPage.tsx ***!
+  \**************************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+"use strict";
+
+
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+function _iterableToArrayLimit(arr, i) { var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]; if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+var __createBinding = this && this.__createBinding || (Object.create ? function (o, m, k, k2) {
+  if (k2 === undefined) k2 = k;
+  Object.defineProperty(o, k2, {
+    enumerable: true,
+    get: function get() {
+      return m[k];
+    }
+  });
+} : function (o, m, k, k2) {
+  if (k2 === undefined) k2 = k;
+  o[k2] = m[k];
+});
+
+var __setModuleDefault = this && this.__setModuleDefault || (Object.create ? function (o, v) {
+  Object.defineProperty(o, "default", {
+    enumerable: true,
+    value: v
+  });
+} : function (o, v) {
+  o["default"] = v;
+});
+
+var __importStar = this && this.__importStar || function (mod) {
+  if (mod && mod.__esModule) return mod;
+  var result = {};
+  if (mod != null) for (var k in mod) {
+    if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+  }
+
+  __setModuleDefault(result, mod);
+
+  return result;
+};
+
+var __importDefault = this && this.__importDefault || function (mod) {
+  return mod && mod.__esModule ? mod : {
+    "default": mod
+  };
+};
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+
+var react_1 = __importStar(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
+
+var react_bootstrap_1 = __webpack_require__(/*! react-bootstrap */ "./node_modules/react-bootstrap/esm/index.js");
+
+var axios_1 = __importDefault(__webpack_require__(/*! axios */ "./node_modules/axios/index.js"));
+
+var react_router_dom_1 = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/index.js");
+
+var universal_cookie_1 = __importDefault(__webpack_require__(/*! universal-cookie */ "./node_modules/universal-cookie/es6/index.js"));
+
+var Loading_1 = __importDefault(__webpack_require__(/*! ../../components/Loading */ "./resources/src/components/Loading.tsx"));
+
+var TaskPage = function TaskPage() {
+  var params = (0, react_router_dom_1.useParams)();
+
+  var _ref = (0, react_1.useState)(),
+      _ref2 = _slicedToArray(_ref, 2),
+      task = _ref2[0],
+      setTask = _ref2[1];
+
+  var _ref3 = (0, react_1.useState)(false),
+      _ref4 = _slicedToArray(_ref3, 2),
+      isLoad = _ref4[0],
+      setLoad = _ref4[1];
+
+  var _ref5 = (0, react_1.useState)(),
+      _ref6 = _slicedToArray(_ref5, 2),
+      phpCode = _ref6[0],
+      setPhpCode = _ref6[1];
+
+  var _ref7 = (0, react_1.useState)(),
+      _ref8 = _slicedToArray(_ref7, 2),
+      compileResult = _ref8[0],
+      setCompileResult = _ref8[1];
+
+  var navigate = (0, react_router_dom_1.useNavigate)();
+  var cookies = new universal_cookie_1["default"]();
+  var token = cookies.get('auth_token');
+
+  function checkCode() {
+    var headers = {
+      'Accept': 'application/json',
+      'Authorization': 'Bearer ' + token
+    };
+    var params = {
+      php_code: phpCode
+    };
+    axios_1["default"].post('/api/courses/check-task', params, {
+      headers: headers
+    }).then(function (response) {
+      if (response.data) {
+        setCompileResult(response.data);
+      }
+    });
+  } //подгрузка задания
+
+
+  (0, react_1.useEffect)(function () {
+    var headers = {
+      'Accept': 'application/json',
+      'Authorization': 'Bearer ' + token
+    };
+    axios_1["default"].get('/api/courses/task-by-id?id=' + params.id_task, {
+      headers: headers
+    }).then(function (response) {
+      if (response.data.id_task) {
+        setTask(response.data);
+        setLoad(true);
+      }
+    });
+  }, []);
+  (0, react_1.useEffect)(function () {
+    setCompileResult(compileResult === null || compileResult === void 0 ? void 0 : compileResult.replace("\n", '<br/>'));
+  }, [compileResult]); //установка php_code
+
+  (0, react_1.useEffect)(function () {
+    if (task) {
+      setPhpCode(task.php_code);
+    }
+  }, [task]); //check auth
+
+  (0, react_1.useEffect)(function () {
+    if (!token) {
+      alert('Авторизуйтесь!');
+      navigate('/');
+    }
+  }, []);
+  return react_1["default"].createElement("div", {
+    style: {
+      color: 'white'
+    }
+  }, isLoad ? react_1["default"].createElement("div", {
+    className: 'mt-3'
+  }, react_1["default"].createElement(react_bootstrap_1.Card, {
+    style: {
+      color: 'black'
+    }
+  }, react_1["default"].createElement(react_bootstrap_1.Card.Body, null, react_1["default"].createElement(react_bootstrap_1.Card.Title, null, task === null || task === void 0 ? void 0 : task.task_name), react_1["default"].createElement(react_bootstrap_1.Card.Text, null, task === null || task === void 0 ? void 0 : task.theory))), react_1["default"].createElement(react_bootstrap_1.Row, {
+    className: 'mt-3'
+  }, react_1["default"].createElement("h2", null, "\u0412\u0430\u0448 \u043A\u043E\u0434"), react_1["default"].createElement(react_bootstrap_1.Col, {
+    sm: 7
+  }, react_1["default"].createElement(react_bootstrap_1.Form, null, react_1["default"].createElement(react_bootstrap_1.Form.Group, {
+    className: 'mb-3',
+    controlId: "exampleForm.ControlTextarea1"
+  }, react_1["default"].createElement(react_bootstrap_1.Form.Control, {
+    onChange: function onChange(event) {
+      return setPhpCode(event.target.value);
+    },
+    defaultValue: task === null || task === void 0 ? void 0 : task.php_code,
+    value: phpCode,
+    style: {
+      backgroundColor: '#434447',
+      color: 'white'
+    },
+    as: "textarea",
+    rows: 10
+  })), react_1["default"].createElement(react_bootstrap_1.Button, {
+    onClick: function onClick() {
+      return checkCode();
+    },
+    variant: "primary",
+    type: "button"
+  }, "\u041F\u0440\u043E\u0432\u0435\u0440\u0438\u0442\u044C"))), react_1["default"].createElement(react_bootstrap_1.Col, null, react_1["default"].createElement(react_bootstrap_1.Card, null, react_1["default"].createElement(react_bootstrap_1.Card.Header, {
+    style: {
+      backgroundColor: 'black'
+    }
+  }, "Terminal"), react_1["default"].createElement(react_bootstrap_1.Card.Body, {
+    style: {
+      backgroundColor: '#434447',
+      minHeight: '10em'
+    }
+  }, react_1["default"].createElement(react_bootstrap_1.Card.Text, null, compileResult ? react_1["default"].createElement("div", {
+    dangerouslySetInnerHTML: {
+      __html: compileResult
+    }
+  }) : 'RESULT')))))) : react_1["default"].createElement(Loading_1["default"], null));
+};
+
+exports["default"] = TaskPage;
+
+/***/ }),
+
+/***/ "./resources/src/pages/Courses/Tasks.tsx":
+/*!***********************************************!*\
+  !*** ./resources/src/pages/Courses/Tasks.tsx ***!
+  \***********************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+"use strict";
+
+
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+function _iterableToArrayLimit(arr, i) { var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]; if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+var __createBinding = this && this.__createBinding || (Object.create ? function (o, m, k, k2) {
+  if (k2 === undefined) k2 = k;
+  Object.defineProperty(o, k2, {
+    enumerable: true,
+    get: function get() {
+      return m[k];
+    }
+  });
+} : function (o, m, k, k2) {
+  if (k2 === undefined) k2 = k;
+  o[k2] = m[k];
+});
+
+var __setModuleDefault = this && this.__setModuleDefault || (Object.create ? function (o, v) {
+  Object.defineProperty(o, "default", {
+    enumerable: true,
+    value: v
+  });
+} : function (o, v) {
+  o["default"] = v;
+});
+
+var __importStar = this && this.__importStar || function (mod) {
+  if (mod && mod.__esModule) return mod;
+  var result = {};
+  if (mod != null) for (var k in mod) {
+    if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+  }
+
+  __setModuleDefault(result, mod);
+
+  return result;
+};
+
+var __importDefault = this && this.__importDefault || function (mod) {
+  return mod && mod.__esModule ? mod : {
+    "default": mod
+  };
+};
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+
+var react_1 = __importStar(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
+
+var react_router_dom_1 = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/index.js");
+
+var universal_cookie_1 = __importDefault(__webpack_require__(/*! universal-cookie */ "./node_modules/universal-cookie/es6/index.js"));
+
+var axios_1 = __importDefault(__webpack_require__(/*! axios */ "./node_modules/axios/index.js"));
+
+var react_bootstrap_1 = __webpack_require__(/*! react-bootstrap */ "./node_modules/react-bootstrap/esm/index.js");
+
+var Loading_1 = __importDefault(__webpack_require__(/*! ../../components/Loading */ "./resources/src/components/Loading.tsx"));
+
+var Tasks = function Tasks() {
+  // console.log(params.id_course)
+  var params = (0, react_router_dom_1.useParams)();
+  var navigate = (0, react_router_dom_1.useNavigate)();
+
+  var _ref = (0, react_1.useState)([]),
+      _ref2 = _slicedToArray(_ref, 2),
+      tasks = _ref2[0],
+      setTasks = _ref2[1];
+
+  var _ref3 = (0, react_1.useState)(false),
+      _ref4 = _slicedToArray(_ref3, 2),
+      isLoad = _ref4[0],
+      setLoad = _ref4[1];
+
+  var cookies = new universal_cookie_1["default"]();
+  var token = cookies.get('auth_token'); //получение списка заданий
+
+  (0, react_1.useEffect)(function () {
+    var headers = {
+      'Accept': 'application/json',
+      'Authorization': 'Bearer ' + token
+    };
+    axios_1["default"].get('/api/courses/tasks-by-course-id?id=' + params.id_course, {
+      headers: headers
+    }).then(function (response) {
+      if (response.data.length) {
+        setTasks(response.data);
+        setLoad(true);
+      }
+    });
+  }, []); //check auth
+
+  (0, react_1.useEffect)(function () {
+    if (!token) {
+      alert('Авторизуйтесь!');
+      navigate('/');
+    }
+  }, []);
+  return react_1["default"].createElement("div", {
+    style: {
+      color: "white"
+    }
+  }, react_1["default"].createElement("p", null, "\u0417\u0430\u0434\u0430\u043D\u0438\u044F"), isLoad ? tasks.map(function (task) {
+    return react_1["default"].createElement(react_bootstrap_1.Card, {
+      key: task.id_task,
+      style: {
+        color: 'black'
+      },
+      className: 'mb-3'
+    }, react_1["default"].createElement(react_bootstrap_1.Card.Header, {
+      as: "h5"
+    }, task.task_name), react_1["default"].createElement(react_bootstrap_1.Card.Body, null, react_1["default"].createElement(react_bootstrap_1.Button, {
+      variant: "primary",
+      onClick: function onClick() {
+        return navigate('/courses/tasks/' + task.id_course + '/' + task.id_task);
+      }
+    }, "\u041D\u0430\u0447\u0430\u0442\u044C")));
+  }) : react_1["default"].createElement(Loading_1["default"], null));
+};
+
+exports["default"] = Tasks;
 
 /***/ }),
 

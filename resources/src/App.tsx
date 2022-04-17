@@ -12,7 +12,7 @@ const App = () => {
      Auth: {bearerStart: 'Bearer '}
     }}>
     <BrowserRouter>
-      <Container fluid={true} className={'bg-dark vh-100'}>
+      <Container fluid={true} className={'bg-dark min-vh-100'}>
         <Navbar/>
         <AppRouter/>
       </Container>

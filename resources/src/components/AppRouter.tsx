@@ -1,20 +1,24 @@
-import React, {useContext} from 'react';
+import React from 'react';
 import {Route, Routes} from "react-router-dom";
 import Home from "../pages/Home";
 import About from "../pages/About";
-import Courses from "../pages/Courses";
+import Courses from "../pages/Courses/Courses";
 import Register from "../pages/Auth/Register";
 import Login from "../pages/Auth/Login";
-import Cookies from "universal-cookie";
+import Tasks from "../pages/Courses/Tasks";
+import TaskPage from "../pages/Courses/TaskPage";
 
 const AppRouter: React.FC = () => {
-  const cookies = new Cookies()
-  let authToken = cookies.get('auth')
   return (
     <Routes>
       <Route path='/' element={<Home/>}/>
       <Route path='*' element={<Home/>}/>
+
+      {/*Courses routes*/}
       <Route path='/courses' element={<Courses/>}/>
+      <Route path='/courses/tasks/:id_course' element={<Tasks/>}/>
+      <Route path='/courses/tasks/:id_course/:id_task' element={<TaskPage/>}/>
+
       <Route path='/about' element={<About/>}/>
       <Route path='/register' element={<Register/>}/>
       <Route path='/login' element={<Login/>}/>

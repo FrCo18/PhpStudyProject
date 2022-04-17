@@ -2,11 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CourseController;
-use App\Http\Resources\UserCollection;
-use App\Models\User;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\TasksController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -28,5 +24,12 @@ Route::group(['middleware' => ['auth:sanctum']], function (){
     Route::post('/logout', [AuthController::class, 'logout']);
 
     //Courses routes
-    Route::get('/courses', [CourseController::class, 'getCourses']);
+    Route::prefix('courses')->group(function (){
+        Route::get('/', [CourseController::class, 'getCourses']);
+
+        //Tasks
+        Route::get('/tasks-by-course-id/', [TasksController::class, 'getTasksByCourseId']);
+        Route::get('/task-by-id/', [TasksController::class, 'getTaskById']);
+        Route::post('/check-task/', [TasksController::class, 'checkTask']);
+    });
 });

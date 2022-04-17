@@ -3,15 +3,17 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
-use Illuminate\Http\JsonResponse;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Str;
 use JetBrains\PhpStorm\ArrayShape;
 
 class AuthController extends Controller
 {
-    public function logout(Request $request)
+    #[ArrayShape(['auth' => "false"])]
+    public function logout(Request $request): array
     {
         $request->user()->tokens()->delete();
 
@@ -21,7 +23,7 @@ class AuthController extends Controller
     }
 
     #[ArrayShape(['token' => "mixed"])]
-    public function register(Request $request)
+    public function register(Request $request): Response|Application|ResponseFactory
     {
         $fields = $request->validate([
             'email' => 'required|string|unique:Users,email',
@@ -52,7 +54,7 @@ class AuthController extends Controller
         return response($response, 201);
     }
 
-    public function login(Request $request)
+    public function login(Request $request): Response|Application|ResponseFactory
     {
         $fields = $request->validate([
             'email' => 'required|string',

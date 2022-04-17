@@ -11,15 +11,16 @@ const Navbar: React.FC = () => {
   const logout = () => {
     const cookies = new Cookies()
     const authToken = cookies.get('auth_token')
+
     const headers = {
       'Accept': 'application/json',
       'Authorization': 'Bearer ' + authToken
     }
 
+    cookies.remove('auth_token')
+
     axios.post('api/logout', null, {headers})
       .then((response) => {
-        const cookies = new Cookies()
-        cookies.remove('auth_token')
       })
       .catch(error => {
         console.error('There was an error!', error);
