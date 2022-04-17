@@ -8750,7 +8750,7 @@ var Navbar = function Navbar() {
       'Authorization': 'Bearer ' + authToken
     };
     cookies.remove('auth_token');
-    axios_1["default"].post('api/logout', null, {
+    axios_1["default"].post('/api/logout', null, {
       headers: headers
     }).then(function (response) {})["catch"](function (error) {
       console.error('There was an error!', error);
@@ -9017,7 +9017,7 @@ var Login = function Login() {
       'email': email,
       'password': password
     };
-    axios_1["default"].post('api/login', params, {
+    axios_1["default"].post('/api/login', params, {
       headers: headers
     }).then(function (response) {
       if (response.data.auth) {
@@ -9206,7 +9206,7 @@ var Register = function Register() {
       'password': password,
       'password_confirmation': confirmPassword
     };
-    axios_1["default"].post('api/register', params, {
+    axios_1["default"].post('/api/register', params, {
       headers: headers
     }).then(function (response) {
       if (response.data.auth) {
