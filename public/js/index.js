@@ -9790,7 +9790,7 @@ var Tasks = function Tasks() {
       className: 'mb-3'
     }, react_1["default"].createElement(react_bootstrap_1.Card.Header, {
       as: "h5"
-    }, task.task_name), react_1["default"].createElement(react_bootstrap_1.Card.Body, null, react_1["default"].createElement(react_bootstrap_1.Button, {
+    }, "\u0423\u0440\u043E\u0432\u0435\u043D\u044C: ", task.level_number), react_1["default"].createElement(react_bootstrap_1.Card.Title, null, task.task_name), react_1["default"].createElement(react_bootstrap_1.Card.Body, null, react_1["default"].createElement(react_bootstrap_1.Button, {
       variant: "primary",
       onClick: function onClick() {
         return navigate('/courses/tasks/' + task.id_course + '/' + task.id_task);

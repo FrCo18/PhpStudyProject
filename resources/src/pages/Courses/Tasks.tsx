@@ -49,7 +49,8 @@ const Tasks: React.FC = () => {
         tasks.map((task) => {
           return (
             <Card key={task.id_task} style={{color: 'black'}} className='mb-3'>
-              <Card.Header as="h5">{task.task_name}</Card.Header>
+              <Card.Header as="h5">Уровень: {task.level_number}</Card.Header>
+              <Card.Title>{task.task_name}</Card.Title>
               <Card.Body>
                 <Button variant="primary" onClick={() => navigate('/courses/tasks/' + task.id_course + '/' + task.id_task)}>Начать</Button>
               </Card.Body>
