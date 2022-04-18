@@ -48,7 +48,7 @@ class TasksController extends Controller
             if($return_result){
                 //...something logic
             }
-        }catch (\ParseError|\ErrorException $e) {
+        }catch (\ParseError|\ErrorException|\Error $e) {
             return $e->getMessage();
         }
 

@@ -9591,7 +9591,7 @@ var TaskPage = function TaskPage() {
     });
   }, []);
   (0, react_1.useEffect)(function () {
-    setCompileResult(compileResult === null || compileResult === void 0 ? void 0 : compileResult.replace("\n", '<br/>'));
+    setCompileResult(compileResult === null || compileResult === void 0 ? void 0 : compileResult.toString().replace("\n", '<br/>'));
   }, [compileResult]); //установка php_code
 
   (0, react_1.useEffect)(function () {

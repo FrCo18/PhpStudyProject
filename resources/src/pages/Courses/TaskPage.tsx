@@ -50,7 +50,7 @@ const TaskPage = () => {
   }, [])
 
   useEffect(()=> {
-    setCompileResult(compileResult?.replace("\n", '<br/>'))
+    setCompileResult(compileResult?.toString().replace("\n", '<br/>'))
   }, [compileResult])
 
   //установка php_code
