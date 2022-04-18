@@ -23,8 +23,8 @@ class Course extends Model
     public static function getJoinCourses(): Collection|array
     {
         return self::query()
-            ->select('Courses.id_course', 'Courses.name as course', 'DifficultyCourse.name as difficulty', 'Courses.description')
-            ->join('DifficultyCourse', 'Courses.id_difficulty', '=', 'DifficultyCourse.id_difficulty')
+            ->select('Courses.id_course', 'Courses.name as course', 'DifficultyCourses.name as difficulty', 'Courses.description')
+            ->join('DifficultyCourses', 'Courses.id_difficulty', '=', 'DifficultyCourses.id_difficulty')
             ->orderBy('Courses.id_course')
             ->get();
     }

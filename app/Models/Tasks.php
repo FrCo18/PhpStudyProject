@@ -41,12 +41,12 @@ class Tasks extends Model
                     'Tasks.id_course',
                     'Tasks.theory',
                     'Courses.name as course_name',
-                    'DifficultyCourse.name as difficulty',
+                    'DifficultyCourses.name as difficulty',
                     'Courses.description'
                 ]
             )
             ->join('Courses', 'Courses.id_course', '=', 'Tasks.id_course')
-            ->join('DifficultyCourse', 'Courses.id_difficulty', '=', 'DifficultyCourse.id_difficulty')
+            ->join('DifficultyCourses', 'Courses.id_difficulty', '=', 'DifficultyCourses.id_difficulty')
             ->where('Tasks.id_course', '=', $id_course)
             ->get();
     }
@@ -63,12 +63,12 @@ class Tasks extends Model
                     'Tasks.id_course',
                     'Tasks.theory',
                     'Courses.name as course_name',
-                    'DifficultyCourse.name as difficulty',
+                    'DifficultyCourses.name as difficulty',
                     'Courses.description'
                 ]
             )
             ->join('Courses', 'Courses.id_course', '=', 'Tasks.id_course')
-            ->join('DifficultyCourse', 'Courses.id_difficulty', '=', 'DifficultyCourse.id_difficulty')
+            ->join('DifficultyCourses', 'Courses.id_difficulty', '=', 'DifficultyCourses.id_difficulty')
             ->where('Tasks.id_task', '=', $id_task)
             ->first();
     }
