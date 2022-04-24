@@ -18,6 +18,7 @@ const Navbar: React.FC = () => {
     }
 
     cookies.remove('auth_token')
+    localStorage.removeItem('user')
 
     axios.post('/api/logout', null, {headers})
       .then((response) => {

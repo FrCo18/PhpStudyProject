@@ -22,6 +22,7 @@ const Login: React.FC = () => {
         if (response.data.auth) {
           const cookies = new Cookies()
           cookies.set('auth_token', response.data.token, {path: '/'})
+          localStorage.setItem('user', JSON.stringify(response.data.user))
         }
       })
       .catch(error => {
@@ -40,7 +41,7 @@ const Login: React.FC = () => {
   useEffect(() => {
     const cookies = new Cookies()
     const token = cookies.get('auth_token')
-    if(token){
+    if (token) {
       navigate('/')
     }
   }, [])

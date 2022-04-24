@@ -15,4 +15,19 @@ export interface TaskItem {
   course_name: string,
   difficulty: string,
   description: string
+  is_complete: boolean
+}
+
+export interface TaskResult{
+  is_complete: boolean,
+  eval_result: string
+  echo_text: string
+}
+
+export interface User{
+  id: number,
+  first_name: string,
+  last_name: string,
+  middle_name: string,
+  email: string
 }

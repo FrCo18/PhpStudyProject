@@ -8750,6 +8750,7 @@ var Navbar = function Navbar() {
       'Authorization': 'Bearer ' + authToken
     };
     cookies.remove('auth_token');
+    localStorage.removeItem('user');
     axios_1["default"].post('/api/logout', null, {
       headers: headers
     }).then(function (response) {})["catch"](function (error) {
@@ -8832,6 +8833,178 @@ var Navbar = function Navbar() {
 };
 
 exports["default"] = Navbar;
+
+/***/ }),
+
+/***/ "./resources/src/components/TaskCompleteAlert.tsx":
+/*!********************************************************!*\
+  !*** ./resources/src/components/TaskCompleteAlert.tsx ***!
+  \********************************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+"use strict";
+
+
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+function _iterableToArrayLimit(arr, i) { var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]; if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+var __createBinding = this && this.__createBinding || (Object.create ? function (o, m, k, k2) {
+  if (k2 === undefined) k2 = k;
+  Object.defineProperty(o, k2, {
+    enumerable: true,
+    get: function get() {
+      return m[k];
+    }
+  });
+} : function (o, m, k, k2) {
+  if (k2 === undefined) k2 = k;
+  o[k2] = m[k];
+});
+
+var __setModuleDefault = this && this.__setModuleDefault || (Object.create ? function (o, v) {
+  Object.defineProperty(o, "default", {
+    enumerable: true,
+    value: v
+  });
+} : function (o, v) {
+  o["default"] = v;
+});
+
+var __importStar = this && this.__importStar || function (mod) {
+  if (mod && mod.__esModule) return mod;
+  var result = {};
+  if (mod != null) for (var k in mod) {
+    if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+  }
+
+  __setModuleDefault(result, mod);
+
+  return result;
+};
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+
+var react_1 = __importStar(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
+
+var react_bootstrap_1 = __webpack_require__(/*! react-bootstrap */ "./node_modules/react-bootstrap/esm/index.js");
+
+var TaskCompleteAlert = function TaskCompleteAlert() {
+  var _ref = (0, react_1.useState)(true),
+      _ref2 = _slicedToArray(_ref, 2),
+      show = _ref2[0],
+      setShow = _ref2[1];
+
+  if (show) {
+    return react_1["default"].createElement(react_bootstrap_1.Alert, {
+      variant: "success",
+      onClose: function onClose() {
+        return setShow(false);
+      },
+      dismissible: true
+    }, react_1["default"].createElement(react_bootstrap_1.Alert.Heading, null, "\u041F\u043E\u0437\u0434\u0440\u0430\u0432\u043B\u044F\u0435\u043C! \u0417\u0430\u0434\u0430\u043D\u0438\u0435 \u0443\u0441\u043F\u0435\u0448\u043D\u043E \u0437\u0430\u0432\u0435\u0440\u0448\u0435\u043D\u043E!"), react_1["default"].createElement("p", null, "\u041C\u043E\u0436\u043D\u043E \u043D\u0430\u0447\u0438\u043D\u0430\u0442\u044C \u0441\u043B\u0435\u0434\u0443\u044E\u0449\u0435\u0435!"));
+  }
+
+  return react_1["default"].createElement(react_1["default"].Fragment, null);
+};
+
+exports["default"] = TaskCompleteAlert;
+
+/***/ }),
+
+/***/ "./resources/src/components/TaskFailAlert.tsx":
+/*!****************************************************!*\
+  !*** ./resources/src/components/TaskFailAlert.tsx ***!
+  \****************************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+"use strict";
+
+
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+function _iterableToArrayLimit(arr, i) { var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]; if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+var __createBinding = this && this.__createBinding || (Object.create ? function (o, m, k, k2) {
+  if (k2 === undefined) k2 = k;
+  Object.defineProperty(o, k2, {
+    enumerable: true,
+    get: function get() {
+      return m[k];
+    }
+  });
+} : function (o, m, k, k2) {
+  if (k2 === undefined) k2 = k;
+  o[k2] = m[k];
+});
+
+var __setModuleDefault = this && this.__setModuleDefault || (Object.create ? function (o, v) {
+  Object.defineProperty(o, "default", {
+    enumerable: true,
+    value: v
+  });
+} : function (o, v) {
+  o["default"] = v;
+});
+
+var __importStar = this && this.__importStar || function (mod) {
+  if (mod && mod.__esModule) return mod;
+  var result = {};
+  if (mod != null) for (var k in mod) {
+    if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+  }
+
+  __setModuleDefault(result, mod);
+
+  return result;
+};
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+
+var react_1 = __importStar(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
+
+var react_bootstrap_1 = __webpack_require__(/*! react-bootstrap */ "./node_modules/react-bootstrap/esm/index.js");
+
+var TaskFailAlert = function TaskFailAlert() {
+  var _ref = (0, react_1.useState)(true),
+      _ref2 = _slicedToArray(_ref, 2),
+      show = _ref2[0],
+      setShow = _ref2[1];
+
+  if (show) {
+    return react_1["default"].createElement(react_bootstrap_1.Alert, {
+      variant: "danger",
+      onClose: function onClose() {
+        return setShow(false);
+      },
+      dismissible: true
+    }, react_1["default"].createElement(react_bootstrap_1.Alert.Heading, null, "\u0417\u0430\u0434\u0430\u043D\u0438\u0435 \u0432\u044B\u043F\u043E\u043B\u043D\u0435\u043D\u043E \u043D\u0435\u0432\u0435\u0440\u043D\u043E!"), react_1["default"].createElement("p", null, "\u041F\u0440\u043E\u0432\u0435\u0440\u044C\u0442\u0435, \u0441\u043E\u0431\u043B\u044E\u0434\u0430\u043B\u0438 \u043B\u0438 \u0432\u044B \u0443\u0441\u0442\u0430\u043D\u043E\u0432\u043A\u0438 \u0437\u0430\u0434\u0430\u043D\u0438\u044F."));
+  }
+
+  return react_1["default"].createElement(react_1["default"].Fragment, null);
+};
+
+exports["default"] = TaskFailAlert;
 
 /***/ }),
 
@@ -9025,6 +9198,7 @@ var Login = function Login() {
         cookies.set('auth_token', response.data.token, {
           path: '/'
         });
+        localStorage.setItem('user', JSON.stringify(response.data.user));
       }
     })["catch"](function (error) {
       alert('Не верны имя пользователя или пароль');
@@ -9463,6 +9637,8 @@ exports["default"] = Courses;
 "use strict";
 
 
+function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
+
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
@@ -9531,7 +9707,13 @@ var universal_cookie_1 = __importDefault(__webpack_require__(/*! universal-cooki
 
 var Loading_1 = __importDefault(__webpack_require__(/*! ../../components/Loading */ "./resources/src/components/Loading.tsx"));
 
+var TaskCompleteAlert_1 = __importDefault(__webpack_require__(/*! ../../components/TaskCompleteAlert */ "./resources/src/components/TaskCompleteAlert.tsx"));
+
+var TaskFailAlert_1 = __importDefault(__webpack_require__(/*! ../../components/TaskFailAlert */ "./resources/src/components/TaskFailAlert.tsx"));
+
 var TaskPage = function TaskPage() {
+  var _a;
+
   var params = (0, react_router_dom_1.useParams)();
 
   var _ref = (0, react_1.useState)(),
@@ -9554,9 +9736,11 @@ var TaskPage = function TaskPage() {
       compileResult = _ref8[0],
       setCompileResult = _ref8[1];
 
+  var userInfo = JSON.parse((_a = localStorage.getItem('user')) !== null && _a !== void 0 ? _a : '');
   var navigate = (0, react_router_dom_1.useNavigate)();
   var cookies = new universal_cookie_1["default"]();
   var token = cookies.get('auth_token');
+  console.log(token);
 
   function checkCode() {
     var headers = {
@@ -9564,13 +9748,28 @@ var TaskPage = function TaskPage() {
       'Authorization': 'Bearer ' + token
     };
     var params = {
-      php_code: phpCode
+      php_code: phpCode,
+      course_name: task === null || task === void 0 ? void 0 : task.course_name,
+      level_number: task === null || task === void 0 ? void 0 : task.level_number,
+      id_user: userInfo.id,
+      id_task: task === null || task === void 0 ? void 0 : task.id_task
     };
     axios_1["default"].post('/api/courses/check-task', params, {
       headers: headers
     }).then(function (response) {
       if (response.data) {
-        setCompileResult(response.data);
+        var object = response.data;
+
+        if (_typeof(object) !== 'object') {
+          object = JSON.parse(response.data.toString().replace(/.*?(\{)/, '$1'));
+        }
+
+        object.eval_result = object.eval_result.replace("\n", '<br/>');
+        setCompileResult({
+          is_complete: object.is_complete,
+          eval_result: object.eval_result,
+          echo_text: object.echo_text === '' ? object.error_text : object.echo_text
+        });
       }
     });
   } //подгрузка задания
@@ -9581,7 +9780,7 @@ var TaskPage = function TaskPage() {
       'Accept': 'application/json',
       'Authorization': 'Bearer ' + token
     };
-    axios_1["default"].get('/api/courses/task-by-id?id=' + params.id_task, {
+    axios_1["default"].get('/api/courses/task-by-id?id_task=' + params.id_task + '&' + 'id_user=' + userInfo.id, {
       headers: headers
     }).then(function (response) {
       if (response.data.id_task) {
@@ -9589,16 +9788,43 @@ var TaskPage = function TaskPage() {
         setLoad(true);
       }
     });
-  }, []);
-  (0, react_1.useEffect)(function () {
-    setCompileResult(compileResult === null || compileResult === void 0 ? void 0 : compileResult.toString().replace("\n", '<br/>'));
-  }, [compileResult]); //установка php_code
+  }, []); //установка php_code
 
   (0, react_1.useEffect)(function () {
     if (task) {
       setPhpCode(task.php_code);
     }
-  }, [task]); //check auth
+  }, [task]);
+
+  function showAlertComplete() {
+    if (compileResult) {
+      if (compileResult.is_complete) {
+        return react_1["default"].createElement(TaskCompleteAlert_1["default"], null);
+      } else {
+        return react_1["default"].createElement(TaskFailAlert_1["default"], null);
+      }
+    }
+
+    return react_1["default"].createElement(react_1["default"].Fragment, null);
+  } // function showTextForTerminal() {
+  //   if(compileResult?.error_text.toString() && compileResult?.error_text.toString() !== ''){
+  //     console.log(1)
+  //     return <div dangerouslySetInnerHTML={{__html: compileResult.error_text.toString()}}/>
+  //   }else if(compileResult?.echo_text.toString()){
+  //     console.log(2)
+  //     return <div dangerouslySetInnerHTML={{__html: compileResult.echo_text.toString()}}/>
+  //   }else{
+  //     console.log(3)
+  //     return <></>
+  //   }
+  // }
+  // useEffect(() => {
+  //   if (compileResult?.is_complete){
+  //     alert('')
+  //   }
+  // }, [compileResult])
+  //check auth
+
 
   (0, react_1.useEffect)(function () {
     if (!token) {
@@ -9652,9 +9878,11 @@ var TaskPage = function TaskPage() {
     }
   }, react_1["default"].createElement(react_bootstrap_1.Card.Text, null, compileResult ? react_1["default"].createElement("div", {
     dangerouslySetInnerHTML: {
-      __html: compileResult
+      __html: compileResult.echo_text.toString()
     }
-  }) : 'RESULT')))))) : react_1["default"].createElement(Loading_1["default"], null));
+  }) : 'RESULT'))))), react_1["default"].createElement("div", {
+    className: 'mt-3'
+  }, showAlertComplete())) : react_1["default"].createElement(Loading_1["default"], null));
 };
 
 exports["default"] = TaskPage;
@@ -9739,7 +9967,9 @@ var react_bootstrap_1 = __webpack_require__(/*! react-bootstrap */ "./node_modul
 var Loading_1 = __importDefault(__webpack_require__(/*! ../../components/Loading */ "./resources/src/components/Loading.tsx"));
 
 var Tasks = function Tasks() {
-  // console.log(params.id_course)
+  var _a; // console.log(params.id_course)
+
+
   var params = (0, react_router_dom_1.useParams)();
   var navigate = (0, react_router_dom_1.useNavigate)();
 
@@ -9753,6 +9983,7 @@ var Tasks = function Tasks() {
       isLoad = _ref4[0],
       setLoad = _ref4[1];
 
+  var userInfo = JSON.parse((_a = localStorage.getItem('user')) !== null && _a !== void 0 ? _a : '');
   var cookies = new universal_cookie_1["default"]();
   var token = cookies.get('auth_token'); //получение списка заданий
 
@@ -9761,7 +9992,7 @@ var Tasks = function Tasks() {
       'Accept': 'application/json',
       'Authorization': 'Bearer ' + token
     };
-    axios_1["default"].get('/api/courses/tasks-by-course-id?id=' + params.id_course, {
+    axios_1["default"].get('/api/courses/tasks-by-course-id?id_course=' + params.id_course + '&id_user=' + userInfo.id, {
       headers: headers
     }).then(function (response) {
       if (response.data.length) {
@@ -9790,7 +10021,14 @@ var Tasks = function Tasks() {
       className: 'mb-3'
     }, react_1["default"].createElement(react_bootstrap_1.Card.Header, {
       as: "h5"
-    }, "\u0423\u0440\u043E\u0432\u0435\u043D\u044C: ", task.level_number), react_1["default"].createElement(react_bootstrap_1.Card.Title, null, task.task_name), react_1["default"].createElement(react_bootstrap_1.Card.Body, null, react_1["default"].createElement(react_bootstrap_1.Button, {
+    }, "\u0423\u0440\u043E\u0432\u0435\u043D\u044C: ", task.level_number), task.is_complete && react_1["default"].createElement(react_bootstrap_1.Card.Subtitle, {
+      style: {
+        backgroundColor: '#2aaf1a',
+        color: 'white',
+        textAlign: 'center'
+      },
+      className: "mb-2"
+    }, "\u0417\u0430\u0434\u0430\u043D\u0438\u0435 \u0432\u044B\u043F\u043E\u043B\u043D\u0435\u043D\u043E"), react_1["default"].createElement(react_bootstrap_1.Card.Title, null, task.task_name), react_1["default"].createElement(react_bootstrap_1.Card.Body, null, react_1["default"].createElement(react_bootstrap_1.Button, {
       variant: "primary",
       onClick: function onClick() {
         return navigate('/courses/tasks/' + task.id_course + '/' + task.id_task);
