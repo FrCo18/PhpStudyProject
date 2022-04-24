@@ -22,10 +22,10 @@ class TaskChecker
         $this->check_task_callback = include  "/var/www/html/app/Courses/$course_name/Level$level_number/check.php";
     }
 
-    public function checkTask(string $php_code, string $eval_result = null): bool
+    public function checkTask(string $php_code, string $eval_result = '', $echo_text = ''): bool
     {
         $result = $this->check_task_callback;
-        return $result($php_code, $eval_result);
+        return $result($php_code, $eval_result, $echo_text);
     }
 
     public function setCourseName(string $name): void

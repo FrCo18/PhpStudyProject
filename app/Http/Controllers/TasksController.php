@@ -66,16 +66,16 @@ class TasksController extends Controller
         $arr_replaces = [
             '/^\s*<\?php|\?>\s*$/' => '',
             '/\$echo_system_var/' => '$echo_system_var1',
-            '/echo/' => '$echo_system_var.='
+            '/echo/' => '$echo_system_var .='
         ];
 
         $php_code = preg_replace(array_keys($arr_replaces), $arr_replaces, $request_params['php_code']);
 
         try {
-            $eval_result = eval($php_code);
+            $eval_result = eval($php_code) ?: '';
 
             $task_checker = new TaskChecker($request_params['course_name'], $request_params['level_number']);
-            $is_complete = $task_checker->checkTask($request_params['php_code'], $eval_result);
+            $is_complete = $task_checker->checkTask($request_params['php_code'], $eval_result, $echo_system_var);
 
             $result = ProgressTask::setProgressTask($request_params['id_task'], $request_params['id_user'], $is_complete);
             if (!$result) {
