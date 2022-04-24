@@ -8534,7 +8534,12 @@ var AppRouter_1 = __importDefault(__webpack_require__(/*! ./components/AppRouter
 
 var AuthContext_1 = __webpack_require__(/*! ./contexts/AuthContext */ "./resources/src/contexts/AuthContext.tsx");
 
+var universal_cookie_1 = __importDefault(__webpack_require__(/*! universal-cookie */ "./node_modules/universal-cookie/es6/index.js"));
+
 var App = function App() {
+  var cookies = new universal_cookie_1["default"]();
+  var token = cookies.get('auth_token');
+  console.log(token);
   return react_1["default"].createElement(AuthContext_1.AuthContext.Provider, {
     value: {
       Auth: {
@@ -9740,7 +9745,6 @@ var TaskPage = function TaskPage() {
   var navigate = (0, react_router_dom_1.useNavigate)();
   var cookies = new universal_cookie_1["default"]();
   var token = cookies.get('auth_token');
-  console.log(token);
 
   function checkCode() {
     var headers = {

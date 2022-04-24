@@ -4,9 +4,12 @@ import Navbar from "./components/Navbar/Navbar";
 import {BrowserRouter} from "react-router-dom";
 import AppRouter from "./components/AppRouter";
 import {AuthContext} from "./contexts/AuthContext";
+import Cookies from "universal-cookie";
 
 const App = () => {
-
+  const cookies = new Cookies()
+  let token = cookies.get('auth_token')
+  console.log(token)
   return (
     <AuthContext.Provider value={{
      Auth: {bearerStart: 'Bearer '}

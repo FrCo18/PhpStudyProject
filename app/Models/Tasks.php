@@ -50,7 +50,8 @@ class Tasks extends Model
          inner join "Courses" on "Courses"."id_course" = "Tasks"."id_course"
          inner join "DifficultyCourses" on "Courses"."id_difficulty" = "DifficultyCourses"."id_difficulty"
          left join "ProgressTasks" "pt" on "pt"."id_task" = "Tasks"."id_task" and "pt"."id_user" = ' . $id_user . '
-         where "Tasks"."id_course" = ' . $id_course;
+         where "Tasks"."id_course" = ' . $id_course
+        . ' order by "Tasks"."level_number"';
 
         return DB::select($query);
     }

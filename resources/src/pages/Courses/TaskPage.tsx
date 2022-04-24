@@ -18,7 +18,6 @@ const TaskPage = () => {
   const navigate = useNavigate()
   const cookies = new Cookies()
   let token = cookies.get('auth_token')
-  console.log(token)
 
   function checkCode() {
     const headers = {
