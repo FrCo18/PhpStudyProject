@@ -40,12 +40,12 @@ const TaskPage = () => {
           if (typeof object !== 'object') {
             object = JSON.parse(response.data.toString().replace(/.*?(\{)/, '$1'))
           }
-
-          object.eval_result = object.eval_result.replace("\n", '<br/>')
+          let echo_text = '<pre>' + (object.echo_text === '' ? object.error_text : object.echo_text) + '</pre>';
           setCompileResult({
             is_complete: object.is_complete,
             eval_result: object.eval_result,
-            echo_text: object.echo_text === '' ? object.error_text : object.echo_text
+            echo_text: echo_text
+
           })
         }
       })
@@ -88,25 +88,6 @@ const TaskPage = () => {
     );
   }
 
-  // function showTextForTerminal() {
-  //   if(compileResult?.error_text.toString() && compileResult?.error_text.toString() !== ''){
-  //     console.log(1)
-  //     return <div dangerouslySetInnerHTML={{__html: compileResult.error_text.toString()}}/>
-  //   }else if(compileResult?.echo_text.toString()){
-  //     console.log(2)
-  //     return <div dangerouslySetInnerHTML={{__html: compileResult.echo_text.toString()}}/>
-  //   }else{
-  //     console.log(3)
-  //     return <></>
-  //   }
-  // }
-
-  // useEffect(() => {
-  //   if (compileResult?.is_complete){
-  //     alert('')
-  //   }
-  // }, [compileResult])
-
   //check auth
   useEffect(() => {
     if (!token) {
@@ -124,7 +105,7 @@ const TaskPage = () => {
             <Card.Body>
               <Card.Title>{task?.task_name}</Card.Title>
               <Card.Text>
-                {task?.theory}
+                <pre>{task?.theory}</pre>
               </Card.Text>
             </Card.Body>
           </Card>

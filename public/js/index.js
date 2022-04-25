@@ -9768,11 +9768,11 @@ var TaskPage = function TaskPage() {
           object = JSON.parse(response.data.toString().replace(/.*?(\{)/, '$1'));
         }
 
-        object.eval_result = object.eval_result.replace("\n", '<br/>');
+        var echo_text = '<pre>' + (object.echo_text === '' ? object.error_text : object.echo_text) + '</pre>';
         setCompileResult({
           is_complete: object.is_complete,
           eval_result: object.eval_result,
-          echo_text: object.echo_text === '' ? object.error_text : object.echo_text
+          echo_text: echo_text
         });
       }
     });
@@ -9810,24 +9810,7 @@ var TaskPage = function TaskPage() {
     }
 
     return react_1["default"].createElement(react_1["default"].Fragment, null);
-  } // function showTextForTerminal() {
-  //   if(compileResult?.error_text.toString() && compileResult?.error_text.toString() !== ''){
-  //     console.log(1)
-  //     return <div dangerouslySetInnerHTML={{__html: compileResult.error_text.toString()}}/>
-  //   }else if(compileResult?.echo_text.toString()){
-  //     console.log(2)
-  //     return <div dangerouslySetInnerHTML={{__html: compileResult.echo_text.toString()}}/>
-  //   }else{
-  //     console.log(3)
-  //     return <></>
-  //   }
-  // }
-  // useEffect(() => {
-  //   if (compileResult?.is_complete){
-  //     alert('')
-  //   }
-  // }, [compileResult])
-  //check auth
+  } //check auth
 
 
   (0, react_1.useEffect)(function () {
@@ -9846,7 +9829,7 @@ var TaskPage = function TaskPage() {
     style: {
       color: 'black'
     }
-  }, react_1["default"].createElement(react_bootstrap_1.Card.Body, null, react_1["default"].createElement(react_bootstrap_1.Card.Title, null, task === null || task === void 0 ? void 0 : task.task_name), react_1["default"].createElement(react_bootstrap_1.Card.Text, null, task === null || task === void 0 ? void 0 : task.theory))), react_1["default"].createElement(react_bootstrap_1.Row, {
+  }, react_1["default"].createElement(react_bootstrap_1.Card.Body, null, react_1["default"].createElement(react_bootstrap_1.Card.Title, null, task === null || task === void 0 ? void 0 : task.task_name), react_1["default"].createElement(react_bootstrap_1.Card.Text, null, react_1["default"].createElement("pre", null, task === null || task === void 0 ? void 0 : task.theory)))), react_1["default"].createElement(react_bootstrap_1.Row, {
     className: 'mt-3'
   }, react_1["default"].createElement("h2", null, "\u0412\u0430\u0448 \u043A\u043E\u0434"), react_1["default"].createElement(react_bootstrap_1.Col, {
     sm: 7
