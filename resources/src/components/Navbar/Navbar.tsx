@@ -58,7 +58,7 @@ const Navbar: React.FC = () => {
           <Nav.Link eventKey="link-1"><Link to='/courses'>Начать курсы</Link></Nav.Link>
         </Nav.Item>
         <Nav.Item as="li">
-          <Nav.Link eventKey="link-2"><Link to='/about'>О проекте</Link></Nav.Link>
+          <Nav.Link eventKey="link-2"><Link to='/about'>О нас</Link></Nav.Link>
         </Nav.Item>
         {auth ?
           <Button onClick={() => logout()} style={{ right: '5%'}} className='mt-1'

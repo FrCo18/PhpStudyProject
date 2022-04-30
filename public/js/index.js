@@ -8805,7 +8805,7 @@ var Navbar = function Navbar() {
     eventKey: "link-2"
   }, react_1["default"].createElement(react_router_dom_1.Link, {
     to: '/about'
-  }, "\u041E \u043F\u0440\u043E\u0435\u043A\u0442\u0435"))), auth ? react_1["default"].createElement(react_bootstrap_1.Button, {
+  }, "\u041E \u043D\u0430\u0441"))), auth ? react_1["default"].createElement(react_bootstrap_1.Button, {
     onClick: function onClick() {
       return logout();
     },
@@ -9087,12 +9087,37 @@ Object.defineProperty(exports, "__esModule", ({
 
 var react_1 = __importDefault(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
 
+var react_bootstrap_1 = __webpack_require__(/*! react-bootstrap */ "./node_modules/react-bootstrap/esm/index.js");
+
 var About = function About() {
-  return react_1["default"].createElement("div", {
+  return react_1["default"].createElement("div", null, react_1["default"].createElement(react_bootstrap_1.Card, {
     style: {
-      color: "white"
+      backgroundColor: '#434447',
+      color: 'white'
     }
-  }, "\u041E \u043D\u0430\u0441!!!");
+  }, react_1["default"].createElement(react_bootstrap_1.Card.Img, {
+    variant: "top",
+    src: (__webpack_require__(/*! ../recourses/AdminIcon.png */ "./resources/src/recourses/AdminIcon.png")["default"]),
+    style: {
+      width: '50%'
+    },
+    className: 'mx-auto'
+  }), react_1["default"].createElement(react_bootstrap_1.Card.Body, null, react_1["default"].createElement(react_bootstrap_1.Card.Text, null, "\u0420\u0430\u0437\u0440\u0430\u0431\u043E\u0442\u0447\u0438\u043A \u0441\u0430\u0439\u0442\u0430: \u0411\u043E\u0440\u0438\u0441\u043E\u0432 \u041D\u0438\u043A\u0438\u0442\u0430 \u041E\u043B\u0435\u0433\u043E\u0432\u0438\u0447.", react_1["default"].createElement("br", null), "\u0418\u0434\u0435\u044F \u0440\u0430\u0437\u0440\u0430\u0431\u043E\u0442\u043A\u0438:", react_1["default"].createElement("br", null), "\u041F\u043E\u0437\u043D\u0430\u043A\u043E\u043C\u0438\u0442\u044C \u043B\u044E\u0434\u0435\u0439 \u0441 \u043F\u0440\u043E\u0433\u0440\u0430\u043C\u043C\u0438\u0440\u043E\u0432\u0430\u043D\u0438\u0435\u043C, \u0430 \u0432 \u0447\u0430\u0441\u0442\u043D\u043E\u0441\u0442\u0438 \u0441 \u044F\u0437\u044B\u043A\u043E\u043C \u043F\u0440\u043E\u0433\u0440\u0430\u043C\u043C\u0438\u0440\u043E\u0432\u0430\u043D\u0438\u044F PHP.", react_1["default"].createElement("br", null), "\u0417\u0434\u0435\u0441\u044C \u043C\u043E\u0436\u043D\u043E \u043F\u043E\u043B\u0443\u0447\u0438\u0442\u044C \u043F\u0435\u0440\u0432\u043E\u0435 \u043F\u0440\u0435\u0434\u0441\u0442\u0430\u0432\u043B\u0435\u043D\u0438\u0435 \u043A\u0430\u043A \u043F\u0440\u043E\u0433\u0440\u0430\u043C\u043C\u0438\u0440\u043E\u0432\u0430\u0442\u044C \u0438 \u0441 \u044D\u0442\u0438\u043C\u0438 \u0437\u043D\u0430\u043D\u0438\u044F\u043C\u0438 \u0431\u044B\u043B\u043E \u043F\u0440\u043E\u0449\u0435 \u043F\u043E\u043D\u044F\u0442\u044C", react_1["default"].createElement("br", null), "\u0447\u0442\u043E \u0438\u0437\u0443\u0447\u0430\u0442\u044C.")), react_1["default"].createElement(react_bootstrap_1.Card.Body, null, react_1["default"].createElement(react_bootstrap_1.Card.Link, {
+    href: "https://vk.com/frco18"
+  }, "\u0421\u0442\u0440\u0430\u043D\u0438\u0446\u0430 \u0432 VK"))), react_1["default"].createElement(react_bootstrap_1.Card, {
+    className: 'mt-2',
+    style: {
+      backgroundColor: '#434447',
+      color: 'white'
+    }
+  }, react_1["default"].createElement(react_bootstrap_1.Card.Img, {
+    variant: "top",
+    src: (__webpack_require__(/*! ../recourses/PHP.png */ "./resources/src/recourses/PHP.png")["default"]),
+    style: {
+      width: '50%'
+    },
+    className: 'mx-auto'
+  }), react_1["default"].createElement(react_bootstrap_1.Card.Body, null, react_1["default"].createElement(react_bootstrap_1.Card.Text, null, "\u0421\u0435\u0440\u0432\u0435\u0440\u043D\u0430\u044F \u0447\u0430\u0441\u0442\u044C \u0441\u0430\u0439\u0442\u0430 \u0442\u0430\u043A\u0436\u0435 \u043D\u0430\u043F\u0438\u0441\u0430\u043D\u0430 \u043D\u0430 \u044F\u0437\u044B\u043A\u0435 \u043F\u0440\u043E\u0433\u0440\u0430\u043C\u043C\u0438\u0440\u043E\u0432\u0430\u043D\u0438\u044F PHP \u0432\u0435\u0440\u0441\u0438\u0438 8.0."))));
 };
 
 exports["default"] = About;
@@ -11268,6 +11293,36 @@ function triggerEvent(node, eventName, bubbles, cancelable) {
     node.dispatchEvent(event);
   }
 }
+
+/***/ }),
+
+/***/ "./resources/src/recourses/AdminIcon.png":
+/*!***********************************************!*\
+  !*** ./resources/src/recourses/AdminIcon.png ***!
+  \***********************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("/images/AdminIcon.png?6e257ed4e76a56519ea78b5bbafbe8e9");
+
+/***/ }),
+
+/***/ "./resources/src/recourses/PHP.png":
+/*!*****************************************!*\
+  !*** ./resources/src/recourses/PHP.png ***!
+  \*****************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("/images/PHP.png?6c7aed25172b61045270cbdd5c476218");
 
 /***/ }),
 
