@@ -1,6 +1,5 @@
 import React from 'react';
 import {Card, Carousel, Container} from "react-bootstrap";
-import Navbar from "../components/Navbar/Navbar";
 
 const About: React.FC = () => {
   return (
@@ -10,7 +9,6 @@ const About: React.FC = () => {
                   style={{width: '50%'}}
                   className='mx-auto'
         />
-        {/*<img src={require('./AdminIcon.png').default} />*/}
         <Card.Body>
           <Card.Text>
             Разработчик сайта: Борисов Никита Олегович.
@@ -34,7 +32,6 @@ const About: React.FC = () => {
                   style={{width: '50%'}}
                   className='mx-auto'
         />
-        {/*<img src={require('./AdminIcon.png').default} />*/}
         <Card.Body>
           <Card.Text>
             Серверная часть сайта также написана на языке программирования PHP версии 8.0.

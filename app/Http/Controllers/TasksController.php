@@ -60,12 +60,12 @@ class TasksController extends Controller
             return $check_params;
         }
 
-        $echo_system_var = '';
+        $_SESSION['echo_system_var'] = '';
 
         $arr_replaces = [
             '/^\s*<\?php|\?>\s*$/' => '',
-            '/\$echo_system_var/' => '$echo_system_var1',
-            '/echo/' => '$echo_system_var .='
+            '/\$_SESSION\[[\'"]echo_system_var[\'"]]/' => '',
+            '/echo/' => '$_SESSION[\'echo_system_var\'] .='
         ];
 
         $php_code = preg_replace(array_keys($arr_replaces), $arr_replaces, $request_params['php_code']);
@@ -75,12 +75,12 @@ class TasksController extends Controller
 
             return [
                 'error_text' => '',
-                'echo_text' => $echo_system_var
+                'echo_text' => $_SESSION['echo_system_var']
             ];
         } catch (\ParseError|\ErrorException|\Error $e) {
             return [
                 'error_text' => $e->getMessage(),
-                'echo_text' => $echo_system_var
+                'echo_text' => $_SESSION['echo_system_var']
             ];
         }
     }
@@ -105,12 +105,12 @@ class TasksController extends Controller
             return $check_params;
         }
 
-        $echo_system_var = '';
+        $_SESSION['echo_system_var'] = '';
 
         $arr_replaces = [
             '/^\s*<\?php|\?>\s*$/' => '',
-            '/\$echo_system_var/' => '$echo_system_var1',
-            '/echo/' => '$echo_system_var .='
+            '/\$_SESSION\[[\'"]echo_system_var[\'"]]/' => '',
+            '/echo/' => '$_SESSION[\'echo_system_var\'] .='
         ];
 
         $php_code = preg_replace(array_keys($arr_replaces), $arr_replaces, $request_params['php_code']);
@@ -119,7 +119,7 @@ class TasksController extends Controller
             $eval_result = eval($php_code) ?: '';
 
             $task_checker = new TaskChecker($request_params['course_name'], $request_params['level_number']);
-            $is_complete = $task_checker->checkTask($request_params['php_code'], $eval_result, $echo_system_var);
+            $is_complete = $task_checker->checkTask($request_params['php_code'], $eval_result, $_SESSION['echo_system_var']);
 
             $result = ProgressTask::setProgressTask($request_params['id_task'], $request_params['id_user'], $is_complete);
             if (!$result) {
@@ -136,7 +136,7 @@ class TasksController extends Controller
                 'is_complete' => $is_complete,
                 'eval_result' => $eval_result ?? '',
                 'error_text' => '',
-                'echo_text' => $echo_system_var
+                'echo_text' => $_SESSION['echo_system_var']
             ];
 
         } catch (\ParseError|\ErrorException|\Error $e) {
@@ -144,7 +144,7 @@ class TasksController extends Controller
                 'is_complete' => false,
                 'eval_result' => '',
                 'error_text' => $e->getMessage(),
-                'echo_text' => $echo_system_var
+                'echo_text' => $_SESSION['echo_system_var']
             ];
         }
     }

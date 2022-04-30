@@ -9906,7 +9906,9 @@ var TaskPage = function TaskPage() {
     className: 'mt-3'
   }, react_1["default"].createElement("h2", null, "\u0412\u0430\u0448 \u043A\u043E\u0434"), react_1["default"].createElement(react_bootstrap_1.Col, {
     sm: 7
-  }, react_1["default"].createElement(react_bootstrap_1.Form, null, react_1["default"].createElement(react_bootstrap_1.Form.Group, {
+  }, react_1["default"].createElement(react_bootstrap_1.Form, {
+    className: 'mb-3'
+  }, react_1["default"].createElement(react_bootstrap_1.Form.Group, {
     className: 'mb-3',
     controlId: "exampleForm.ControlTextarea1"
   }, react_1["default"].createElement(react_bootstrap_1.Form.Control, {

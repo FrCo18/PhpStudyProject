@@ -145,7 +145,7 @@ const TaskPage = () => {
           <Row className='mt-3'>
             <h2>Ваш код</h2>
             <Col sm={7}>
-              <Form>
+              <Form className='mb-3'>
                 <Form.Group className='mb-3' controlId="exampleForm.ControlTextarea1">
                   <Form.Control onChange={event => setPhpCode(event.target.value)} defaultValue={task?.php_code}
                                 value={phpCode}
