@@ -9571,6 +9571,8 @@ var react_bootstrap_1 = __webpack_require__(/*! react-bootstrap */ "./node_modul
 var Loading_1 = __importDefault(__webpack_require__(/*! ../../components/Loading */ "./resources/src/components/Loading.tsx"));
 
 var Courses = function Courses() {
+  var _a;
+
   var navigate = (0, react_router_dom_1.useNavigate)();
   var cookies = new universal_cookie_1["default"]();
   var token = cookies.get('auth_token');
@@ -9583,8 +9585,9 @@ var Courses = function Courses() {
   var _ref3 = (0, react_1.useState)(false),
       _ref4 = _slicedToArray(_ref3, 2),
       isLoad = _ref4[0],
-      setLoad = _ref4[1]; //check auth
+      setLoad = _ref4[1];
 
+  var userInfo = JSON.parse((_a = localStorage.getItem('user')) !== null && _a !== void 0 ? _a : ''); //check auth
 
   (0, react_1.useEffect)(function () {
     if (!token) {
@@ -9598,7 +9601,7 @@ var Courses = function Courses() {
       'Accept': 'application/json',
       'Authorization': 'Bearer ' + token
     };
-    axios_1["default"].get('/api/courses', {
+    axios_1["default"].get('/api/courses?' + 'id_user=' + userInfo.id, {
       headers: headers
     }).then(function (response) {
       if (response.data.length) {
@@ -9620,7 +9623,14 @@ var Courses = function Courses() {
       className: 'mb-3'
     }, react_1["default"].createElement(react_bootstrap_1.Card.Header, {
       as: "h5"
-    }, course.course), react_1["default"].createElement(react_bootstrap_1.Card.Body, null, react_1["default"].createElement(react_bootstrap_1.Card.Title, null, "\u0421\u043B\u043E\u0436\u043D\u043E\u0441\u0442\u044C: ", course.difficulty), react_1["default"].createElement(react_bootstrap_1.Card.Text, null, course.description), react_1["default"].createElement(react_bootstrap_1.Button, {
+    }, course.course), react_1["default"].createElement(react_bootstrap_1.Card.Body, null, course.is_complete && react_1["default"].createElement(react_bootstrap_1.Card.Subtitle, {
+      style: {
+        backgroundColor: '#2aaf1a',
+        color: 'white',
+        textAlign: 'center'
+      },
+      className: "mb-2"
+    }, "\u041A\u0443\u0440\u0441 \u043F\u0440\u043E\u0439\u0434\u0435\u043D"), react_1["default"].createElement(react_bootstrap_1.Card.Title, null, "\u0421\u043B\u043E\u0436\u043D\u043E\u0441\u0442\u044C: ", course.difficulty), react_1["default"].createElement(react_bootstrap_1.Card.Text, null, course.description), react_1["default"].createElement(react_bootstrap_1.Button, {
       variant: "primary",
       onClick: function onClick() {
         return navigate('/courses/tasks/' + course.id_course);
@@ -9741,6 +9751,11 @@ var TaskPage = function TaskPage() {
       compileResult = _ref8[0],
       setCompileResult = _ref8[1];
 
+  var _ref9 = (0, react_1.useState)(false),
+      _ref10 = _slicedToArray(_ref9, 2),
+      isOnlyCompile = _ref10[0],
+      setIsOnlyCompile = _ref10[1];
+
   var userInfo = JSON.parse((_a = localStorage.getItem('user')) !== null && _a !== void 0 ? _a : '');
   var navigate = (0, react_router_dom_1.useNavigate)();
   var cookies = new universal_cookie_1["default"]();
@@ -9756,7 +9771,8 @@ var TaskPage = function TaskPage() {
       course_name: task === null || task === void 0 ? void 0 : task.course_name,
       level_number: task === null || task === void 0 ? void 0 : task.level_number,
       id_user: userInfo.id,
-      id_task: task === null || task === void 0 ? void 0 : task.id_task
+      id_task: task === null || task === void 0 ? void 0 : task.id_task,
+      id_course: task === null || task === void 0 ? void 0 : task.id_course
     };
     axios_1["default"].post('/api/courses/check-task', params, {
       headers: headers
@@ -9774,6 +9790,38 @@ var TaskPage = function TaskPage() {
           eval_result: object.eval_result,
           echo_text: echo_text
         });
+        setIsOnlyCompile(false);
+      }
+    });
+  }
+
+  function compileCode() {
+    var headers = {
+      'Accept': 'application/json',
+      'Authorization': 'Bearer ' + token
+    };
+    var params = {
+      php_code: phpCode
+    };
+    axios_1["default"].post('/api/compile-code', params, {
+      headers: headers
+    }).then(function (response) {
+      var _a, _b;
+
+      if (response.data) {
+        var object = response.data;
+
+        if (_typeof(object) !== 'object') {
+          object = JSON.parse(response.data.toString().replace(/.*?(\{)/, '$1'));
+        }
+
+        var echo_text = '<pre>' + (object.echo_text === '' ? object.error_text : object.echo_text) + '</pre>';
+        setCompileResult({
+          is_complete: (_a = compileResult === null || compileResult === void 0 ? void 0 : compileResult.is_complete) !== null && _a !== void 0 ? _a : false,
+          eval_result: (_b = compileResult === null || compileResult === void 0 ? void 0 : compileResult.eval_result) !== null && _b !== void 0 ? _b : '',
+          echo_text: echo_text
+        });
+        setIsOnlyCompile(true);
       }
     });
   } //подгрузка задания
@@ -9854,7 +9902,21 @@ var TaskPage = function TaskPage() {
     },
     variant: "primary",
     type: "button"
-  }, "\u041F\u0440\u043E\u0432\u0435\u0440\u0438\u0442\u044C"))), react_1["default"].createElement(react_bootstrap_1.Col, null, react_1["default"].createElement(react_bootstrap_1.Card, null, react_1["default"].createElement(react_bootstrap_1.Card.Header, {
+  }, "\u041F\u0440\u043E\u0432\u0435\u0440\u0438\u0442\u044C"), react_1["default"].createElement(react_bootstrap_1.Button, {
+    onClick: function onClick() {
+      return compileCode();
+    },
+    className: 'ms-2',
+    variant: "primary",
+    type: "button"
+  }, "\u0421\u043A\u043E\u043C\u043F\u0438\u043B\u0438\u0440\u043E\u0432\u0430\u0442\u044C"), react_1["default"].createElement(react_bootstrap_1.Button, {
+    onClick: function onClick() {
+      return navigate('/courses/tasks/' + (task === null || task === void 0 ? void 0 : task.id_course));
+    },
+    className: 'ms-2',
+    variant: "primary",
+    type: "button"
+  }, "\u041D\u0430\u0437\u0430\u0434 \u043A \u0437\u0430\u0434\u0430\u043D\u0438\u044F\u043C"))), react_1["default"].createElement(react_bootstrap_1.Col, null, react_1["default"].createElement(react_bootstrap_1.Card, null, react_1["default"].createElement(react_bootstrap_1.Card.Header, {
     style: {
       backgroundColor: 'black'
     }
@@ -9867,9 +9929,9 @@ var TaskPage = function TaskPage() {
     dangerouslySetInnerHTML: {
       __html: compileResult.echo_text.toString()
     }
-  }) : 'RESULT'))))), react_1["default"].createElement("div", {
+  }) : 'RESULT'))))), !isOnlyCompile ? react_1["default"].createElement("div", {
     className: 'mt-3'
-  }, showAlertComplete())) : react_1["default"].createElement(Loading_1["default"], null));
+  }, showAlertComplete()) : '') : react_1["default"].createElement(Loading_1["default"], null));
 };
 
 exports["default"] = TaskPage;

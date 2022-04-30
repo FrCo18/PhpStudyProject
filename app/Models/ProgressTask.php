@@ -41,4 +41,20 @@ class ProgressTask extends Model
 
         return $result;
     }
+
+    public static function isCompleteAllTasks(int $id_course, int $id_user): bool
+    {
+        $tasks = Tasks::getTasksByCourseId($id_course, $id_user);
+
+        $is_complete = true;
+
+        foreach ($tasks as $task) {
+            if (!$task['is_complete']) {
+                $is_complete = false;
+                break;
+            }
+        }
+
+        return $is_complete;
+    }
 }

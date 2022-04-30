@@ -14,6 +14,7 @@ const TaskPage = () => {
   const [isLoad, setLoad] = useState(false)
   const [phpCode, setPhpCode] = useState<string>()
   const [compileResult, setCompileResult] = useState<TaskResult>()
+  const [isOnlyCompile, setIsOnlyCompile] = useState(false)
   let userInfo: User = JSON.parse((localStorage.getItem('user')) ?? '')
   const navigate = useNavigate()
   const cookies = new Cookies()
@@ -29,7 +30,8 @@ const TaskPage = () => {
       course_name: task?.course_name,
       level_number: task?.level_number,
       id_user: userInfo.id,
-      id_task: task?.id_task
+      id_task: task?.id_task,
+      id_course: task?.id_course
     }
 
     axios.post('/api/courses/check-task', params, {headers})
@@ -47,6 +49,36 @@ const TaskPage = () => {
             echo_text: echo_text
 
           })
+          setIsOnlyCompile(false)
+        }
+      })
+  }
+
+  function compileCode(){
+    const headers = {
+      'Accept': 'application/json',
+      'Authorization': 'Bearer ' + token
+    }
+    const params = {
+      php_code: phpCode,
+    }
+
+    axios.post('/api/compile-code', params, {headers})
+      .then((response) => {
+        if (response.data) {
+          let object = response.data
+
+          if (typeof object !== 'object') {
+            object = JSON.parse(response.data.toString().replace(/.*?(\{)/, '$1'))
+          }
+          let echo_text = '<pre>' + (object.echo_text === '' ? object.error_text : object.echo_text) + '</pre>';
+          setCompileResult({
+            is_complete: compileResult?.is_complete ?? false,
+            eval_result: compileResult?.eval_result ?? '',
+            echo_text: echo_text
+
+          })
+          setIsOnlyCompile(true)
         }
       })
   }
@@ -123,6 +155,12 @@ const TaskPage = () => {
                 <Button onClick={() => checkCode()} variant="primary" type="button">
                   Проверить
                 </Button>
+                <Button onClick={() => compileCode()} className='ms-2' variant="primary" type="button">
+                  Скомпилировать
+                </Button>
+                <Button onClick={() => navigate('/courses/tasks/' + task?.id_course)} className='ms-2' variant="primary" type="button">
+                  Назад к заданиям
+                </Button>
               </Form>
             </Col>
             <Col>
@@ -141,9 +179,14 @@ const TaskPage = () => {
               </Card>
             </Col>
           </Row>
-          <div className='mt-3'>
-            {showAlertComplete()}
-          </div>
+          {
+            !isOnlyCompile?
+              <div className='mt-3'>
+                {showAlertComplete()}
+              </div>
+              :''
+          }
+
         </div>)
         : <Loading/>
       }

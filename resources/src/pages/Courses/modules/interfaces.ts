@@ -2,7 +2,8 @@ export interface CourseItem {
   id_course: number,
   course: string,
   difficulty: string,
-  description: string
+  description: string,
+  is_complete: boolean
 }
 
 export interface TaskItem {

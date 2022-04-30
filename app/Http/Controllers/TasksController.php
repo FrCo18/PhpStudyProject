@@ -3,8 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Courses\TaskChecker;
+use App\Models\Course;
+use App\Models\ProgressCourse;
 use App\Models\ProgressTask;
 use App\Models\Tasks;
+use Exception;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
@@ -45,7 +48,47 @@ class TasksController extends Controller
         return response()->json($task);
     }
 
-    public function checkTask(Request $request)
+    public function compileCode(Request $request): array|JsonResponse|\Illuminate\Http\JsonResponse
+    {
+        $request_params = [
+            'php_code' => $request->get('php_code'),
+        ];
+
+        $check_params = self::checkExistsParams($request_params);
+
+        if ($check_params instanceof JsonResponse) {
+            return $check_params;
+        }
+
+        $echo_system_var = '';
+
+        $arr_replaces = [
+            '/^\s*<\?php|\?>\s*$/' => '',
+            '/\$echo_system_var/' => '$echo_system_var1',
+            '/echo/' => '$echo_system_var .='
+        ];
+
+        $php_code = preg_replace(array_keys($arr_replaces), $arr_replaces, $request_params['php_code']);
+
+        try {
+            eval($php_code);
+
+            return [
+                'error_text' => '',
+                'echo_text' => $echo_system_var
+            ];
+        } catch (\ParseError|\ErrorException|\Error $e) {
+            return [
+                'error_text' => $e->getMessage(),
+                'echo_text' => $echo_system_var
+            ];
+        }
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function checkTask(Request $request): JsonResponse|\Illuminate\Http\JsonResponse|array
     {
         $request_params = [
             'php_code' => $request->get('php_code'),
@@ -53,6 +96,7 @@ class TasksController extends Controller
             'level_number' => $request->get('level_number'),
             'id_user' => $request->get('id_user'),
             'id_task' => $request->get('id_task'),
+            'id_course' => $request->get('id_course'),
         ];
 
         $check_params = self::checkExistsParams($request_params);
@@ -79,7 +123,13 @@ class TasksController extends Controller
 
             $result = ProgressTask::setProgressTask($request_params['id_task'], $request_params['id_user'], $is_complete);
             if (!$result) {
-                throw new \Exception('Fail set to ProgressTasks', 500);
+                throw new Exception('Fail set to ProgressTasks', 500);
+            }
+
+            $is_complete_all_tasks = ProgressTask::isCompleteAllTasks($request_params['id_course'], $request_params['id_user']);
+            $result = ProgressCourse::setProgressCourse($request_params['id_course'], $request_params['id_user'], $is_complete_all_tasks);
+            if (!$result) {
+                throw new Exception('Fail set to ProgressCourses', 500);
             }
 
             return [

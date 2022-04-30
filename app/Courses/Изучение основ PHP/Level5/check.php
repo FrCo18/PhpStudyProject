@@ -9,6 +9,7 @@ return function (string $php_code, string $eval_text, string $echo_text): bool {
     $variants_in_body = '/('
         . '\s*(?<var>\$[\w_\d]+)\s*\.=\s*\$[\w_\d]+\s*\.\s*(\' \'|" ")\s*;'
         . '|\s*(?<var1>\$[\w_\d]+)\s*\.=\s*(\' \'|" ")\s*\.\s*\$[\w_\d]+\s*;'
+        . '|\s*(?<var2>\$[\w_\d]+)\s*\.=\s*["\']\s*\$[\w_\d]+\s*[\'"]'
         . ')/s';
 
     if (preg_match($regex, $php_code, $matches)) {
@@ -20,13 +21,19 @@ return function (string $php_code, string $eval_text, string $echo_text): bool {
     }
 
     if (preg_match_all('/echo .*?;/', $php_code, $matches_count) && count($matches_count[0]) === 1) {
-        if (isset($matches['var'])) {
+        if ($matches['var']) {
             return $echo_check && (bool)preg_match('/echo\s*\(*\s*trim\(\s*' .
                     preg_quote($matches['var'])
                     . '\s*\)*\s*;/', $php_code);
-        } else if (isset($matches['var1'])) {
+        } else if ($matches['var1']) {
             return $echo_check && (bool)preg_match('/echo\s*\(*\s*trim\(\s*' .
                     preg_quote($matches['var1'])
+                    . '\s*\)*\s*;/', $php_code);
+        }
+
+        else if ($matches['var2']) {
+            return $echo_check && (bool)preg_match('/echo\s*\(*\s*trim\(\s*' .
+                    preg_quote($matches['var2'])
                     . '\s*\)*\s*;/', $php_code);
         }
     }

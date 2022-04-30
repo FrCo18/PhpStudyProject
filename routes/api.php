@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\CourseController;
+use App\Http\Controllers\CoursesController;
 use App\Http\Controllers\TasksController;
 use Illuminate\Support\Facades\Route;
 
@@ -25,11 +25,13 @@ Route::group(['middleware' => ['auth:sanctum']], function (){
 
     //Courses routes
     Route::prefix('courses')->group(function (){
-        Route::get('/', [CourseController::class, 'getCourses']);
+        Route::get('/', [CoursesController::class, 'getCourses']);
 
         //Tasks
         Route::get('/tasks-by-course-id/', [TasksController::class, 'getTasksByCourseId']);
         Route::get('/task-by-id/', [TasksController::class, 'getTaskById']);
         Route::post('/check-task/', [TasksController::class, 'checkTask']);
     });
+
+    Route::post('/compile-code/', [TasksController::class, 'compileCode']);
 });
