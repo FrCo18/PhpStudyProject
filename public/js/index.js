@@ -9752,7 +9752,7 @@ var TaskCompleteAlert_1 = __importDefault(__webpack_require__(/*! ../../componen
 var TaskFailAlert_1 = __importDefault(__webpack_require__(/*! ../../components/TaskFailAlert */ "./resources/src/components/TaskFailAlert.tsx"));
 
 var TaskPage = function TaskPage() {
-  var _a;
+  var _a, _b;
 
   var params = (0, react_router_dom_1.useParams)();
 
@@ -9780,6 +9780,11 @@ var TaskPage = function TaskPage() {
       _ref10 = _slicedToArray(_ref9, 2),
       isOnlyCompile = _ref10[0],
       setIsOnlyCompile = _ref10[1];
+
+  var _ref11 = (0, react_1.useState)(10),
+      _ref12 = _slicedToArray(_ref11, 2),
+      rowsTextArea = _ref12[0],
+      setRowsTextArea = _ref12[1];
 
   var userInfo = JSON.parse((_a = localStorage.getItem('user')) !== null && _a !== void 0 ? _a : '');
   var navigate = (0, react_router_dom_1.useNavigate)();
@@ -9861,7 +9866,10 @@ var TaskPage = function TaskPage() {
       headers: headers
     }).then(function (response) {
       if (response.data.id_task) {
-        setTask(response.data);
+        var _task = response.data;
+        _task.theory = _task.theory.replace(/\n/g, '<br />');
+        setPhpCode(_task.php_code);
+        setTask(_task);
         setLoad(true);
       }
     });
@@ -9883,8 +9891,16 @@ var TaskPage = function TaskPage() {
     }
 
     return react_1["default"].createElement(react_1["default"].Fragment, null);
-  } //check auth
+  } //установка количества строк в textArea
 
+
+  (0, react_1.useEffect)(function () {
+    var _a;
+
+    var countRows = ((_a = phpCode === null || phpCode === void 0 ? void 0 : phpCode.match(/\n/g)) !== null && _a !== void 0 ? _a : []).length;
+    countRows = countRows < 10 ? 10 : countRows;
+    setRowsTextArea(countRows + 2);
+  }, [phpCode]); //check auth
 
   (0, react_1.useEffect)(function () {
     if (!token) {
@@ -9902,7 +9918,11 @@ var TaskPage = function TaskPage() {
     style: {
       color: 'black'
     }
-  }, react_1["default"].createElement(react_bootstrap_1.Card.Body, null, react_1["default"].createElement(react_bootstrap_1.Card.Title, null, task === null || task === void 0 ? void 0 : task.task_name), react_1["default"].createElement(react_bootstrap_1.Card.Text, null, react_1["default"].createElement("pre", null, task === null || task === void 0 ? void 0 : task.theory)))), react_1["default"].createElement(react_bootstrap_1.Row, {
+  }, react_1["default"].createElement(react_bootstrap_1.Card.Body, null, react_1["default"].createElement(react_bootstrap_1.Card.Title, null, task === null || task === void 0 ? void 0 : task.task_name), react_1["default"].createElement(react_bootstrap_1.Card.Text, null, react_1["default"].createElement("div", {
+    dangerouslySetInnerHTML: {
+      __html: (_b = task === null || task === void 0 ? void 0 : task.theory) !== null && _b !== void 0 ? _b : ''
+    }
+  })))), react_1["default"].createElement(react_bootstrap_1.Row, {
     className: 'mt-3'
   }, react_1["default"].createElement("h2", null, "\u0412\u0430\u0448 \u043A\u043E\u0434"), react_1["default"].createElement(react_bootstrap_1.Col, {
     sm: 7
@@ -9915,14 +9935,14 @@ var TaskPage = function TaskPage() {
     onChange: function onChange(event) {
       return setPhpCode(event.target.value);
     },
-    defaultValue: task === null || task === void 0 ? void 0 : task.php_code,
+    defaultValue: phpCode,
     value: phpCode,
     style: {
       backgroundColor: '#434447',
       color: 'white'
     },
     as: "textarea",
-    rows: 10
+    rows: rowsTextArea
   })), react_1["default"].createElement(react_bootstrap_1.Button, {
     onClick: function onClick() {
       return checkCode();

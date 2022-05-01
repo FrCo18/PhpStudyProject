@@ -15,6 +15,7 @@ const TaskPage = () => {
   const [phpCode, setPhpCode] = useState<string>()
   const [compileResult, setCompileResult] = useState<TaskResult>()
   const [isOnlyCompile, setIsOnlyCompile] = useState(false)
+  const [rowsTextArea, setRowsTextArea] = useState<number>(10)
   let userInfo: User = JSON.parse((localStorage.getItem('user')) ?? '')
   const navigate = useNavigate()
   const cookies = new Cookies()
@@ -93,7 +94,10 @@ const TaskPage = () => {
     axios.get('/api/courses/task-by-id?id_task=' + params.id_task + '&' + 'id_user=' + userInfo.id, {headers})
       .then((response) => {
         if (response.data.id_task) {
-          setTask(response.data)
+          let task = response.data
+          task.theory = task.theory.replace(/\n/g, '<br />')
+          setPhpCode(task.php_code)
+          setTask(task)
           setLoad(true)
         }
       })
@@ -120,6 +124,13 @@ const TaskPage = () => {
     );
   }
 
+  //установка количества строк в textArea
+  useEffect(() => {
+    let countRows = (phpCode?.match(/\n/g) ?? []).length
+    countRows = countRows < 10 ? 10 : countRows
+    setRowsTextArea(countRows + 2)
+  }, [phpCode])
+
   //check auth
   useEffect(() => {
     if (!token) {
@@ -137,7 +148,7 @@ const TaskPage = () => {
             <Card.Body>
               <Card.Title>{task?.task_name}</Card.Title>
               <Card.Text>
-                <pre>{task?.theory}</pre>
+                <div dangerouslySetInnerHTML={{__html: task?.theory ?? ''}}/>
               </Card.Text>
             </Card.Body>
           </Card>
@@ -147,10 +158,10 @@ const TaskPage = () => {
             <Col sm={7}>
               <Form className='mb-3'>
                 <Form.Group className='mb-3' controlId="exampleForm.ControlTextarea1">
-                  <Form.Control onChange={event => setPhpCode(event.target.value)} defaultValue={task?.php_code}
+                  <Form.Control onChange={event => setPhpCode(event.target.value)} defaultValue={phpCode}
                                 value={phpCode}
                                 style={{backgroundColor: '#434447', color: 'white'}}
-                                as="textarea" rows={10}/>
+                                as="textarea" rows={rowsTextArea}/>
                 </Form.Group>
                 <Button onClick={() => checkCode()} variant="primary" type="button">
                   Проверить
