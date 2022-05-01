@@ -6,38 +6,42 @@ import {Button, Card} from "react-bootstrap";
 import {TaskItem, User} from "./modules/interfaces";
 import Loading from "../../components/Loading";
 
-
 const Tasks: React.FC = () => {
-  // console.log(params.id_course)
   const params = useParams()
   const navigate = useNavigate();
   const [tasks, setTasks] = useState<TaskItem[]>([])
   const [isLoad, setLoad] = useState(false)
-  let userInfo: User = JSON.parse((localStorage.getItem('user')) ?? '')
+  const [isAuth, setAuth] = useState(false)
+  const [userInfo, setUserInfo] = useState<User>()
   const cookies = new Cookies()
   let token = cookies.get('auth_token')
 
   //получение списка заданий
   useEffect(() => {
-    const headers = {
-      'Accept': 'application/json',
-      'Authorization': 'Bearer ' + token
-    }
+    if(isAuth){
+      const headers = {
+        'Accept': 'application/json',
+        'Authorization': 'Bearer ' + token
+      }
 
-    axios.get('/api/courses/tasks-by-course-id?id_course=' + params.id_course + '&id_user=' + userInfo.id, {headers})
-      .then((response) => {
-        if (response.data.length) {
-          setTasks(response.data)
-          setLoad(true)
-        }
-      })
-  }, [])
+      axios.get('/api/courses/tasks-by-course-id?id_course=' + params.id_course + '&id_user=' + userInfo?.id, {headers})
+        .then((response) => {
+          if (response.data.length) {
+            setTasks(response.data)
+            setLoad(true)
+          }
+        })
+    }
+  }, [isAuth])
 
   //check auth
   useEffect(() => {
     if (!token) {
       alert('Авторизуйтесь!')
       navigate('/')
+    }else{
+      setUserInfo(JSON.parse((localStorage.getItem('user')) ?? ''))
+      setAuth(true)
     }
   }, [])
 

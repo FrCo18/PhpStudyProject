@@ -12,29 +12,35 @@ const Courses: React.FC = () => {
   let token = cookies.get('auth_token')
   const [courses, setCourses] = useState<CourseItem[]>([])
   const [isLoad, setLoad] = useState(false)
-  let userInfo: User = JSON.parse((localStorage.getItem('user')) ?? '')
+  const [isAuth, setAuth] = useState(false)
+  const [userInfo, setUserInfo] = useState<User>()
+
+  //получение списка курсов
+  useEffect(() => {
+    if(isAuth){
+      const headers = {
+        'Accept': 'application/json',
+        'Authorization': 'Bearer ' + token
+      }
+      axios.get('/api/courses?' + 'id_user=' + userInfo?.id, {headers})
+        .then((response) => {
+          if (response.data.length) {
+            setCourses(response.data)
+            setLoad(true)
+          }
+        })
+    }
+  }, [isAuth])
 
   //check auth
   useEffect(() => {
     if (!token) {
       alert('Авторизуйтесь!')
       navigate('/')
+    }else{
+      setUserInfo(JSON.parse((localStorage.getItem('user')) ?? ''))
+      setAuth(true)
     }
-  }, [])
-
-  //получение списка курсов
-  useEffect(() => {
-    const headers = {
-      'Accept': 'application/json',
-      'Authorization': 'Bearer ' + token
-    }
-    axios.get('/api/courses?' + 'id_user=' + userInfo.id, {headers})
-      .then((response) => {
-        if (response.data.length) {
-          setCourses(response.data)
-          setLoad(true)
-        }
-      })
   }, [])
 
   return (

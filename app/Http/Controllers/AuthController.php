@@ -2,16 +2,41 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ProgressCourse;
+use App\Models\ProgressTask;
 use App\Models\User;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use JetBrains\PhpStorm\ArrayShape;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 class AuthController extends Controller
 {
+
+    public function destroy(Request $request): JsonResponse|\Illuminate\Http\JsonResponse
+    {
+        $request_params = [
+            'id_user' => $request->get('id_user'),
+        ];
+
+        $check_params = self::checkExistsParams($request_params);
+
+        if ($check_params instanceof JsonResponse) {
+            return $check_params;
+        }
+
+        DB::select('delete from "ProgressTasks" where "id_user" = ' . $request_params['id_user']);
+        DB::select('delete from "ProgressCourses" where "id_user" = ' . $request_params['id_user']);
+
+        User::destroy($request_params['id_user']);
+
+        return response()->json(['message' => "user deleted"]);
+    }
+
     #[ArrayShape(['auth' => "false"])]
     public function logout(Request $request): array
     {
@@ -65,7 +90,7 @@ class AuthController extends Controller
         $user = User::where('email', $fields['email'])->first();
 
         //Проверка пароля
-        if(!$user || !Hash::check($fields['password'], $user->password)){
+        if (!$user || !Hash::check($fields['password'], $user->password)) {
             return response(['auth' => false], 401);
         }
 

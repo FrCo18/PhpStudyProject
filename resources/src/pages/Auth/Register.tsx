@@ -21,9 +21,9 @@ const Register: React.FC = () => {
     axios.post('/api/register', params, {headers})
       .then((response) => {
         if (response.data.auth) {
-          console.log('adadadadadadadadadadadadadada')
           const cookies = new Cookies()
           cookies.set('auth_token', response.data.token, {path: '/'})
+          localStorage.setItem('user', JSON.stringify(response.data.user))
         }
       })
       .catch(error => {

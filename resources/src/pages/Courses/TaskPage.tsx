@@ -16,7 +16,8 @@ const TaskPage = () => {
   const [compileResult, setCompileResult] = useState<TaskResult>()
   const [isOnlyCompile, setIsOnlyCompile] = useState(false)
   const [rowsTextArea, setRowsTextArea] = useState<number>(10)
-  let userInfo: User = JSON.parse((localStorage.getItem('user')) ?? '')
+  const [isAuth, setAuth] = useState(false)
+  const [userInfo, setUserInfo] = useState<User>()
   const navigate = useNavigate()
   const cookies = new Cookies()
   let token = cookies.get('auth_token')
@@ -30,7 +31,7 @@ const TaskPage = () => {
       php_code: phpCode,
       course_name: task?.course_name,
       level_number: task?.level_number,
-      id_user: userInfo.id,
+      id_user: userInfo?.id,
       id_task: task?.id_task,
       id_course: task?.id_course
     }
@@ -55,7 +56,7 @@ const TaskPage = () => {
       })
   }
 
-  function compileCode(){
+  function compileCode() {
     const headers = {
       'Accept': 'application/json',
       'Authorization': 'Bearer ' + token
@@ -86,22 +87,24 @@ const TaskPage = () => {
 
   //подгрузка задания
   useEffect(() => {
-    const headers = {
-      'Accept': 'application/json',
-      'Authorization': 'Bearer ' + token
-    }
+    if (isAuth) {
+      const headers = {
+        'Accept': 'application/json',
+        'Authorization': 'Bearer ' + token
+      }
 
-    axios.get('/api/courses/task-by-id?id_task=' + params.id_task + '&' + 'id_user=' + userInfo.id, {headers})
-      .then((response) => {
-        if (response.data.id_task) {
-          let task = response.data
-          task.theory = task.theory.replace(/\n/g, '<br />')
-          setPhpCode(task.php_code)
-          setTask(task)
-          setLoad(true)
-        }
-      })
-  }, [])
+      axios.get('/api/courses/task-by-id?id_task=' + params.id_task + '&' + 'id_user=' + userInfo?.id, {headers})
+        .then((response) => {
+          if (response.data.id_task) {
+            let task = response.data
+            task.theory = task.theory.replace(/\n/g, '<br />')
+            setPhpCode(task.php_code)
+            setTask(task)
+            setLoad(true)
+          }
+        })
+    }
+  }, [isAuth])
 
   //установка php_code
   useEffect(() => {
@@ -136,6 +139,9 @@ const TaskPage = () => {
     if (!token) {
       alert('Авторизуйтесь!')
       navigate('/')
+    } else {
+      setUserInfo(JSON.parse((localStorage.getItem('user')) ?? ''))
+      setAuth(true)
     }
   }, [])
 
@@ -160,7 +166,7 @@ const TaskPage = () => {
                 <Form.Group className='mb-3' controlId="exampleForm.ControlTextarea1">
                   <Form.Control onChange={event => setPhpCode(event.target.value)} defaultValue={phpCode}
                                 value={phpCode}
-                                style={{backgroundColor: '#434447', color: 'white'}}
+                                style={{backgroundColor: '#434447', color: 'white', resize: "none"}}
                                 as="textarea" rows={rowsTextArea}/>
                 </Form.Group>
                 <Button onClick={() => checkCode()} variant="primary" type="button">
@@ -169,7 +175,8 @@ const TaskPage = () => {
                 <Button onClick={() => compileCode()} className='ms-2' variant="primary" type="button">
                   Скомпилировать
                 </Button>
-                <Button onClick={() => navigate('/courses/tasks/' + task?.id_course)} className='ms-2' variant="primary" type="button">
+                <Button onClick={() => navigate('/courses/tasks/' + task?.id_course)} className='ms-2' variant="primary"
+                        type="button">
                   Назад к заданиям
                 </Button>
               </Form>
@@ -191,11 +198,11 @@ const TaskPage = () => {
             </Col>
           </Row>
           {
-            !isOnlyCompile?
+            !isOnlyCompile ?
               <div className='mt-3'>
                 {showAlertComplete()}
               </div>
-              :''
+              : ''
           }
 
         </div>)

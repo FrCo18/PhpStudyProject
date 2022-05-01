@@ -8593,6 +8593,8 @@ var Tasks_1 = __importDefault(__webpack_require__(/*! ../pages/Courses/Tasks */ 
 
 var TaskPage_1 = __importDefault(__webpack_require__(/*! ../pages/Courses/TaskPage */ "./resources/src/pages/Courses/TaskPage.tsx"));
 
+var AccountEdit_1 = __importDefault(__webpack_require__(/*! ../pages/AccountEdit */ "./resources/src/pages/AccountEdit.tsx"));
+
 var AppRouter = function AppRouter() {
   return react_1["default"].createElement(react_router_dom_1.Routes, null, react_1["default"].createElement(react_router_dom_1.Route, {
     path: '/',
@@ -8618,6 +8620,9 @@ var AppRouter = function AppRouter() {
   }), react_1["default"].createElement(react_router_dom_1.Route, {
     path: '/login',
     element: react_1["default"].createElement(Login_1["default"], null)
+  }), react_1["default"].createElement(react_router_dom_1.Route, {
+    path: '/account-edit',
+    element: react_1["default"].createElement(AccountEdit_1["default"], null)
   }));
 };
 
@@ -8805,7 +8810,7 @@ var Navbar = function Navbar() {
     eventKey: "link-2"
   }, react_1["default"].createElement(react_router_dom_1.Link, {
     to: '/about'
-  }, "\u041E \u043D\u0430\u0441"))), auth ? react_1["default"].createElement(react_bootstrap_1.Button, {
+  }, "\u041E \u043D\u0430\u0441"))), auth ? react_1["default"].createElement(react_1["default"].Fragment, null, react_1["default"].createElement(react_bootstrap_1.Button, {
     onClick: function onClick() {
       return logout();
     },
@@ -8815,7 +8820,17 @@ var Navbar = function Navbar() {
     className: 'mt-1',
     variant: "primary",
     size: "sm"
-  }, "Logout") : react_1["default"].createElement("div", {
+  }, "Logout"), react_1["default"].createElement(react_bootstrap_1.Button, {
+    onClick: function onClick() {
+      return navigate('/account-edit');
+    },
+    style: {
+      right: '5%'
+    },
+    className: 'mt-1 ms-1',
+    variant: "primary",
+    size: "sm"
+  }, "\u041D\u0430\u0441\u0442\u0440\u043E\u0439\u043A\u0438 \u0430\u043A\u043A\u0430\u0443\u043D\u0442\u0430")) : react_1["default"].createElement("div", {
     style: {
       "float": 'right',
       right: '5%'
@@ -9124,6 +9139,142 @@ exports["default"] = About;
 
 /***/ }),
 
+/***/ "./resources/src/pages/AccountEdit.tsx":
+/*!*********************************************!*\
+  !*** ./resources/src/pages/AccountEdit.tsx ***!
+  \*********************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+"use strict";
+
+
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+function _iterableToArrayLimit(arr, i) { var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]; if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+var __createBinding = this && this.__createBinding || (Object.create ? function (o, m, k, k2) {
+  if (k2 === undefined) k2 = k;
+  Object.defineProperty(o, k2, {
+    enumerable: true,
+    get: function get() {
+      return m[k];
+    }
+  });
+} : function (o, m, k, k2) {
+  if (k2 === undefined) k2 = k;
+  o[k2] = m[k];
+});
+
+var __setModuleDefault = this && this.__setModuleDefault || (Object.create ? function (o, v) {
+  Object.defineProperty(o, "default", {
+    enumerable: true,
+    value: v
+  });
+} : function (o, v) {
+  o["default"] = v;
+});
+
+var __importStar = this && this.__importStar || function (mod) {
+  if (mod && mod.__esModule) return mod;
+  var result = {};
+  if (mod != null) for (var k in mod) {
+    if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+  }
+
+  __setModuleDefault(result, mod);
+
+  return result;
+};
+
+var __importDefault = this && this.__importDefault || function (mod) {
+  return mod && mod.__esModule ? mod : {
+    "default": mod
+  };
+};
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+
+var react_1 = __importStar(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
+
+var react_bootstrap_1 = __webpack_require__(/*! react-bootstrap */ "./node_modules/react-bootstrap/esm/index.js");
+
+var axios_1 = __importDefault(__webpack_require__(/*! axios */ "./node_modules/axios/index.js"));
+
+var universal_cookie_1 = __importDefault(__webpack_require__(/*! universal-cookie */ "./node_modules/universal-cookie/es6/index.js"));
+
+var react_router_dom_1 = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/index.js");
+
+var AccountEdit = function AccountEdit() {
+  var cookies = new universal_cookie_1["default"]();
+  var token = cookies.get('auth_token');
+  var navigate = (0, react_router_dom_1.useNavigate)();
+
+  var _ref = (0, react_1.useState)(),
+      _ref2 = _slicedToArray(_ref, 2),
+      userInfo = _ref2[0],
+      setUserInfo = _ref2[1];
+
+  function accountDelete() {
+    var headers = {
+      'Accept': 'application/json',
+      'Authorization': 'Bearer ' + token
+    };
+    var params = {
+      id_user: userInfo === null || userInfo === void 0 ? void 0 : userInfo.id
+    };
+    axios_1["default"]["delete"]('/api/delete-user', {
+      headers: headers,
+      data: params
+    })["finally"](function () {
+      cookies.remove('auth_token');
+      localStorage.removeItem('user');
+
+      if (!cookies.get('auth_token')) {
+        alert('Аккаунт удалён!');
+        navigate('/');
+        window.location.reload();
+      }
+    });
+  } //check auth
+
+
+  (0, react_1.useEffect)(function () {
+    var _a;
+
+    if (!token) {
+      alert('Авторизуйтесь!');
+      navigate('/');
+    } else {
+      setUserInfo(JSON.parse((_a = localStorage.getItem('user')) !== null && _a !== void 0 ? _a : ''));
+    }
+  }, []);
+  return react_1["default"].createElement("div", null, react_1["default"].createElement(react_bootstrap_1.Button, {
+    onClick: function onClick() {
+      return accountDelete();
+    },
+    style: {
+      right: '5%'
+    },
+    className: 'mt-1',
+    variant: "primary",
+    size: "sm"
+  }, "\u0423\u0434\u0430\u043B\u0438\u0442\u044C \u0430\u043A\u043A\u0430\u0443\u043D\u0442"));
+};
+
+exports["default"] = AccountEdit;
+
+/***/ }),
+
 /***/ "./resources/src/pages/Auth/Login.tsx":
 /*!********************************************!*\
   !*** ./resources/src/pages/Auth/Login.tsx ***!
@@ -9414,11 +9565,11 @@ var Register = function Register() {
       headers: headers
     }).then(function (response) {
       if (response.data.auth) {
-        console.log('adadadadadadadadadadadadadada');
         var cookies = new universal_cookie_1["default"]();
         cookies.set('auth_token', response.data.token, {
           path: '/'
         });
+        localStorage.setItem('user', JSON.stringify(response.data.user));
       }
     })["catch"](function (error) {
       console.error('There was an error!', error);
@@ -9596,8 +9747,6 @@ var react_bootstrap_1 = __webpack_require__(/*! react-bootstrap */ "./node_modul
 var Loading_1 = __importDefault(__webpack_require__(/*! ../../components/Loading */ "./resources/src/components/Loading.tsx"));
 
 var Courses = function Courses() {
-  var _a;
-
   var navigate = (0, react_router_dom_1.useNavigate)();
   var cookies = new universal_cookie_1["default"]();
   var token = cookies.get('auth_token');
@@ -9612,28 +9761,44 @@ var Courses = function Courses() {
       isLoad = _ref4[0],
       setLoad = _ref4[1];
 
-  var userInfo = JSON.parse((_a = localStorage.getItem('user')) !== null && _a !== void 0 ? _a : ''); //check auth
+  var _ref5 = (0, react_1.useState)(false),
+      _ref6 = _slicedToArray(_ref5, 2),
+      isAuth = _ref6[0],
+      setAuth = _ref6[1];
+
+  var _ref7 = (0, react_1.useState)(),
+      _ref8 = _slicedToArray(_ref7, 2),
+      userInfo = _ref8[0],
+      setUserInfo = _ref8[1]; //получение списка курсов
+
 
   (0, react_1.useEffect)(function () {
+    if (isAuth) {
+      var headers = {
+        'Accept': 'application/json',
+        'Authorization': 'Bearer ' + token
+      };
+      axios_1["default"].get('/api/courses?' + 'id_user=' + (userInfo === null || userInfo === void 0 ? void 0 : userInfo.id), {
+        headers: headers
+      }).then(function (response) {
+        if (response.data.length) {
+          setCourses(response.data);
+          setLoad(true);
+        }
+      });
+    }
+  }, [isAuth]); //check auth
+
+  (0, react_1.useEffect)(function () {
+    var _a;
+
     if (!token) {
       alert('Авторизуйтесь!');
       navigate('/');
+    } else {
+      setUserInfo(JSON.parse((_a = localStorage.getItem('user')) !== null && _a !== void 0 ? _a : ''));
+      setAuth(true);
     }
-  }, []); //получение списка курсов
-
-  (0, react_1.useEffect)(function () {
-    var headers = {
-      'Accept': 'application/json',
-      'Authorization': 'Bearer ' + token
-    };
-    axios_1["default"].get('/api/courses?' + 'id_user=' + userInfo.id, {
-      headers: headers
-    }).then(function (response) {
-      if (response.data.length) {
-        setCourses(response.data);
-        setLoad(true);
-      }
-    });
   }, []);
   return react_1["default"].createElement("div", {
     style: {
@@ -9752,7 +9917,7 @@ var TaskCompleteAlert_1 = __importDefault(__webpack_require__(/*! ../../componen
 var TaskFailAlert_1 = __importDefault(__webpack_require__(/*! ../../components/TaskFailAlert */ "./resources/src/components/TaskFailAlert.tsx"));
 
 var TaskPage = function TaskPage() {
-  var _a, _b;
+  var _a;
 
   var params = (0, react_router_dom_1.useParams)();
 
@@ -9786,7 +9951,16 @@ var TaskPage = function TaskPage() {
       rowsTextArea = _ref12[0],
       setRowsTextArea = _ref12[1];
 
-  var userInfo = JSON.parse((_a = localStorage.getItem('user')) !== null && _a !== void 0 ? _a : '');
+  var _ref13 = (0, react_1.useState)(false),
+      _ref14 = _slicedToArray(_ref13, 2),
+      isAuth = _ref14[0],
+      setAuth = _ref14[1];
+
+  var _ref15 = (0, react_1.useState)(),
+      _ref16 = _slicedToArray(_ref15, 2),
+      userInfo = _ref16[0],
+      setUserInfo = _ref16[1];
+
   var navigate = (0, react_router_dom_1.useNavigate)();
   var cookies = new universal_cookie_1["default"]();
   var token = cookies.get('auth_token');
@@ -9800,7 +9974,7 @@ var TaskPage = function TaskPage() {
       php_code: phpCode,
       course_name: task === null || task === void 0 ? void 0 : task.course_name,
       level_number: task === null || task === void 0 ? void 0 : task.level_number,
-      id_user: userInfo.id,
+      id_user: userInfo === null || userInfo === void 0 ? void 0 : userInfo.id,
       id_task: task === null || task === void 0 ? void 0 : task.id_task,
       id_course: task === null || task === void 0 ? void 0 : task.id_course
     };
@@ -9858,22 +10032,24 @@ var TaskPage = function TaskPage() {
 
 
   (0, react_1.useEffect)(function () {
-    var headers = {
-      'Accept': 'application/json',
-      'Authorization': 'Bearer ' + token
-    };
-    axios_1["default"].get('/api/courses/task-by-id?id_task=' + params.id_task + '&' + 'id_user=' + userInfo.id, {
-      headers: headers
-    }).then(function (response) {
-      if (response.data.id_task) {
-        var _task = response.data;
-        _task.theory = _task.theory.replace(/\n/g, '<br />');
-        setPhpCode(_task.php_code);
-        setTask(_task);
-        setLoad(true);
-      }
-    });
-  }, []); //установка php_code
+    if (isAuth) {
+      var headers = {
+        'Accept': 'application/json',
+        'Authorization': 'Bearer ' + token
+      };
+      axios_1["default"].get('/api/courses/task-by-id?id_task=' + params.id_task + '&' + 'id_user=' + (userInfo === null || userInfo === void 0 ? void 0 : userInfo.id), {
+        headers: headers
+      }).then(function (response) {
+        if (response.data.id_task) {
+          var _task = response.data;
+          _task.theory = _task.theory.replace(/\n/g, '<br />');
+          setPhpCode(_task.php_code);
+          setTask(_task);
+          setLoad(true);
+        }
+      });
+    }
+  }, [isAuth]); //установка php_code
 
   (0, react_1.useEffect)(function () {
     if (task) {
@@ -9903,9 +10079,14 @@ var TaskPage = function TaskPage() {
   }, [phpCode]); //check auth
 
   (0, react_1.useEffect)(function () {
+    var _a;
+
     if (!token) {
       alert('Авторизуйтесь!');
       navigate('/');
+    } else {
+      setUserInfo(JSON.parse((_a = localStorage.getItem('user')) !== null && _a !== void 0 ? _a : ''));
+      setAuth(true);
     }
   }, []);
   return react_1["default"].createElement("div", {
@@ -9920,7 +10101,7 @@ var TaskPage = function TaskPage() {
     }
   }, react_1["default"].createElement(react_bootstrap_1.Card.Body, null, react_1["default"].createElement(react_bootstrap_1.Card.Title, null, task === null || task === void 0 ? void 0 : task.task_name), react_1["default"].createElement(react_bootstrap_1.Card.Text, null, react_1["default"].createElement("div", {
     dangerouslySetInnerHTML: {
-      __html: (_b = task === null || task === void 0 ? void 0 : task.theory) !== null && _b !== void 0 ? _b : ''
+      __html: (_a = task === null || task === void 0 ? void 0 : task.theory) !== null && _a !== void 0 ? _a : ''
     }
   })))), react_1["default"].createElement(react_bootstrap_1.Row, {
     className: 'mt-3'
@@ -9939,7 +10120,8 @@ var TaskPage = function TaskPage() {
     value: phpCode,
     style: {
       backgroundColor: '#434447',
-      color: 'white'
+      color: 'white',
+      resize: "none"
     },
     as: "textarea",
     rows: rowsTextArea
@@ -10063,9 +10245,6 @@ var react_bootstrap_1 = __webpack_require__(/*! react-bootstrap */ "./node_modul
 var Loading_1 = __importDefault(__webpack_require__(/*! ../../components/Loading */ "./resources/src/components/Loading.tsx"));
 
 var Tasks = function Tasks() {
-  var _a; // console.log(params.id_course)
-
-
   var params = (0, react_router_dom_1.useParams)();
   var navigate = (0, react_router_dom_1.useNavigate)();
 
@@ -10079,29 +10258,45 @@ var Tasks = function Tasks() {
       isLoad = _ref4[0],
       setLoad = _ref4[1];
 
-  var userInfo = JSON.parse((_a = localStorage.getItem('user')) !== null && _a !== void 0 ? _a : '');
+  var _ref5 = (0, react_1.useState)(false),
+      _ref6 = _slicedToArray(_ref5, 2),
+      isAuth = _ref6[0],
+      setAuth = _ref6[1];
+
+  var _ref7 = (0, react_1.useState)(),
+      _ref8 = _slicedToArray(_ref7, 2),
+      userInfo = _ref8[0],
+      setUserInfo = _ref8[1];
+
   var cookies = new universal_cookie_1["default"]();
   var token = cookies.get('auth_token'); //получение списка заданий
 
   (0, react_1.useEffect)(function () {
-    var headers = {
-      'Accept': 'application/json',
-      'Authorization': 'Bearer ' + token
-    };
-    axios_1["default"].get('/api/courses/tasks-by-course-id?id_course=' + params.id_course + '&id_user=' + userInfo.id, {
-      headers: headers
-    }).then(function (response) {
-      if (response.data.length) {
-        setTasks(response.data);
-        setLoad(true);
-      }
-    });
-  }, []); //check auth
+    if (isAuth) {
+      var headers = {
+        'Accept': 'application/json',
+        'Authorization': 'Bearer ' + token
+      };
+      axios_1["default"].get('/api/courses/tasks-by-course-id?id_course=' + params.id_course + '&id_user=' + (userInfo === null || userInfo === void 0 ? void 0 : userInfo.id), {
+        headers: headers
+      }).then(function (response) {
+        if (response.data.length) {
+          setTasks(response.data);
+          setLoad(true);
+        }
+      });
+    }
+  }, [isAuth]); //check auth
 
   (0, react_1.useEffect)(function () {
+    var _a;
+
     if (!token) {
       alert('Авторизуйтесь!');
       navigate('/');
+    } else {
+      setUserInfo(JSON.parse((_a = localStorage.getItem('user')) !== null && _a !== void 0 ? _a : ''));
+      setAuth(true);
     }
   }, []);
   return react_1["default"].createElement("div", {

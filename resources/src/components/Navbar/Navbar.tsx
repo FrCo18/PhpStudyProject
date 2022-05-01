@@ -61,11 +61,18 @@ const Navbar: React.FC = () => {
           <Nav.Link eventKey="link-2"><Link to='/about'>О нас</Link></Nav.Link>
         </Nav.Item>
         {auth ?
-          <Button onClick={() => logout()} style={{ right: '5%'}} className='mt-1'
+          <>
+            <Button onClick={() => logout()} style={{ right: '5%'}} className='mt-1'
                   variant="primary"
                   size="sm">
             Logout
           </Button>
+            <Button onClick={() => navigate('/account-edit')} style={{ right: '5%'}} className='mt-1 ms-1'
+                    variant="primary"
+                    size="sm">
+              Настройки аккаунта
+            </Button>
+          </>
           :
           <div style={{float: 'right', right: '5%'}}>
             <Button onClick={() => navigate('/login')}  className='mt-1'

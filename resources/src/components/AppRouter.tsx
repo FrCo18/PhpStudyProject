@@ -7,6 +7,7 @@ import Register from "../pages/Auth/Register";
 import Login from "../pages/Auth/Login";
 import Tasks from "../pages/Courses/Tasks";
 import TaskPage from "../pages/Courses/TaskPage";
+import AccountEdit from "../pages/AccountEdit";
 
 const AppRouter: React.FC = () => {
   return (
@@ -22,6 +23,7 @@ const AppRouter: React.FC = () => {
       <Route path='/about' element={<About/>}/>
       <Route path='/register' element={<Register/>}/>
       <Route path='/login' element={<Login/>}/>
+      <Route path='/account-edit' element={<AccountEdit/>}/>
     </Routes>
   );
 };
