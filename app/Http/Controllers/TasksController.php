@@ -3,10 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Courses\TaskChecker;
-use App\Models\Course;
 use App\Models\ProgressCourse;
 use App\Models\ProgressTask;
 use App\Models\Tasks;
+use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -26,6 +26,12 @@ class TasksController extends Controller
             return $check_params;
         }
 
+        $request_params['id_user'] = User::decryptUserId($request_params['id_user']);
+
+        if ($request_params['id_user'] instanceof JsonResponse) {
+            return $request_params['id_user'];
+        }
+
         $tasks = Tasks::getTasksByCourseId($request_params['id_course'], $request_params['id_user']);
         return response()->json($tasks);
     }
@@ -41,6 +47,12 @@ class TasksController extends Controller
 
         if ($check_params instanceof JsonResponse) {
             return $check_params;
+        }
+
+        $request_params['id_user'] = User::decryptUserId($request_params['id_user']);
+
+        if ($request_params['id_user'] instanceof JsonResponse) {
+            return $request_params['id_user'];
         }
 
         $task = Tasks::getTaskById($request_params['id_task'], $request_params['id_user']);
@@ -103,6 +115,12 @@ class TasksController extends Controller
 
         if ($check_params instanceof JsonResponse) {
             return $check_params;
+        }
+
+        $request_params['id_user'] = User::decryptUserId($request_params['id_user']);
+
+        if ($request_params['id_user'] instanceof JsonResponse) {
+            return $request_params['id_user'];
         }
 
         $_SESSION['echo_system_var'] = '';

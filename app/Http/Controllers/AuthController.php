@@ -2,13 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\ProgressCourse;
-use App\Models\ProgressTask;
 use App\Models\User;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use JetBrains\PhpStorm\ArrayShape;
@@ -23,10 +22,18 @@ class AuthController extends Controller
             'id_user' => $request->get('id_user'),
         ];
 
+        $request->user()->tokens()->delete();
+
         $check_params = self::checkExistsParams($request_params);
 
         if ($check_params instanceof JsonResponse) {
             return $check_params;
+        }
+
+        $request_params['id_user'] = User::decryptUserId($request_params['id_user']);
+
+        if ($request_params['id_user'] instanceof JsonResponse) {
+            return $request_params['id_user'];
         }
 
         DB::select('delete from "ProgressTasks" where "id_user" = ' . $request_params['id_user']);
@@ -63,7 +70,7 @@ class AuthController extends Controller
         $token = $user->createToken('apptoken')->plainTextToken;
 
         $user_response = [
-            'id' => $user->idUser,
+            'id' => Crypt::encrypt($user->idUser),
             'first_name' => $user->first_name,
             'last_name' => $user->last_name,
             'middle_name' => $user->middle_name,
@@ -97,7 +104,7 @@ class AuthController extends Controller
         $token = $user->createToken('apptoken')->plainTextToken;
 
         $user_response = [
-            'id' => $user->idUser,
+            'id' => Crypt::encrypt($user->idUser),
             'first_name' => $user->first_name,
             'last_name' => $user->last_name,
             'middle_name' => $user->middle_name,

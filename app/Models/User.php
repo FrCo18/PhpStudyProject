@@ -2,9 +2,12 @@
 
 namespace App\Models;
 
+use Exception;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Date;
 use Laravel\Sanctum\HasApiTokens;
 
@@ -29,4 +32,13 @@ class User extends Authenticatable
         'email',
         'password'
     ];
+
+    public static function decryptUserId(string $id): JsonResponse|string
+    {
+        try {
+            return Crypt::decrypt($id);
+        } catch (Exception $e) {
+            return response()->json(['message' => 'Invalid id_hash. ' . $e->getMessage()], 401);
+        }
+    }
 }

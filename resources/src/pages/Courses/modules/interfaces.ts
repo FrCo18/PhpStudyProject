@@ -26,7 +26,7 @@ export interface TaskResult{
 }
 
 export interface User{
-  id: number,
+  id: string,
   first_name: string,
   last_name: string,
   middle_name: string,

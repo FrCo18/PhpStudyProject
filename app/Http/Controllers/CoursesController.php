@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Course;
 use App\Models\ProgressCourse;
 use App\Models\ProgressTask;
-use App\Models\Tasks;
+use App\Models\User;
 use Exception;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Illuminate\Http\Request;
@@ -22,6 +22,12 @@ class CoursesController extends Controller
 
         if ($check_params instanceof JsonResponse) {
             return $check_params;
+        }
+
+        $request_params['id_user'] = User::decryptUserId($request_params['id_user']);
+
+        if ($request_params['id_user'] instanceof JsonResponse) {
+            return $request_params['id_user'];
         }
 
         $courses = Course::getJoinCourses($request_params['id_user']);
@@ -42,6 +48,12 @@ class CoursesController extends Controller
 
         if ($check_params instanceof JsonResponse) {
             return $check_params;
+        }
+
+        $request_params['id_user'] = User::decryptUserId($request_params['id_user']);
+
+        if ($request_params['id_user'] instanceof JsonResponse) {
+            return $request_params['id_user'];
         }
 
         $is_complete = ProgressTask::isCompleteAllTasks($request_params['id_course'], $request_params['id_user']);
