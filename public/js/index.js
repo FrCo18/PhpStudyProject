@@ -8820,7 +8820,7 @@ var Navbar = function Navbar() {
     className: 'mt-1',
     variant: "primary",
     size: "sm"
-  }, "Logout"), react_1["default"].createElement(react_bootstrap_1.Button, {
+  }, "\u0412\u044B\u0439\u0442\u0438"), react_1["default"].createElement(react_bootstrap_1.Button, {
     onClick: function onClick() {
       return navigate('/account-edit');
     },

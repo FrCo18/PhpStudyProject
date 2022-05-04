@@ -65,7 +65,7 @@ const Navbar: React.FC = () => {
             <Button onClick={() => logout()} style={{ right: '5%'}} className='mt-1'
                   variant="primary"
                   size="sm">
-            Logout
+            Выйти
           </Button>
             <Button onClick={() => navigate('/account-edit')} style={{ right: '5%'}} className='mt-1 ms-1'
                     variant="primary"
