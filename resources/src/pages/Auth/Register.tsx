@@ -54,9 +54,9 @@ const Register: React.FC = () => {
         <Form.Group className="mb-3" controlId="formBasicEmail">
           <Form.Label>Email address</Form.Label>
           <Form.Control id='inputEmail' onChange={event => setEmail(event.target.value)}
-                        name='email' type="email" placeholder="Enter email" required/>
+                        name='email' type="email" placeholder="Введите email" required/>
           <Form.Text className="text-muted">
-            We'll never share your email with anyone else.
+            Мы никогда не передадим вашу электронную почту кому-либо еще.
           </Form.Text>
         </Form.Group>
 
@@ -66,7 +66,7 @@ const Register: React.FC = () => {
           <Form.Control
             required
             name='password'
-            placeholder="Enter password"
+            placeholder="Введите пароль"
             type="password"
             id="inputPassword"
             aria-describedby="passwordHelpBlock"
@@ -75,8 +75,8 @@ const Register: React.FC = () => {
             onChange={event => setPassword(event.target.value)}
           />
           <Form.Text id="passwordHelpBlock" muted>
-            Your password must be 8-20 characters long, contain letters and numbers, and
-            must not contain spaces, special characters, or emoji.
+            Ваш пароль должен состоять из 8-20 символов, содержать буквы и цифры и
+            не должен содержать пробелов, специальных символов или смайликов.
           </Form.Text>
         </Form.Group>
 
@@ -86,7 +86,7 @@ const Register: React.FC = () => {
           <Form.Control
             required
             name='password_confirmation'
-            placeholder="Enter password"
+            placeholder="Повторите пароль"
             type="password"
             id="inputPasswordConfirm"
             aria-describedby="passwordHelpBlock"
@@ -95,8 +95,8 @@ const Register: React.FC = () => {
             onChange={event => setConfirmPassword(event.target.value)}
           />
           <Form.Text id="passwordHelpBlock" muted>
-            Your password must be 8-20 characters long, contain letters and numbers, and
-            must not contain spaces, special characters, or emoji.
+            Ваш пароль должен состоять из 8-20 символов, содержать буквы и цифры и
+            не должен содержать пробелов, специальных символов или смайликов.
           </Form.Text>
         </Form.Group>
         <Button onClick={() => register()} variant="primary" type="button">

@@ -9422,7 +9422,7 @@ var Login = function Login() {
     },
     name: 'email',
     type: "email",
-    placeholder: "Enter email",
+    placeholder: "\u0412\u0432\u0435\u0434\u0438\u0442\u0435 email",
     required: true
   }), react_1["default"].createElement(react_bootstrap_1.Form.Text, {
     className: "text-muted"
@@ -9434,7 +9434,7 @@ var Login = function Login() {
   }, "Password"), react_1["default"].createElement(react_bootstrap_1.Form.Control, {
     required: true,
     name: 'password',
-    placeholder: "Enter password",
+    placeholder: "\u0412\u0432\u0435\u0434\u0438\u0442\u0435 \u043F\u0430\u0440\u043E\u043B\u044C",
     type: "password",
     id: "inputPassword",
     "aria-describedby": "passwordHelpBlock",
@@ -9612,11 +9612,11 @@ var Register = function Register() {
     },
     name: 'email',
     type: "email",
-    placeholder: "Enter email",
+    placeholder: "\u0412\u0432\u0435\u0434\u0438\u0442\u0435 email",
     required: true
   }), react_1["default"].createElement(react_bootstrap_1.Form.Text, {
     className: "text-muted"
-  }, "We'll never share your email with anyone else.")), react_1["default"].createElement(react_bootstrap_1.Form.Group, {
+  }, "\u041C\u044B \u043D\u0438\u043A\u043E\u0433\u0434\u0430 \u043D\u0435 \u043F\u0435\u0440\u0435\u0434\u0430\u0434\u0438\u043C \u0432\u0430\u0448\u0443 \u044D\u043B\u0435\u043A\u0442\u0440\u043E\u043D\u043D\u0443\u044E \u043F\u043E\u0447\u0442\u0443 \u043A\u043E\u043C\u0443-\u043B\u0438\u0431\u043E \u0435\u0449\u0435.")), react_1["default"].createElement(react_bootstrap_1.Form.Group, {
     className: "mb-3",
     controlId: "formBasicPassword"
   }, react_1["default"].createElement(react_bootstrap_1.Form.Label, {
@@ -9624,7 +9624,7 @@ var Register = function Register() {
   }, "Password"), react_1["default"].createElement(react_bootstrap_1.Form.Control, {
     required: true,
     name: 'password',
-    placeholder: "Enter password",
+    placeholder: "\u0412\u0432\u0435\u0434\u0438\u0442\u0435 \u043F\u0430\u0440\u043E\u043B\u044C",
     type: "password",
     id: "inputPassword",
     "aria-describedby": "passwordHelpBlock",
@@ -9636,7 +9636,7 @@ var Register = function Register() {
   }), react_1["default"].createElement(react_bootstrap_1.Form.Text, {
     id: "passwordHelpBlock",
     muted: true
-  }, "Your password must be 8-20 characters long, contain letters and numbers, and must not contain spaces, special characters, or emoji.")), react_1["default"].createElement(react_bootstrap_1.Form.Group, {
+  }, "\u0412\u0430\u0448 \u043F\u0430\u0440\u043E\u043B\u044C \u0434\u043E\u043B\u0436\u0435\u043D \u0441\u043E\u0441\u0442\u043E\u044F\u0442\u044C \u0438\u0437 8-20 \u0441\u0438\u043C\u0432\u043E\u043B\u043E\u0432, \u0441\u043E\u0434\u0435\u0440\u0436\u0430\u0442\u044C \u0431\u0443\u043A\u0432\u044B \u0438 \u0446\u0438\u0444\u0440\u044B \u0438 \u043D\u0435 \u0434\u043E\u043B\u0436\u0435\u043D \u0441\u043E\u0434\u0435\u0440\u0436\u0430\u0442\u044C \u043F\u0440\u043E\u0431\u0435\u043B\u043E\u0432, \u0441\u043F\u0435\u0446\u0438\u0430\u043B\u044C\u043D\u044B\u0445 \u0441\u0438\u043C\u0432\u043E\u043B\u043E\u0432 \u0438\u043B\u0438 \u0441\u043C\u0430\u0439\u043B\u0438\u043A\u043E\u0432.")), react_1["default"].createElement(react_bootstrap_1.Form.Group, {
     className: "mb-3",
     controlId: "formBasicPassword"
   }, react_1["default"].createElement(react_bootstrap_1.Form.Label, {
@@ -9644,7 +9644,7 @@ var Register = function Register() {
   }, "Password"), react_1["default"].createElement(react_bootstrap_1.Form.Control, {
     required: true,
     name: 'password_confirmation',
-    placeholder: "Enter password",
+    placeholder: "\u041F\u043E\u0432\u0442\u043E\u0440\u0438\u0442\u0435 \u043F\u0430\u0440\u043E\u043B\u044C",
     type: "password",
     id: "inputPasswordConfirm",
     "aria-describedby": "passwordHelpBlock",
@@ -9656,7 +9656,7 @@ var Register = function Register() {
   }), react_1["default"].createElement(react_bootstrap_1.Form.Text, {
     id: "passwordHelpBlock",
     muted: true
-  }, "Your password must be 8-20 characters long, contain letters and numbers, and must not contain spaces, special characters, or emoji.")), react_1["default"].createElement(react_bootstrap_1.Button, {
+  }, "\u0412\u0430\u0448 \u043F\u0430\u0440\u043E\u043B\u044C \u0434\u043E\u043B\u0436\u0435\u043D \u0441\u043E\u0441\u0442\u043E\u044F\u0442\u044C \u0438\u0437 8-20 \u0441\u0438\u043C\u0432\u043E\u043B\u043E\u0432, \u0441\u043E\u0434\u0435\u0440\u0436\u0430\u0442\u044C \u0431\u0443\u043A\u0432\u044B \u0438 \u0446\u0438\u0444\u0440\u044B \u0438 \u043D\u0435 \u0434\u043E\u043B\u0436\u0435\u043D \u0441\u043E\u0434\u0435\u0440\u0436\u0430\u0442\u044C \u043F\u0440\u043E\u0431\u0435\u043B\u043E\u0432, \u0441\u043F\u0435\u0446\u0438\u0430\u043B\u044C\u043D\u044B\u0445 \u0441\u0438\u043C\u0432\u043E\u043B\u043E\u0432 \u0438\u043B\u0438 \u0441\u043C\u0430\u0439\u043B\u0438\u043A\u043E\u0432.")), react_1["default"].createElement(react_bootstrap_1.Button, {
     onClick: function onClick() {
       return register();
     },

@@ -54,7 +54,7 @@ const Login: React.FC = () => {
         <Form.Group className="mb-3" controlId="formBasicEmail">
           <Form.Label>Email address</Form.Label>
           <Form.Control id='inputEmail' onChange={event => setEmail(event.target.value)}
-                        name='email' type="email" placeholder="Enter email" required/>
+                        name='email' type="email" placeholder="Введите email" required/>
           <Form.Text className="text-muted">
           </Form.Text>
         </Form.Group>
@@ -65,7 +65,7 @@ const Login: React.FC = () => {
           <Form.Control
             required
             name='password'
-            placeholder="Enter password"
+            placeholder="Введите пароль"
             type="password"
             id="inputPassword"
             aria-describedby="passwordHelpBlock"
