@@ -18,30 +18,51 @@ const Register: React.FC = () => {
       'password': password,
       'password_confirmation': confirmPassword
     }
-    axios.post('/api/register', params, {headers})
-      .then((response) => {
-        if (response.data.auth) {
-          const cookies = new Cookies()
-          cookies.set('auth_token', response.data.token, {path: '/'})
-          localStorage.setItem('user', JSON.stringify(response.data.user))
+
+    let validFields = true
+
+    if (!email.match(/[\w\d]+?@[\w\d]+\.\w+/)) {
+      validFields = false
+      alert('Почта должна содержать в себе знак @, ., com, ru и т. д.')
+    }
+
+    if (!(password.length >= 8 && password.length <= 20)) {
+      validFields = false
+      alert('Пароль должен быть больше или равен 8 или меньше или равен 20.')
+    }
+
+    if(password !== confirmPassword){
+      validFields = false
+      alert('Пароли не совпадают!')
+    }
+
+    if (validFields) {
+      axios.post('/api/register', params, {headers})
+        .then((response) => {
+          if (response.data.auth) {
+            const cookies = new Cookies()
+            cookies.set('auth_token', response.data.token, {path: '/'})
+            localStorage.setItem('user', JSON.stringify(response.data.user))
+          }
+        })
+        .catch(error => {
+          alert('Ошибка при регистрации!')
+          console.error('There was an error!', error);
+        }).finally(() => {
+        const cookies = new Cookies()
+        if (cookies.get('auth_token')) {
+          alert('Регистрация прошла успешно')
+          window.location.reload();
         }
-      })
-      .catch(error => {
-        console.error('There was an error!', error);
-      }).finally(() => {
-      const cookies = new Cookies()
-      if (cookies.get('auth_token')) {
-        alert('Регистрация прошла успешно')
-        window.location.reload();
-      }
-    });
+      });
+    }
   }
 
   //check auth
   useEffect(() => {
     const cookies = new Cookies()
     const token = cookies.get('auth_token')
-    if(token){
+    if (token) {
       navigate('/')
     }
   }, [])
@@ -99,7 +120,7 @@ const Register: React.FC = () => {
             не должен содержать пробелов, специальных символов или смайликов.
           </Form.Text>
         </Form.Group>
-        <Button onClick={() => register()} variant="primary" type="button">
+        <Button type='button' onClick={() => register()} variant="primary">
           Зарегистрироваться
         </Button>
       </Form>
