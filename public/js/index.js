@@ -9564,18 +9564,18 @@ var Register = function Register() {
     var validFields = true;
 
     if (!email.match(/[\w\d]+?@[\w\d]+\.\w+/)) {
-      validFields = false;
       alert('Почта должна содержать в себе знак @, ., com, ru и т. д.');
+      return;
     }
 
     if (!(password.length >= 8 && password.length <= 20)) {
-      validFields = false;
       alert('Пароль должен быть больше или равен 8 или меньше или равен 20.');
+      return;
     }
 
     if (password !== confirmPassword) {
-      validFields = false;
       alert('Пароли не совпадают!');
+      return;
     }
 
     if (validFields) {
