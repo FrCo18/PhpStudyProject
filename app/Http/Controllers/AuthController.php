@@ -175,6 +175,7 @@ class AuthController extends Controller
         $user->password = bcrypt($fields['password']);
         $user->save();
 
+        Password::deleteToken($user);
         return \response()->json(['msg' => 'Пароль успешно изменён!']);
     }
 }
