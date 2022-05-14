@@ -8595,6 +8595,10 @@ var TaskPage_1 = __importDefault(__webpack_require__(/*! ../pages/Courses/TaskPa
 
 var AccountEdit_1 = __importDefault(__webpack_require__(/*! ../pages/AccountEdit */ "./resources/src/pages/AccountEdit.tsx"));
 
+var ResetPassword_1 = __importDefault(__webpack_require__(/*! ../pages/Auth/ResetPassword */ "./resources/src/pages/Auth/ResetPassword.tsx"));
+
+var ChangePassword_1 = __importDefault(__webpack_require__(/*! ../pages/Auth/ChangePassword */ "./resources/src/pages/Auth/ChangePassword.tsx"));
+
 var AppRouter = function AppRouter() {
   return react_1["default"].createElement(react_router_dom_1.Routes, null, react_1["default"].createElement(react_router_dom_1.Route, {
     path: '/',
@@ -8623,6 +8627,12 @@ var AppRouter = function AppRouter() {
   }), react_1["default"].createElement(react_router_dom_1.Route, {
     path: '/account-edit',
     element: react_1["default"].createElement(AccountEdit_1["default"], null)
+  }), react_1["default"].createElement(react_router_dom_1.Route, {
+    path: '/reset-password',
+    element: react_1["default"].createElement(ResetPassword_1["default"], null)
+  }), react_1["default"].createElement(react_router_dom_1.Route, {
+    path: '/change-password/:token/:email',
+    element: react_1["default"].createElement(ChangePassword_1["default"], null)
   }));
 };
 
@@ -9275,6 +9285,217 @@ exports["default"] = AccountEdit;
 
 /***/ }),
 
+/***/ "./resources/src/pages/Auth/ChangePassword.tsx":
+/*!*****************************************************!*\
+  !*** ./resources/src/pages/Auth/ChangePassword.tsx ***!
+  \*****************************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+"use strict";
+
+
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+function _iterableToArrayLimit(arr, i) { var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]; if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+var __createBinding = this && this.__createBinding || (Object.create ? function (o, m, k, k2) {
+  if (k2 === undefined) k2 = k;
+  Object.defineProperty(o, k2, {
+    enumerable: true,
+    get: function get() {
+      return m[k];
+    }
+  });
+} : function (o, m, k, k2) {
+  if (k2 === undefined) k2 = k;
+  o[k2] = m[k];
+});
+
+var __setModuleDefault = this && this.__setModuleDefault || (Object.create ? function (o, v) {
+  Object.defineProperty(o, "default", {
+    enumerable: true,
+    value: v
+  });
+} : function (o, v) {
+  o["default"] = v;
+});
+
+var __importStar = this && this.__importStar || function (mod) {
+  if (mod && mod.__esModule) return mod;
+  var result = {};
+  if (mod != null) for (var k in mod) {
+    if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+  }
+
+  __setModuleDefault(result, mod);
+
+  return result;
+};
+
+var __importDefault = this && this.__importDefault || function (mod) {
+  return mod && mod.__esModule ? mod : {
+    "default": mod
+  };
+};
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+
+var react_1 = __importStar(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
+
+var react_router_dom_1 = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/index.js");
+
+var axios_1 = __importDefault(__webpack_require__(/*! axios */ "./node_modules/axios/index.js"));
+
+var universal_cookie_1 = __importDefault(__webpack_require__(/*! universal-cookie */ "./node_modules/universal-cookie/es6/index.js"));
+
+var react_bootstrap_1 = __webpack_require__(/*! react-bootstrap */ "./node_modules/react-bootstrap/esm/index.js");
+
+var ChangePassword = function ChangePassword() {
+  var navigate = (0, react_router_dom_1.useNavigate)();
+  var params = (0, react_router_dom_1.useParams)();
+
+  var _ref = (0, react_1.useState)(''),
+      _ref2 = _slicedToArray(_ref, 2),
+      email = _ref2[0],
+      setEmail = _ref2[1];
+
+  var _ref3 = (0, react_1.useState)(''),
+      _ref4 = _slicedToArray(_ref3, 2),
+      password = _ref4[0],
+      setPassword = _ref4[1];
+
+  var _ref5 = (0, react_1.useState)(''),
+      _ref6 = _slicedToArray(_ref5, 2),
+      confirmPassword = _ref6[0],
+      setConfirmPassword = _ref6[1];
+
+  var _ref7 = (0, react_1.useState)(false),
+      _ref8 = _slicedToArray(_ref7, 2),
+      isChangePassword = _ref8[0],
+      setIsChangePassword = _ref8[1];
+
+  var changePassword = function changePassword() {
+    var headers = {
+      'Accept': 'application/json'
+    };
+    var paramsPost = {
+      'token': params.token,
+      'email': email,
+      'password': password,
+      'password_confirmation': confirmPassword
+    };
+    axios_1["default"].post('/api/change-password', paramsPost, {
+      headers: headers
+    }).then(function (response) {
+      if (response.status === 200) {
+        alert('Пароль успешно изменён!');
+        setIsChangePassword(true);
+      }
+    })["catch"](function (error) {
+      alert('Ошибка при изменении пароля!');
+      console.error('There was an error!', error);
+    });
+  };
+
+  (0, react_1.useEffect)(function () {
+    if (isChangePassword) {
+      navigate('/login');
+    }
+  }, [isChangePassword]); //check auth
+
+  (0, react_1.useEffect)(function () {
+    var cookies = new universal_cookie_1["default"]();
+    var token = cookies.get('auth_token');
+
+    if (token) {
+      navigate('/');
+    }
+  }, []);
+  return react_1["default"].createElement(react_bootstrap_1.Container, {
+    style: {
+      width: '80vh'
+    }
+  }, react_1["default"].createElement("h1", {
+    style: {
+      color: "white"
+    }
+  }, "\u0421\u043C\u0435\u043D\u0430 \u043F\u0430\u0440\u043E\u043B\u044F"), react_1["default"].createElement(react_bootstrap_1.Form, {
+    action: '#'
+  }, react_1["default"].createElement(react_bootstrap_1.Form.Group, {
+    className: "mb-3",
+    controlId: "formBasicEmail"
+  }, react_1["default"].createElement(react_bootstrap_1.Form.Label, null, "Email address"), react_1["default"].createElement(react_bootstrap_1.Form.Control, {
+    id: 'inputEmail',
+    onChange: function onChange(event) {
+      return setEmail(event.target.value);
+    },
+    name: 'email',
+    type: "email",
+    placeholder: "\u0412\u0432\u0435\u0434\u0438\u0442\u0435 email",
+    required: true
+  })), react_1["default"].createElement(react_bootstrap_1.Form.Group, {
+    className: "mb-3",
+    controlId: "formBasicPassword"
+  }, react_1["default"].createElement(react_bootstrap_1.Form.Label, {
+    htmlFor: "inputPassword"
+  }, "Password"), react_1["default"].createElement(react_bootstrap_1.Form.Control, {
+    required: true,
+    name: 'password',
+    placeholder: "\u0412\u0432\u0435\u0434\u0438\u0442\u0435 \u043F\u0430\u0440\u043E\u043B\u044C",
+    type: "password",
+    id: "inputPassword",
+    "aria-describedby": "passwordHelpBlock",
+    minLength: 8,
+    maxLength: 20,
+    onChange: function onChange(event) {
+      return setPassword(event.target.value);
+    }
+  }), react_1["default"].createElement(react_bootstrap_1.Form.Text, {
+    id: "passwordHelpBlock",
+    muted: true
+  }, "\u0412\u0430\u0448 \u043F\u0430\u0440\u043E\u043B\u044C \u0434\u043E\u043B\u0436\u0435\u043D \u0441\u043E\u0441\u0442\u043E\u044F\u0442\u044C \u0438\u0437 8-20 \u0441\u0438\u043C\u0432\u043E\u043B\u043E\u0432, \u0441\u043E\u0434\u0435\u0440\u0436\u0430\u0442\u044C \u0431\u0443\u043A\u0432\u044B \u0438 \u0446\u0438\u0444\u0440\u044B \u0438 \u043D\u0435 \u0434\u043E\u043B\u0436\u0435\u043D \u0441\u043E\u0434\u0435\u0440\u0436\u0430\u0442\u044C \u043F\u0440\u043E\u0431\u0435\u043B\u043E\u0432, \u0441\u043F\u0435\u0446\u0438\u0430\u043B\u044C\u043D\u044B\u0445 \u0441\u0438\u043C\u0432\u043E\u043B\u043E\u0432 \u0438\u043B\u0438 \u0441\u043C\u0430\u0439\u043B\u0438\u043A\u043E\u0432.")), react_1["default"].createElement(react_bootstrap_1.Form.Group, {
+    className: "mb-3",
+    controlId: "formBasicPassword"
+  }, react_1["default"].createElement(react_bootstrap_1.Form.Label, {
+    htmlFor: "inputPasswordConfirm"
+  }, "Password"), react_1["default"].createElement(react_bootstrap_1.Form.Control, {
+    required: true,
+    name: 'password_confirmation',
+    placeholder: "\u041F\u043E\u0432\u0442\u043E\u0440\u0438\u0442\u0435 \u043F\u0430\u0440\u043E\u043B\u044C",
+    type: "password",
+    id: "inputPasswordConfirm",
+    "aria-describedby": "passwordHelpBlock",
+    minLength: 8,
+    maxLength: 20,
+    onChange: function onChange(event) {
+      return setConfirmPassword(event.target.value);
+    }
+  }), react_1["default"].createElement(react_bootstrap_1.Form.Text, {
+    id: "passwordHelpBlock",
+    muted: true
+  }, "\u0412\u0430\u0448 \u043F\u0430\u0440\u043E\u043B\u044C \u0434\u043E\u043B\u0436\u0435\u043D \u0441\u043E\u0441\u0442\u043E\u044F\u0442\u044C \u0438\u0437 8-20 \u0441\u0438\u043C\u0432\u043E\u043B\u043E\u0432, \u0441\u043E\u0434\u0435\u0440\u0436\u0430\u0442\u044C \u0431\u0443\u043A\u0432\u044B \u0438 \u0446\u0438\u0444\u0440\u044B \u0438 \u043D\u0435 \u0434\u043E\u043B\u0436\u0435\u043D \u0441\u043E\u0434\u0435\u0440\u0436\u0430\u0442\u044C \u043F\u0440\u043E\u0431\u0435\u043B\u043E\u0432, \u0441\u043F\u0435\u0446\u0438\u0430\u043B\u044C\u043D\u044B\u0445 \u0441\u0438\u043C\u0432\u043E\u043B\u043E\u0432 \u0438\u043B\u0438 \u0441\u043C\u0430\u0439\u043B\u0438\u043A\u043E\u0432.")), react_1["default"].createElement(react_bootstrap_1.Button, {
+    type: 'button',
+    onClick: function onClick() {
+      return changePassword();
+    },
+    variant: "primary"
+  }, "\u0418\u0437\u043C\u0435\u043D\u0438\u0442\u044C \u043F\u0430\u0440\u043E\u043B\u044C")));
+};
+
+exports["default"] = ChangePassword;
+
+/***/ }),
+
 /***/ "./resources/src/pages/Auth/Login.tsx":
 /*!********************************************!*\
   !*** ./resources/src/pages/Auth/Login.tsx ***!
@@ -9452,7 +9673,9 @@ var Login = function Login() {
     },
     variant: "primary",
     type: "button"
-  }, "\u0412\u043E\u0439\u0442\u0438")));
+  }, "\u0412\u043E\u0439\u0442\u0438"), react_1["default"].createElement("br", null), react_1["default"].createElement(react_router_dom_1.Link, {
+    to: '/reset-password'
+  }, "\u0417\u0430\u0431\u044B\u043B\u0438 \u043F\u0430\u0440\u043E\u043B\u044C?")));
 };
 
 exports["default"] = Login;
@@ -9686,6 +9909,154 @@ var Register = function Register() {
 };
 
 exports["default"] = Register;
+
+/***/ }),
+
+/***/ "./resources/src/pages/Auth/ResetPassword.tsx":
+/*!****************************************************!*\
+  !*** ./resources/src/pages/Auth/ResetPassword.tsx ***!
+  \****************************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+"use strict";
+
+
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+function _iterableToArrayLimit(arr, i) { var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]; if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+var __createBinding = this && this.__createBinding || (Object.create ? function (o, m, k, k2) {
+  if (k2 === undefined) k2 = k;
+  Object.defineProperty(o, k2, {
+    enumerable: true,
+    get: function get() {
+      return m[k];
+    }
+  });
+} : function (o, m, k, k2) {
+  if (k2 === undefined) k2 = k;
+  o[k2] = m[k];
+});
+
+var __setModuleDefault = this && this.__setModuleDefault || (Object.create ? function (o, v) {
+  Object.defineProperty(o, "default", {
+    enumerable: true,
+    value: v
+  });
+} : function (o, v) {
+  o["default"] = v;
+});
+
+var __importStar = this && this.__importStar || function (mod) {
+  if (mod && mod.__esModule) return mod;
+  var result = {};
+  if (mod != null) for (var k in mod) {
+    if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+  }
+
+  __setModuleDefault(result, mod);
+
+  return result;
+};
+
+var __importDefault = this && this.__importDefault || function (mod) {
+  return mod && mod.__esModule ? mod : {
+    "default": mod
+  };
+};
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+
+var react_1 = __importStar(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
+
+var universal_cookie_1 = __importDefault(__webpack_require__(/*! universal-cookie */ "./node_modules/universal-cookie/es6/index.js"));
+
+var react_router_dom_1 = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/index.js");
+
+var react_bootstrap_1 = __webpack_require__(/*! react-bootstrap */ "./node_modules/react-bootstrap/esm/index.js");
+
+var axios_1 = __importDefault(__webpack_require__(/*! axios */ "./node_modules/axios/index.js"));
+
+var ResetPassword = function ResetPassword() {
+  var navigate = (0, react_router_dom_1.useNavigate)();
+
+  var _ref = (0, react_1.useState)(''),
+      _ref2 = _slicedToArray(_ref, 2),
+      email = _ref2[0],
+      setEmail = _ref2[1];
+
+  var resetPassword = function resetPassword() {
+    var headers = {
+      'Accept': 'application/json'
+    };
+    var params = {
+      'email': email
+    };
+    axios_1["default"].post('/api/forgot-password', params, {
+      headers: headers
+    }).then(function (response) {
+      if (response.status === 200) {
+        alert('Письмо с востанаволением пароля отправлено!');
+      }
+    })["catch"](function (error) {
+      alert('Ошибка при отправке письма с востановлением пароля');
+      console.error('There was an error!', error);
+    })["finally"](function () {});
+  }; //check auth
+
+
+  (0, react_1.useEffect)(function () {
+    var cookies = new universal_cookie_1["default"]();
+    var token = cookies.get('auth_token');
+
+    if (token) {
+      navigate('/');
+    }
+  }, []);
+  return react_1["default"].createElement(react_bootstrap_1.Container, {
+    style: {
+      width: '80vh'
+    }
+  }, react_1["default"].createElement("h1", {
+    style: {
+      color: "white"
+    }
+  }, "\u0410\u0432\u0442\u043E\u0440\u0438\u0437\u0430\u0446\u0438\u044F"), react_1["default"].createElement(react_bootstrap_1.Form, {
+    action: '#'
+  }, react_1["default"].createElement(react_bootstrap_1.Form.Group, {
+    className: "mb-3",
+    controlId: "formBasicEmail"
+  }, react_1["default"].createElement(react_bootstrap_1.Form.Label, null, "Email address"), react_1["default"].createElement(react_bootstrap_1.Form.Control, {
+    id: 'inputEmail',
+    onChange: function onChange(event) {
+      return setEmail(event.target.value);
+    },
+    name: 'email',
+    type: "email",
+    placeholder: "\u0412\u0432\u0435\u0434\u0438\u0442\u0435 email",
+    required: true
+  }), react_1["default"].createElement(react_bootstrap_1.Form.Text, {
+    className: "text-muted"
+  })), react_1["default"].createElement(react_bootstrap_1.Button, {
+    onClick: function onClick() {
+      return resetPassword();
+    },
+    variant: "primary",
+    type: "button"
+  }, "\u041E\u0442\u043F\u0440\u0430\u0432\u0438\u0442\u044C \u043F\u0438\u0441\u044C\u043C\u043E \u0441 \u0432\u043E\u0441\u0442\u0430\u043D\u043E\u0432\u043B\u0435\u043D\u0438\u0435\u043C \u043F\u0430\u0440\u043E\u043B\u044F")));
+};
+
+exports["default"] = ResetPassword;
 
 /***/ }),
 

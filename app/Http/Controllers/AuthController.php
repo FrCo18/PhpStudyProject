@@ -2,14 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\ResetPassword;
 use App\Models\User;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Routing\ResponseFactory;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Password;
 use JetBrains\PhpStorm\ArrayShape;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
@@ -59,7 +63,7 @@ class AuthController extends Controller
     {
         $fields = $request->validate([
             'email' => 'required|string|unique:Users,email',
-            'password' => 'required|string|confirmed'
+            'password' => 'required|string|confirmed|max:20|min:8',
         ]);
 
         $user = User::create([
@@ -118,5 +122,59 @@ class AuthController extends Controller
         ];
 
         return response($response, 201);
+    }
+
+    public function sendResetPasswordEmail(Request $request): JsonResponse
+    {
+        $fields = $request->validate([
+            'email' => 'required|email'
+        ]);
+
+        /**
+         * @var User $user
+         */
+        $user = User::where('email', '=', $fields['email'])->first();
+
+        if (!$user) {
+            return \response()->json(['msg' => 'user not found'], 403);
+        }
+
+        $token = DB::table('password_resets')
+            ->select('token')
+            ->where('email', '=', $user->email)
+            ->first();
+
+        Mail::to($user->email)->send(new ResetPassword($user->email, $token->token));
+
+        return response()->json([
+            'msg' => 'mail for password reset sent on your',
+        ]);
+    }
+
+    public function changePassword(Request $request): JsonResponse
+    {
+        $fields = $request->validate([
+            'email' => 'required',
+            'token' => 'required',
+            'password' => 'required|string|confirmed|max:20|min:8'
+        ]);
+
+        $find_reset = DB::table('password_resets')
+            ->where('token', '=', $fields['token'])
+            ->where('email', '=', $fields['email'])
+            ->first();
+
+        if (!$find_reset) {
+            return response()->json(['msg' => 'Токен не найден'], 403);
+        }
+
+        /**
+         * @var User $user
+         */
+        $user = Password::getUser($request->only('email'));
+        $user->password = bcrypt($fields['password']);
+        $user->save();
+
+        return \response()->json(['msg' => 'Пароль успешно изменён!']);
     }
 }

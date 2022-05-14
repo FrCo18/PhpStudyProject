@@ -23,7 +23,6 @@ Route::group(['middleware' => ['auth:sanctum']], function (){
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::delete('/delete-user', [AuthController::class, 'destroy']);
 
-
     //Courses routes
     Route::prefix('courses')->group(function (){
         Route::get('/', [CoursesController::class, 'getCourses']);
@@ -36,3 +35,9 @@ Route::group(['middleware' => ['auth:sanctum']], function (){
 
     Route::post('/compile-code/', [TasksController::class, 'compileCode']);
 });
+
+//password reset
+Route::post('/forgot-password', [AuthController::class, 'sendResetPasswordEmail']
+)->middleware('guest')->name('password.reset');
+
+Route::post('/change-password', [AuthController::class, 'changePassword'])->middleware('guest');

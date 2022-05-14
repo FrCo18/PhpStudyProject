@@ -2,7 +2,7 @@ import React, {useEffect, useLayoutEffect, useMemo, useState} from 'react';
 import {Button, Container, Form} from "react-bootstrap";
 import axios from "axios";
 import Cookies from "universal-cookie";
-import {useNavigate} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState<string>('')
@@ -80,6 +80,8 @@ const Login: React.FC = () => {
         <Button onClick={() => login()} variant="primary" type="button">
           Войти
         </Button>
+        <br/>
+        <Link to='/reset-password'>Забыли пароль?</Link>
       </Form>
     </Container>
   );
