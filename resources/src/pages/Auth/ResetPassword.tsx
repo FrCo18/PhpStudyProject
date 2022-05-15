@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import Cookies from "universal-cookie";
-import {Link, useNavigate} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 import {Button, Container, Form} from "react-bootstrap";
 import axios from "axios";
 
@@ -38,7 +38,7 @@ const ResetPassword = () => {
   }, [])
   return (
     <Container style={{width: '80vh'}}>
-      <h1 style={{color: "white"}}>Авторизация</h1>
+      <h1 style={{color: "white"}}>Востановление пароля</h1>
       <Form action='#'>
         {/*Email*/}
         <Form.Group className="mb-3" controlId="formBasicEmail">

@@ -10031,7 +10031,7 @@ var ResetPassword = function ResetPassword() {
     style: {
       color: "white"
     }
-  }, "\u0410\u0432\u0442\u043E\u0440\u0438\u0437\u0430\u0446\u0438\u044F"), react_1["default"].createElement(react_bootstrap_1.Form, {
+  }, "\u0412\u043E\u0441\u0442\u0430\u043D\u043E\u0432\u043B\u0435\u043D\u0438\u0435 \u043F\u0430\u0440\u043E\u043B\u044F"), react_1["default"].createElement(react_bootstrap_1.Form, {
     action: '#'
   }, react_1["default"].createElement(react_bootstrap_1.Form.Group, {
     className: "mb-3",
