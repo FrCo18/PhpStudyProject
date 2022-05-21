@@ -4,7 +4,7 @@ return function (string $php_code, string $eval_text, string $echo_text): bool {
 
     $echo_check = '1 2 3 4 5' === $echo_text;
 
-    $regex = '/for\s*\(\s*\$\w+\s*=\s*\d\s*;\s\$\w+\s*<\s*\d\s*;\s*\$\w+\+{2}\s*\)\s*\{(?<body>.*?)\}/s';
+    $regex = '/for\s*\(\s*\$\w+\s*=\s*\d\s*;\s\$\w+\s*(<|<=)\s*\d\s*;\s*\$\w+\+{2}\s*\)\s*\{(?<body>.*?)\}/s';
 
     $variants_in_body = '/('
         . '\s*(?<var>\$[\w_\d]+)\s*\.=\s*\$[\w_\d]+\s*\.\s*(\' \'|" ")\s*;'
