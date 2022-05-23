@@ -18,7 +18,7 @@ const ResetPassword = () => {
     axios.post('/api/forgot-password', params, {headers})
       .then((response) => {
         if (response.status === 200) {
-          alert('Письмо с востанаволением пароля отправлено!')
+          alert('Письмо с востанавлением пароля отправлено!')
         }
       })
       .catch(error => {
