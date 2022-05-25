@@ -10006,7 +10006,7 @@ var ResetPassword = function ResetPassword() {
       headers: headers
     }).then(function (response) {
       if (response.status === 200) {
-        alert('Письмо с востанаволением пароля отправлено!');
+        alert('Письмо с востанавлением пароля отправлено!');
       }
     })["catch"](function (error) {
       alert('Ошибка при отправке письма с востановлением пароля');
