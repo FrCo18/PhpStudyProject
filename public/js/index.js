@@ -9385,11 +9385,14 @@ var ChangePassword = function ChangePassword() {
       setIsChangePassword = _ref8[1];
 
   var changePassword = function changePassword() {
+    var _a;
+
     var headers = {
       'Accept': 'application/json'
     };
+    var resetToken = (_a = params.token) !== null && _a !== void 0 ? _a : '';
     var paramsPost = {
-      'token': params.token,
+      'token': resetToken,
       'email': email,
       'password': password,
       'password_confirmation': confirmPassword
@@ -10009,7 +10012,7 @@ var ResetPassword = function ResetPassword() {
         alert('Письмо с востанавлением пароля отправлено!');
       }
     })["catch"](function (error) {
-      alert('Ошибка при отправке письма с востановлением пароля');
+      alert('Ошибка при отправке письма с воcстановлением пароля');
       console.error('There was an error!', error);
     })["finally"](function () {});
   }; //check auth

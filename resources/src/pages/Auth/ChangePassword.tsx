@@ -15,8 +15,10 @@ const ChangePassword = () => {
     const headers = {
       'Accept': 'application/json'
     }
+    let resetToken = params.token ?? ''
     const paramsPost = {
-      'token': params.token,
+
+      'token': resetToken,
       'email': email,
       'password': password,
       'password_confirmation': confirmPassword

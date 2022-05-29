@@ -138,12 +138,14 @@ class AuthController extends Controller
             return \response()->json(['msg' => 'user not found'], 403);
         }
 
+        Password::createToken($user);
+
         $token = DB::table('password_resets')
             ->select('token')
             ->where('email', '=', $user->email)
             ->first();
 
-        Mail::to($user->email)->send(new ResetPassword($user->email, $token->token));
+        Mail::to($user->email)->send(new ResetPassword($user->email, urlencode($token->token)));
 
         return response()->json([
             'msg' => 'mail for password reset sent on your',

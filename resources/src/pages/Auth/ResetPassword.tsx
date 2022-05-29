@@ -22,7 +22,7 @@ const ResetPassword = () => {
         }
       })
       .catch(error => {
-        alert('Ошибка при отправке письма с востановлением пароля')
+        alert('Ошибка при отправке письма с воcстановлением пароля')
         console.error('There was an error!', error);
       }).finally(() => {
     });

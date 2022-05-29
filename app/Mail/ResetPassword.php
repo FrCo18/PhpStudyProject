@@ -12,14 +12,14 @@ class ResetPassword extends Mailable
     use Queueable, SerializesModels;
 
     private string $mail;
-    private string $token;
+    private ?string $token;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct(string $mail, string $token)
+    public function __construct(string $mail, ?string $token)
     {
         $this->mail = $mail;
         $this->token = $token;
