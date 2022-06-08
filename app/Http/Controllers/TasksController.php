@@ -13,6 +13,15 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 
 class TasksController extends Controller
 {
+    /**
+     * @var string[]
+     */
+    public array $not_allowed_functions = [
+        'mysqli',
+        'mysqli_connect',
+        'phpinfo',
+    ];
+
     public function getTasksByCourseId(Request $request): JsonResponse
     {
         $request_params = [
@@ -83,6 +92,17 @@ class TasksController extends Controller
         $php_code = preg_replace(array_keys($arr_replaces), $arr_replaces, $request_params['php_code']);
 
         try {
+            foreach ($this->not_allowed_functions as $not_allowed_function) {
+                if (preg_match('/' . $not_allowed_function . '\(/', $php_code)) {
+                    return [
+                        'is_complete' => false,
+                        'eval_result' => '',
+                        'error_text' => 'It is function is not allowed!',
+                        'echo_text' => $_SESSION['echo_system_var']
+                    ];
+                }
+            }
+
             eval($php_code);
 
             return [
@@ -134,6 +154,18 @@ class TasksController extends Controller
         $php_code = preg_replace(array_keys($arr_replaces), $arr_replaces, $request_params['php_code']);
 
         try {
+
+            foreach ($this->not_allowed_functions as $not_allowed_function) {
+                if (preg_match('/' . $not_allowed_function . '\(/', $php_code)) {
+                    return [
+                        'is_complete' => false,
+                        'eval_result' => '',
+                        'error_text' => 'It is function is not allowed!',
+                        'echo_text' => $_SESSION['echo_system_var']
+                    ];
+                }
+            }
+
             $eval_result = eval($php_code) ?: '';
 
             $task_checker = new TaskChecker($request_params['course_name'], $request_params['level_number']);
