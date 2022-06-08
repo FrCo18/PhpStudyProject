@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Courses\TaskChecker;
+use App\Http\Traits\NotAllowedFunctionsTrait;
 use App\Models\ProgressCourse;
 use App\Models\ProgressTask;
 use App\Models\Tasks;
@@ -13,14 +14,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 
 class TasksController extends Controller
 {
-    /**
-     * @var string[]
-     */
-    public array $not_allowed_functions = [
-        'mysqli',
-        'mysqli_connect',
-        'phpinfo',
-    ];
+    use NotAllowedFunctionsTrait;
 
     public function getTasksByCourseId(Request $request): JsonResponse
     {
@@ -93,7 +87,7 @@ class TasksController extends Controller
 
         try {
             foreach ($this->not_allowed_functions as $not_allowed_function) {
-                if (preg_match('/' . $not_allowed_function . '\(/', $php_code)) {
+                if (preg_match('/' . $not_allowed_function . '\s*\(/', $php_code)) {
                     return [
                         'is_complete' => false,
                         'eval_result' => '',
@@ -156,7 +150,7 @@ class TasksController extends Controller
         try {
 
             foreach ($this->not_allowed_functions as $not_allowed_function) {
-                if (preg_match('/' . $not_allowed_function . '\(/', $php_code)) {
+                if (preg_match('/' . $not_allowed_function . '\s*\(/', $php_code)) {
                     return [
                         'is_complete' => false,
                         'eval_result' => '',
